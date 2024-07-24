@@ -11,7 +11,7 @@ pipeline {
         REPO_NAME = "sungwoo166/react-app"
         CONTAINER_NAME = "react-web-app"
         IMAGE_NAME = "${REPO_NAME}:${DOCKER_TAG}"
-        COMPOSE_FILE = 'docker-compose.yml'
+        COMPOSE_FILE = '/var/jenkins_home/docker-compose.yml'
     }
 
     stages {
