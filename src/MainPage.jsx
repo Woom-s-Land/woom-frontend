@@ -10,6 +10,7 @@ const MainPage = () => {
   return (
     <div>
       <button onClick={handleHomeClick}>마이홈으로</button>
+      <br />
       <button onClick={handleLoginClick}>로그인</button>
     </div>
   );
