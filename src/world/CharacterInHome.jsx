@@ -62,6 +62,7 @@ const directionImages = {
   ],
 };
 
+// todo: 하드 코딩 된 것들 수정
 const Character = ({ setBackground }) => {
   const [boundaries, setBoundaries] = useState([]);
   const [bedInteraction, setBedInteraction] = useState([]);
