@@ -4,6 +4,8 @@ import Home from './world/Home.jsx';
 import Login from './components/auth/Login';
 import OauthHandler from './components/auth/OauthHandler';
 
+import Signup from './components/auth/Signup';
+
 function App() {
   return (
     <div>
