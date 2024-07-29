@@ -72,7 +72,7 @@ const Signup = () => {
   const checkEmail = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${baseUrl}/api/auth/email/code`, {
+      const response = await axios.post(`${baseUrl}/api/auth/email`, {
         email: values.email,
       });
       // 인증 코드 요청 버튼 활성화
@@ -98,7 +98,7 @@ const Signup = () => {
   const checkEmailCode = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${baseUrl}/api/auth/email`, {
+      const response = await axios.post(`${baseUrl}/api/auth/email/code`, {
         email: values.email,
         code: values.code,
       });
