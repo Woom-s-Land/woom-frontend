@@ -14,6 +14,8 @@ const MainPage = () => {
       <button onClick={handleClick('/map')}>그룹 공간으로</button>
       <br />
       <button onClick={handleClick('/login')}>로그인</button>
+      <br />
+      <button onClick={handleClick('/photo')}>사진 모달</button>
     </div>
   );
 };
