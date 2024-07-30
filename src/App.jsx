@@ -13,7 +13,7 @@ function App() {
         <Route path='/' element={<Main />} />
         <Route path='/home' element={<Home />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/photo' element={<Photo />}></Route>
+        <Route path='/photo' element={<Photo />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
       </Routes>
     </div>
