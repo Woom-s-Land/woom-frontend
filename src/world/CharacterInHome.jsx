@@ -117,7 +117,6 @@ const Character = ({ setBackground }) => {
   // 키 눌렀을 때 실행될 함수
   const handleArrowKeyDown = useCallback(
     (e) => {
-      setIsAnimating(true);
       const ArrowKeys = {
         KeyW: { dir: Direction.UP, isMoveable: () => charY - 16 > 0 },
         KeyS: {
@@ -136,6 +135,7 @@ const Character = ({ setBackground }) => {
 
       const key = ArrowKeys[e.code];
       if (key) {
+        setIsAnimating(true);
         if (e.code === 'KeyE' && key.isMoveable()) {
           // # todo: 편지 모달 만들어지면 timeout 안 하기
           setWriteLetter(true);
