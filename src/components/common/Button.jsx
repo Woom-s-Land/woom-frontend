@@ -25,7 +25,7 @@ function Button({ label, onClick }) {
       onClick={onClick}
     >
       <img 
-        src={isActive ? 'assets/square-bt-down.png' : 'assets/square-bt-up.png'} 
+        src={isActive ? 'src/assets/common/square-bt-down.png' : 'src/assets/common/square-bt-up.png'} 
         alt={label}
         style={{ 
           width: '100%',  // 버튼의 가로 길이에 맞게 늘림
