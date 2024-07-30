@@ -1,4 +1,5 @@
 import CharacterInMap from './CharacterInMap';
+import boundary from '../assets/map/map_collisions';
 import mapImages from './mapImages';
 import {
   initializeCollisionMap,
@@ -13,26 +14,6 @@ const Map = () => {
   const [backgroundX, setBackgroundX] = useState(-300);
   const [backgroundY, setBackgroundY] = useState(-700);
 
-  const [boundaries, setBoundaries] = useState([]);
-
-  const BoundaryWidth = 32;
-  const BoundaryHeight = 32;
-
-  const collisionImageUrl = 'http://localhost:5173/src/assets/collision.png';
-  useEffect(() => {
-    const boundaryMap = initializeCollisionMap(boundary, 64);
-    setBoundaries(
-      initializeBoundaries(boundaryMap, BoundaryWidth, BoundaryHeight, 29870)
-    );
-  }, []);
-  useEffect(() => {
-    console.log('BackgroundX updated:', backgroundX);
-  }, [backgroundX]);
-
-  useEffect(() => {
-    console.log('BackgroundY updated:', backgroundY);
-  }, [backgroundY]);
-
   return (
     <div>
       <Stage width={width} height={height}>
@@ -42,6 +23,8 @@ const Map = () => {
           height={height}
           setBackgroundX={setBackgroundX}
           setBackgroundY={setBackgroundY}
+          backgroundX={backgroundX}
+          backgroundY={backgroundY}
         />
       </Stage>
     </div>
