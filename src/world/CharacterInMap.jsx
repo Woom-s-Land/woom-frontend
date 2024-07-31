@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import CharacterImages from './characterImages';
 import mapImages from './mapImages';
 import collisions from '../assets/map/map_collisions';
+import interactions from '../assets/map/map-interactions';
 import {
   initializeCollisionMap,
   initializeBoundaries,
@@ -19,8 +20,8 @@ const Direction = {
 
 const MAP_WIDTH = 2048;
 const MAP_HEIGHT = 1536;
-const SIZE = 60; // 캐릭터 사이즈 60*60
-const MOVE_DISTANCE = 7; // 한 프레임별 움직일 거리
+const SIZE = 80; // 캐릭터 사이즈
+const MOVE_DISTANCE = 14; // 한 프레임별 움직일 거리
 const FRAME_INTERVAL = 60; // 프레임이 전환될 간격
 const STEP_COUNT = 6;
 
@@ -67,6 +68,7 @@ const Character = ({
   setBackgroundY,
   backgroundX,
   backgroundY,
+  setMapImage,
 }) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState(Direction.DOWN);
@@ -75,7 +77,14 @@ const Character = ({
   const [isStopX, setIsStopX] = useState(0);
   const [isStopY, setIsStopY] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+
   const [collision, setCollision] = useState([]);
+  const [photoInteraction, setPhotoInteraction] = useState([]);
+  const [photomapInteraction, setPhotomapInteraction] = useState([]);
+  const [guestbookInteraction, setGuestbookInteraction] = useState([]);
+  const [isNearPhoto, setIsNearPhoto] = useState(false);
+  const [isNearPhotomap, setIsNearPhotomap] = useState(false);
+  const [isNearGuestbook, setIsNearGuestbook] = useState(false);
 
   const animationFrameRef = useRef(null);
   const lastFrameTimeRef = useRef(0);
@@ -88,12 +97,25 @@ const Character = ({
     setCollision(
       initializeBoundaries(collisionMap, BoundaryWidth, BoundaryHeight, 29870)
     );
+
+    const interactionMap = initializeCollisionMap(interactions, 64);
+    setPhotoInteraction(
+      initializeBoundaries(interactionMap, BoundaryWidth, BoundaryHeight, 93991)
+    );
+
+    setPhotomapInteraction(
+      initializeBoundaries(interactionMap, BoundaryWidth, BoundaryHeight, 93990)
+    );
+
+    setGuestbookInteraction(
+      initializeBoundaries(interactionMap, BoundaryWidth, BoundaryHeight, 93989)
+    );
   }, []);
 
   // 충돌 or 상호작용 여부 판정 함수
   const boundaryCollision = useCallback(
-    (cx, cy, bx, by) => {
-      return collision.some((col) => {
+    (collisions, cx, cy, bx, by) => {
+      return collisions.some((col) => {
         return (
           col.position.x + BoundaryWidth + bx >= cx + 16 &&
           col.position.y + BoundaryHeight + by >= cy + 35 &&
@@ -102,7 +124,7 @@ const Character = ({
         );
       });
     },
-    [collision]
+    [collision, photoInteraction, photomapInteraction, guestbookInteraction]
   );
 
   // 키 눌렀을 때 실행될 함수
@@ -165,17 +187,29 @@ const Character = ({
     };
   }, [isAnimating, stepIndex, direction]);
 
-  const updateBackgroundPosition = (positionUpdater) => {
-    flushSync(() => {
-      positionUpdater();
-    });
+  const setNearList = (newX, newY) => {
+    setIsNearPhoto(
+      boundaryCollision(photoInteraction, newX, newY, backgroundX, backgroundY)
+    );
+    setIsNearPhotomap(
+      boundaryCollision(
+        photomapInteraction,
+        newX,
+        newY,
+        backgroundX,
+        backgroundY
+      )
+    );
+    setIsNearGuestbook(
+      boundaryCollision(
+        guestbookInteraction,
+        newX,
+        newY,
+        backgroundX,
+        backgroundY
+      )
+    );
   };
-
-  const updateCharacterPosition = (newCharX, newCharY) => {
-    setCharX(newCharX);
-    setCharY(newCharY);
-  };
-
   const animate = (timestamp) => {
     if (!lastFrameTimeRef.current) {
       lastFrameTimeRef.current = timestamp;
@@ -183,13 +217,12 @@ const Character = ({
     const deltaTime = timestamp - lastFrameTimeRef.current;
 
     if (deltaTime > FRAME_INTERVAL) {
-      setStepIndex((prev) => (prev + 1) % 6);
+      setStepIndex((prev) => (prev + 1) % STEP_COUNT);
 
       let newX = charX;
       let newY = charY;
       let newBackgroundX = backgroundX;
       let newBackgroundY = backgroundY;
-      let collisionDetected = false;
 
       switch (direction) {
         case Direction.UP:
@@ -203,9 +236,9 @@ const Character = ({
               newBackgroundY = 0;
             }
           }
+          setNearList(newX, newY);
           break;
         case Direction.DOWN:
-          console.log('DOWN');
           if (isStopY !== 0) {
             newY += MOVE_DISTANCE;
             if (newY >= height / 2) setIsStopY(0);
@@ -216,6 +249,7 @@ const Character = ({
               newBackgroundY = height - MAP_HEIGHT;
             }
           }
+          setNearList(newX, newY);
           break;
         case Direction.LEFT:
           if (isStopX !== 0) {
@@ -228,6 +262,7 @@ const Character = ({
               newBackgroundX = 0;
             }
           }
+          setNearList(newX, newY);
           break;
         case Direction.RIGHT:
           if (isStopX !== 0) {
@@ -240,12 +275,21 @@ const Character = ({
               newBackgroundX = width - MAP_WIDTH;
             }
           }
+          setNearList(newX, newY);
           break;
         default:
           break;
       }
 
-      if (!boundaryCollision(newX, newY, newBackgroundX, newBackgroundY)) {
+      if (
+        !boundaryCollision(
+          collision,
+          newX,
+          newY,
+          newBackgroundX,
+          newBackgroundY
+        )
+      ) {
         flushSync(() => {
           setCharX(newX);
           setCharY(newY);
@@ -256,6 +300,10 @@ const Character = ({
         setIsAnimating(false);
       }
 
+      if (isNearPhoto) setMapImage(mapImages.nearPhoto);
+      else if (isNearPhotomap) setMapImage(mapImages.nearPhotomap);
+      else if (isNearGuestbook) setMapImage(mapImages.nearGuestbook);
+      else setMapImage(mapImages.map);
       lastFrameTimeRef.current = timestamp;
     }
     animationFrameRef.current = requestAnimationFrame(animate);
@@ -267,10 +315,10 @@ const Character = ({
         image={directionImages[direction][stepIndex]}
         x={0}
         y={0}
-        width={60}
-        height={60}
+        width={SIZE}
+        height={SIZE}
       />
-      <Nickname width={60} height={60} text='브로콜리맨' />
+      <Nickname width={SIZE} height={SIZE} text='브로콜리맨' />
     </Container>
   );
 };
