@@ -11,6 +11,8 @@ const MainPage = () => {
     <div>
       <button onClick={handleClick('/home')}>마이홈으로</button>
       <br />
+      <button onClick={handleClick('/signup')}>회원가입</button>
+      <br />
       <button onClick={handleClick('/map')}>그룹 공간으로</button>
       <br />
       <button onClick={handleClick('/login')}>로그인</button>
