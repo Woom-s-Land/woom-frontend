@@ -3,7 +3,9 @@ import Main from './MainPage.jsx';
 import Home from './world/Home.jsx';
 import Map from './world/Map.jsx';
 import Login from './components/auth/Login';
+import Photo from './components/groupSpace/photo/PhotoModal'
 import OauthHandler from './components/auth/OauthHandler';
+import Signup from './components/auth/Signup';
 
 function App() {
   return (
@@ -13,6 +15,7 @@ function App() {
         <Route path='/home' element={<Home />} />
         <Route path='/map' element={<Map />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/photo' element={<Photo />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
       </Routes>
     </div>
