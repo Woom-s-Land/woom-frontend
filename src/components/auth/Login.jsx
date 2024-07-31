@@ -5,6 +5,7 @@ import { authActions } from '../../store/authSlice';
 import axios from 'axios';
 import GitHubLogo from '../../assets/logo/github.svg';
 import GoogleLogo from '../../assets/logo/google.svg';
+import PasswordReset from './PasswordReset'; // PasswordReset 컴포넌트를 임포트합니다.
 
 const baseUrl = 'http://i11e206.p.ssafy.io';
 
@@ -17,6 +18,11 @@ const Login = () => {
     password: '',
   });
   const [isValidEmail, setIsValidEmail] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
 
   const handleChange = (e) => {
     setValues({
@@ -25,7 +31,7 @@ const Login = () => {
     });
   };
 
-  const isEmailValid = (e) => {
+  const isEmailValid = () => {
     const emailRegex = new RegExp('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$');
     setIsValidEmail(emailRegex.test(values.email));
   };
@@ -41,7 +47,7 @@ const Login = () => {
       console.log('로그인 성공', response);
       await getUserInfo();
       dispatch(authActions.login());
-      navigate('/');
+      navigate('/home');
     } catch (error) {
       console.error('일반 로그인 실패', error);
       alert('아이디 또는 비밀번호가 일치하지 않습니다.');
@@ -124,10 +130,10 @@ const Login = () => {
             <span className='text-xs'>
               <Link to='/signup'>회원가입</Link>
             </span>
-            {/* todo: 누르면 임시 코드 발급 모달창 생성 수정 예정 */}
-            <span className='text-xs'>
-              <Link to='/passwordReset'>비밀번호 찾기</Link>
+            <span onClick={handleModal} className='text-xs cursor-pointer'>
+              비밀번호 찾기
             </span>
+            {isModalOpen && <PasswordReset onClose={handleModal} />}
           </section>
         </form>
       </section>
@@ -136,7 +142,7 @@ const Login = () => {
           className='w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-700 flex items-center justify-center space-x-5'
           onClick={() => socialLogin('google')}
         >
-          <img src={GoogleLogo} alt='GoolgleLogo' className='w-6 h-6' />
+          <img src={GoogleLogo} alt='GoogleLogo' className='w-6 h-6' />
           <span>Google</span>
         </button>
         <div className='group relative'>
