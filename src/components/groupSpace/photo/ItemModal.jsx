@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from '../../common/Modal'
 
-function ItemModal({ group, onBack, onImageClick }) {
+function ItemModal({ group, onImageClick }) {
   const itemsPerPage = 6; // 한 페이지당 표시할 이미지 수
   const totalPages = Math.ceil(group.images.length / itemsPerPage);
 
@@ -27,7 +27,7 @@ function ItemModal({ group, onBack, onImageClick }) {
   ));
 
   return (
-    <Modal onClose={onBack}>
+    <Modal>
       <div className="flex justify-center mt-4">
         <div className="grid grid-cols-3 gap-4 max-w-[600px]">
           {currentImages.map((src, index) => (

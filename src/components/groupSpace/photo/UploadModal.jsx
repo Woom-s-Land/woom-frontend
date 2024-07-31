@@ -6,7 +6,7 @@ import getCroppedImg from './cropImage'; // cropImage 유틸리티 함수
 import Modal from '../../common/Modal'
 import Button from '../../common/Button'
 
-function UploadModal({ onClose }) {
+function UploadModal({ }) {
   const [files, setFiles] = useState([]);
   const [pixelCanvas, setPixelCanvas] = useState(null);
   const [pixelScale, setPixelScale] = useState(13);
@@ -173,7 +173,7 @@ function UploadModal({ onClose }) {
   };
 
   return (
-    <Modal onClose={onClose}>
+    <Modal>
       {!pixelCanvas && !loading ? (
         imageSrc ? (
           <div className="relative w-full h-64">
