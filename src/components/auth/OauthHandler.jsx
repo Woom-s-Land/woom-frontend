@@ -19,7 +19,7 @@ const OauthHandler = () => {
 
         dispatch(authActions.setUserInfo(response.data));
         dispatch(authActions.login());
-        navigate('/');
+        navigate('/home');
         console.log('유저 정보 요청 성공', response);
       } catch (error) {
         console.error('유저 정보 요청 실패', error);
