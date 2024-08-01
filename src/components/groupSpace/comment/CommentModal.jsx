@@ -47,7 +47,7 @@ function Comment({ woomsId, onClose }) {
   };
 
   return (
-    <Modal onClose={onClose}>
+    <Modal>
       <div>
         <h2>방명록</h2>
         <form onSubmit={handleSubmit}>
