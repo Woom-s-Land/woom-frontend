@@ -4,6 +4,8 @@ import axios from 'axios';
 import Modal from '../common/Modal';
 import Button from '../common/Button';
 
+import dialogImg from '../../assets/dialog/dialog box big.png';
+
 const baseUrl = 'http://i11e206.p.ssafy.io';
 
 const PasswordChange = ({ onClose }) => {
@@ -34,7 +36,7 @@ const PasswordChange = ({ onClose }) => {
       }
     } else if (name === 'newPasswordCheck') {
       setIsPasswordMatch(value === values.newPassword);
-
+      console.log(isPasswordMatch);
       if (!isPasswordMatch) {
         setMessage('비밀번호가 일치하지 않습니다.');
       } else {
@@ -58,7 +60,6 @@ const PasswordChange = ({ onClose }) => {
         },
         { withCredentials: true }
       );
-
       console.log('비밀번호 변경 성공', response);
       setMessage('비밀번호가 성공적으로 변경되었습니다.');
     } catch (error) {
@@ -69,45 +70,76 @@ const PasswordChange = ({ onClose }) => {
 
   return (
     <Modal onClose={onClose}>
-      <section>
-        <div>
-          <label htmlFor='oldPassword'>현재 비밀번호</label>
-          <input
-            type='password'
-            id='oldPassword'
-            name='oldPassword'
-            value={values.oldPassword}
-            onChange={handleChange}
+      <section className='relative flex flex-col items-center w-full space-y-4 my-auto'>
+        <div className='flex items-center w-full max-w-md space-x-4'>
+          <label
+            htmlFor='oldPassword'
+            className='whitespace-nowrap flex-shrink-0 w-2/6 text-xl pt-4'
+          >
+            현재 비밀번호
+          </label>
+          <div className='relative w-2/3 max-w-sm'>
+            <img src={dialogImg} alt='Dialog' className='w-full' />
+            <input
+              type='password'
+              id='oldPassword'
+              name='oldPassword'
+              value={values.oldPassword}
+              onChange={handleChange}
+              className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/6 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
+            />
+          </div>
+        </div>
+        <div className='flex items-center w-full max-w-md space-x-4'>
+          <label
+            htmlFor='newPassword'
+            className='whitespace-nowrap flex-shrink-0 w-2/6 text-xl pt-4'
+          >
+            새 비밀번호
+          </label>
+          <div className='relative w-2/3 max-w-sm'>
+            <img src={dialogImg} alt='Dialog' className='w-full' />
+            <input
+              type='password'
+              id='newPassword'
+              name='newPassword'
+              value={values.newPassword}
+              onChange={handleChange}
+              className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/6 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
+            />
+          </div>
+        </div>
+        <div className='relative flex items-center w-full max-w-md space-x-4'>
+          <label
+            htmlFor='newPasswordCheck'
+            className='whitespace-nowrap flex-shrink-0 w-2/6 text-xl pt-4'
+          >
+            새 비밀번호 확인
+          </label>
+          <div className='relative w-2/3 max-w-sm'>
+            <img src={dialogImg} alt='Dialog' className='w-full' />
+            <input
+              type='password'
+              id='newPasswordCheck'
+              name='newPasswordCheck'
+              value={values.newPasswordCheck}
+              onChange={handleChange}
+              className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/6 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
+            />
+          </div>
+        </div>
+        <div className='relative flex flex-col w-full items-center'>
+          {(!isValidPassword || !isPasswordMatch) && (
+            <p className='absolute text-xs text-red-600 -translate-y-3'>
+              {message}
+            </p>
+          )}
+          <Button
+            label={'저장'}
+            onClick={savePassword}
+            disabled={!isValidPassword || !isPasswordMatch}
           />
         </div>
-        <div>
-          <label htmlFor='newPassword'>새 비밀번호</label>
-          <input
-            type='password'
-            id='newPassword'
-            name='newPassword'
-            value={values.newPassword}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor='newPasswordCheck'>새 비밀번호 확인</label>
-          <input
-            type='password'
-            id='newPasswordCheck'
-            name='newPasswordCheck'
-            value={values.newPasswordCheck}
-            onChange={handleChange}
-          />
-        </div>
-        {(!isValidPassword || !isPasswordMatch) && (
-          <p className='mt-2 text-xs text-red-600'>{message}</p>
-        )}
-        <Button
-          label={'저장'}
-          onClick={savePassword}
-          disabled={!isValidPassword || !isPasswordMatch}
-        />
       </section>
     </Modal>
   );

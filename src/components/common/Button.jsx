@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Button({ label, onClick, disabled }) {
+function Button({ label, onClick, disabled = false }) {
   const [isActive, setIsActive] = useState(false);
 
   // 버튼의 너비를 계산하기 위해 label의 길이에 따라 기본 너비를 설정합니다.
