@@ -8,12 +8,13 @@ import OauthHandler from './components/auth/OauthHandler';
 import Signup from './components/auth/Signup';
 
 import PasswordReset from './components/auth/PasswordReset';
+import MyInfo from './components/navbar/MyInfo';
 
 function App() {
   return (
     <div>
-      {/* <Login /> */}
-      <Routes>
+      <MyInfo />
+      {/* <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/home' element={<Home />} />
         <Route path='/signup' element={<Signup />} />
@@ -21,7 +22,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/photo' element={<Photo />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
-      </Routes>
+      </Routes> */}
     </div>
   );
 }
