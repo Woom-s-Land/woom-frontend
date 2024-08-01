@@ -4,7 +4,7 @@ import Modal from '../../common/Modal';
 
 const baseUrl = 'http://i11e206.p.ssafy.io';
 
-function CommentModal({ woomsId, onClose }) {
+function Comment({ woomsId, onClose }) {
   const [comments, setComments] = useState([]);
   const [inputValue, setInputValue] = useState("");
 
@@ -72,4 +72,4 @@ function CommentModal({ woomsId, onClose }) {
   );
 }
 
-export default CommentModal;
+export default Comment;
