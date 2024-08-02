@@ -4,8 +4,8 @@ const initialAuthState = {
   isAuthenticated: false,
   userInfo: {
     email: 'znight1020@naver.com',
-    nickname: '눈물나는_문어',
-    costume: 7,
+    nickname: '눈물나는문어',
+    costume: 1,
   },
 };
 

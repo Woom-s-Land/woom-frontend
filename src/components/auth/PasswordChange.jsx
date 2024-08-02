@@ -50,7 +50,7 @@ const PasswordChange = ({ onClose }) => {
     });
   };
 
-  const savePassword = async () => {
+  const changePassword = async () => {
     try {
       const response = await axios.patch(
         `${baseUrl}/api/users/password`,
@@ -136,7 +136,7 @@ const PasswordChange = ({ onClose }) => {
           )}
           <Button
             label={'저장'}
-            onClick={savePassword}
+            onClick={changePassword}
             disabled={!isValidPassword || !isPasswordMatch}
           />
         </div>
