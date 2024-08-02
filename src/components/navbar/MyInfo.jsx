@@ -1,42 +1,95 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+
+import { authActions } from '../../store/authSlice';
 
 import Modal from '../common/Modal';
 import Button from '../common/Button';
 import PasswordChange from '../auth/PasswordChange';
-
+// todo: 캐릭터 assets 정리 후 수정 예정
 import char_1 from '../../assets/char_1/char_1 (0_0).png';
 import rightBtn from '../../assets/button/right-bt-up.png';
 import leftBtn from '../../assets/button/left-bt-up.png';
 import dialogImg from '../../assets/dialog/dialog box big.png';
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
-const costumeList = [];
+// todo: 캐릭터 assets 정리 후 수정 예정
+const costumeList = [
+  'd0',
+  'd1',
+  'd2',
+  'd3',
+  'd4',
+  'd5',
+  'd6',
+  'd7',
+  'd8',
+  'd9',
+  'd10',
+  'd11',
+  'd12',
+];
 
 const MyInfo = () => {
+  const dispatch = useDispatch();
+
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [nickname, setNickname] = useState(userInfo.nickname);
   const [costume, setCostume] = useState(userInfo.costume);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [costumeNum, setCostumeNum] = useState(0);
 
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const changeInfo = () => {};
-
   const handleChange = (e) => {
-    const [name, value] = e.target;
+    const value = e.target.value.replace(/[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]/g, '');
+    let byteCount = 0;
+    let finalValue = '';
+
+    for (let i = 0; i < value.length; i++) {
+      const char = value[i];
+
+      byteCount += char.charCodeAt(0) > 127 ? 2 : 1; // 한글은 3바이트, 그 외는 1바이트
+      if (byteCount > 14) break;
+      finalValue += char;
+    }
+
+    setNickname(finalValue);
   };
 
   const handleLeft = () => {
-    setCostumeNum((costumeNum - 1) % costumeList.length);
+    setCostume(costume - 1 < 0 ? costumeList.length - 1 : costume - 1);
+    console.log(costume);
   };
 
   const handleright = () => {
-    setCostumeNum((costumeNum + 1) % costumeList.length);
+    setCostume((costume + 1) % costumeList.length);
+    console.log(costume);
+  };
+
+  const changeInfo = async () => {
+    try {
+      const response = await axios.patch(
+        `${baseUrl}/api/users/character`,
+        {
+          nickname: nickname,
+          costume: costume,
+        },
+        { withCredentials: true }
+      );
+      console.log(response);
+      dispatch(
+        authActions.setUserInfo({
+          nickname: nickname,
+          costume: costume,
+          email: userInfo.email,
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -48,12 +101,15 @@ const MyInfo = () => {
               src={leftBtn}
               alt='leftBtn'
               className='w-1/12 cursor-pointer'
+              onClick={handleLeft}
             />
+            {/* 캐릭터 assets 정리 후 이미지 경로 수정 예정(동적으로 변경 예정) */}
             <img src={char_1} alt='char_1' className='w-2/3' />
             <img
               src={rightBtn}
               alt='rightBtn'
               className='w-1/12 cursor-pointer'
+              onClick={handleright}
             />
           </div>
         </section>

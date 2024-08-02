@@ -6,7 +6,7 @@ import Button from '../common/Button';
 
 import dialogImg from '../../assets/dialog/dialog box big.png';
 
-const baseUrl = 'http://i11e206.p.ssafy.io';
+const baseUrl = 'https://i11e206.p.ssafy.io';
 
 const PasswordChange = ({ onClose }) => {
   const [isValidPassword, setIsValidPassword] = useState(true);
