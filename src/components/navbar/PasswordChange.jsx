@@ -5,9 +5,8 @@ import Modal from '../common/Modal';
 import Button from '../common/Button';
 
 import dialogImg from '../../assets/dialog/dialog box big.png';
-import eye from '../../assets/common/eye-emoji.png';
+import eye_open from '../../assets/common/eye_open.png';
 import eye_close from '../../assets/common/eye_close.png';
-import eye_open from '../../assets/common/eye_close.png';
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
 
@@ -104,9 +103,9 @@ const PasswordChange = ({ onClose }) => {
               className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/6 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
             />
             <img
-              src={eye}
+              src={!showOldPassword ? eye_close : eye_open}
               alt='eye-emoji'
-              className='absolute top-9 right-4 cursor-pointer'
+              className='absolute top-9 right-4 cursor-pointer w-[26px]'
               onClick={() => showInput('oldPassword')}
             />
           </div>
@@ -129,9 +128,9 @@ const PasswordChange = ({ onClose }) => {
               className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/6 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
             />
             <img
-              src={eye}
+              src={!showNewPassword ? eye_close : eye_open}
               alt='eye-emoji'
-              className='absolute top-9 right-4 cursor-pointer'
+              className='absolute top-9 right-4 cursor-pointer w-[26px]'
               onClick={() => showInput('newPassword')}
             />
           </div>
@@ -154,9 +153,9 @@ const PasswordChange = ({ onClose }) => {
               className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/6 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
             />
             <img
-              src={eye}
+              src={!showNewPasswordCheck ? eye_close : eye_open}
               alt='eye-emoji'
-              className='absolute top-9 right-4 cursor-pointer'
+              className='absolute top-9 right-4 cursor-pointer w-[26px]'
               onClick={() => showInput('newPasswordCheck')}
             />
           </div>
