@@ -6,6 +6,8 @@ import Button from '../common/Button';
 
 import dialogImg from '../../assets/dialog/dialog box big.png';
 import eye from '../../assets/common/eye-emoji.png';
+import eye_close from '../../assets/common/eye_close.png';
+import eye_open from '../../assets/common/eye_close.png';
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
 

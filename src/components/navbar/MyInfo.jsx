@@ -6,7 +6,7 @@ import { authActions } from '../../store/authSlice';
 
 import Modal from '../common/Modal';
 import Button from '../common/Button';
-import PasswordChange from '../auth/PasswordChange';
+import PasswordChange from './PasswordChange';
 // todo: 캐릭터 assets 정리 후 수정 예정
 import char_1 from '../../assets/char_1/char_1 (0_0).png';
 import rightBtn from '../../assets/button/right-bt-up.png';
