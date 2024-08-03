@@ -5,6 +5,7 @@ import Modal from '../common/Modal';
 import Button from '../common/Button';
 
 import dialogImg from '../../assets/dialog/dialog box big.png';
+import eye from '../../assets/common/eye-emoji.png';
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
 
@@ -12,6 +13,9 @@ const PasswordChange = ({ onClose }) => {
   const [isValidPassword, setIsValidPassword] = useState(true);
   const [isPasswordMatch, setIsPasswordMatch] = useState(true);
   const [message, setMessage] = useState('');
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showNewPasswordCheck, setShowNewPasswordCheck] = useState(false);
 
   const [values, setValues] = useState({
     oldPassword: '',
@@ -21,6 +25,11 @@ const PasswordChange = ({ onClose }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    setValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
 
     if (name === 'newPassword') {
       const passwordRegex = new RegExp(
@@ -36,18 +45,22 @@ const PasswordChange = ({ onClose }) => {
       }
     } else if (name === 'newPasswordCheck') {
       setIsPasswordMatch(value === values.newPassword);
-      console.log(isPasswordMatch);
       if (!isPasswordMatch) {
         setMessage('비밀번호가 일치하지 않습니다.');
       } else {
         setMessage('');
       }
     }
+  };
 
-    setValues({
-      ...values,
-      [name]: value,
-    });
+  const showInput = (value) => {
+    if (value === 'oldPassword') {
+      setShowOldPassword(!showOldPassword);
+    } else if (value === 'newPassword') {
+      setShowNewPassword(!showNewPassword);
+    } else if (value === 'newPasswordCheck') {
+      setShowNewPasswordCheck(!showNewPasswordCheck);
+    }
   };
 
   const changePassword = async () => {
@@ -70,7 +83,7 @@ const PasswordChange = ({ onClose }) => {
 
   return (
     <Modal onClose={onClose}>
-      <section className='relative flex flex-col items-center w-full space-y-4 my-auto'>
+      <section className='relative flex flex-col items-center w-full space-y-2 mt-6'>
         <div className='flex items-center w-full max-w-md space-x-4'>
           <label
             htmlFor='oldPassword'
@@ -79,14 +92,20 @@ const PasswordChange = ({ onClose }) => {
             현재 비밀번호
           </label>
           <div className='relative w-2/3 max-w-sm'>
-            <img src={dialogImg} alt='Dialog' className='w-full' />
+            <img src={dialogImg} alt='Dialog' className='w-full h-24' />
             <input
-              type='password'
+              type={showOldPassword ? 'text' : 'password'}
               id='oldPassword'
               name='oldPassword'
               value={values.oldPassword}
               onChange={handleChange}
               className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/6 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
+            />
+            <img
+              src={eye}
+              alt='eye-emoji'
+              className='absolute top-9 right-4 cursor-pointer'
+              onClick={() => showInput('oldPassword')}
             />
           </div>
         </div>
@@ -98,14 +117,20 @@ const PasswordChange = ({ onClose }) => {
             새 비밀번호
           </label>
           <div className='relative w-2/3 max-w-sm'>
-            <img src={dialogImg} alt='Dialog' className='w-full' />
+            <img src={dialogImg} alt='Dialog' className='w-full h-24' />
             <input
-              type='password'
+              type={showNewPassword ? 'text' : 'password'}
               id='newPassword'
               name='newPassword'
               value={values.newPassword}
               onChange={handleChange}
               className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/6 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
+            />
+            <img
+              src={eye}
+              alt='eye-emoji'
+              className='absolute top-9 right-4 cursor-pointer'
+              onClick={() => showInput('newPassword')}
             />
           </div>
         </div>
@@ -117,14 +142,20 @@ const PasswordChange = ({ onClose }) => {
             새 비밀번호 확인
           </label>
           <div className='relative w-2/3 max-w-sm'>
-            <img src={dialogImg} alt='Dialog' className='w-full' />
+            <img src={dialogImg} alt='Dialog' className='w-full h-24' />
             <input
-              type='password'
+              type={showNewPasswordCheck ? 'text' : 'password'}
               id='newPasswordCheck'
               name='newPasswordCheck'
               value={values.newPasswordCheck}
               onChange={handleChange}
               className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/6 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
+            />
+            <img
+              src={eye}
+              alt='eye-emoji'
+              className='absolute top-9 right-4 cursor-pointer'
+              onClick={() => showInput('newPasswordCheck')}
             />
           </div>
         </div>
@@ -134,11 +165,13 @@ const PasswordChange = ({ onClose }) => {
               {message}
             </p>
           )}
-          <Button
-            label={'저장'}
-            onClick={changePassword}
-            disabled={!isValidPassword || !isPasswordMatch}
-          />
+          <div>
+            <Button
+              label={'저장'}
+              onClick={changePassword}
+              disabled={!isValidPassword || !isPasswordMatch}
+            />
+          </div>
         </div>
       </section>
     </Modal>
