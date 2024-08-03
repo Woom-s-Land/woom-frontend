@@ -7,6 +7,7 @@ import Photo from './components/groupSpace/photo/PhotoModal';
 import Comment from './components/groupSpace/comment/CommentModal.jsx'
 import OauthHandler from './components/auth/OauthHandler';
 import Signup from './components/auth/Signup';
+import PhotoHeatMap from './components/groupSpace/photoHeatmap/PhotoHeatMap.jsx';
 
 import PasswordReset from './components/auth/PasswordReset';
 import Modal from './components/common/Modal.jsx';
@@ -23,6 +24,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/photo' element={<Photo />} />
         <Route path='/comment' element={<Comment />} />
+        <Route path='/heatmap' element={<PhotoHeatMap />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
       </Routes>
     </div>

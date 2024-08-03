@@ -20,7 +20,8 @@ const MainPage = () => {
       <button onClick={handleClick('/photo')}>사진 모달</button>
       <br />
       <button onClick={handleClick('/comment')}>방명록 모달</button>
-    </div>
+      <br />
+      <button onClick={handleClick('/heatmap')}>사진 지도</button>    </div>
   );
 };
 
