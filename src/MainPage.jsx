@@ -18,6 +18,8 @@ const MainPage = () => {
       <button onClick={handleClick('/login')}>로그인</button>
       <br />
       <button onClick={handleClick('/photo')}>사진 모달</button>
+      <br />
+      <button onClick={handleClick('/heatmap')}>사진 지도</button>
     </div>
   );
 };
