@@ -142,7 +142,7 @@ const MyInfo = () => {
             </button>
           </div>
         </section>
-        <div className='absolute left-1/2 right-1/2  translate-y-[182px]'>
+        <div className='absolute translate-y-[182px] left-1/2 transform -translate-x-1/2'>
           <Button label={'저장'} onClick={changeInfo}></Button>
         </div>
       </div>
