@@ -7,6 +7,7 @@ const CreateGroup = () => {
   const [isGroupNameConfirmed, setIsGroupNameConfirmed] = useState(false);
   const [icon, setIcon] = useState('bg-gr-copy'); // 초기 아이콘 상태
   const [copySuccess, setCopySuccess] = useState(false); // 복사 성공 여부
+  const [groupName, setGroupName] = useState('');
 
   const handleCopy = () => {
     navigator.clipboard
@@ -40,6 +41,21 @@ const CreateGroup = () => {
         alert('그룹을 생성하지 못했습니다. 다시 시도해 주세요');
       });
   };
+
+  const getByteLength = (str) => {
+    return new Blob([str]).size;
+  };
+
+  const handleGroupNameChange = (e) => {
+    const value = e.target.value;
+    const maxLength = 21; // 최대 21바이트
+
+    if (getByteLength(value) <= maxLength && /^[^\s]*$/.test(value)) {
+      // 띄어쓰기 금지
+      setGroupName(value);
+    }
+  };
+
   return (
     <Modal>
       <div className='flex items-center mb-4'>
@@ -47,6 +63,8 @@ const CreateGroup = () => {
         <input
           type='text'
           ref={groupNameRef}
+          value={groupName}
+          onChange={handleGroupNameChange}
           className='w-2/3 mr-16 px-10 border-none focus:outline-none bg-group-button h-16 text-lg'
           style={{
             backgroundSize: '100% 100%', // 세로 높이를 100%로 고정하고 가로 폭에 맞게 조정
