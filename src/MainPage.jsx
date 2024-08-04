@@ -20,6 +20,10 @@ const MainPage = () => {
       <button onClick={handleClick('/photo')}>사진 모달</button>
       <br />
       <button onClick={handleClick('/heatmap')}>사진 지도</button>
+      <br />
+      <button onClick={handleClick('/group')}>그룹 목록</button>
+      <br />
+      <button onClick={handleClick('/creategroup')}>그룹 생성</button>
     </div>
   );
 };

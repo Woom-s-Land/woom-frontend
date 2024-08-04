@@ -3,6 +3,7 @@ import axios from 'axios';
 import Modal from '../common/Modal';
 import GroupButton from './GroupButton';
 import GroupList from './GroupList';
+import CreateGroup from './CreateGroup';
 
 const Group = () => {
   const [list, setList] = useState([
@@ -55,6 +56,15 @@ const Group = () => {
       mapColorStatus: 'RED',
     },
   ]);
+  const [activeModal, setActiveModal] = useState('list');
+  const handleOpenCreateGroupModal = () => {
+    console.log('create');
+    setActiveModal('create'); // 그룹 생성 모달 활성화
+  };
+
+  const handleOpenJoinGroupModal = () => {
+    setActiveModal('join'); // 그룹 참가 모달 활성화
+  };
 
   //   useEffect(() => {
   //     axios({
@@ -70,21 +80,32 @@ const Group = () => {
   // useEffect(() => {}, [list]);
   return (
     <Modal>
-      <div className='absolute z-10 left-2 right-2 flex justify-between items-center transform -translate-y-1/2 top-1/2'>
-        <button className='bg-cover bg-gr-left-btn w-8 h-8' />
-        <button className='bg-cover bg-gr-right-btn w-8 h-8' />
-      </div>
-      <div>
-        {list.length !== 0 ? (
-          <GroupList list={list} />
-        ) : (
-          <p className='text-base-color text-3xl'>없음</p>
-        )}
-      </div>
-      <div className='absolute bottom-3 left-1/2 transform -translate-x-1/2 flex justify-center w-full max-w-md'>
-        <GroupButton buttonText='그룹 생성' />
-        <GroupButton buttonText='그룹 참가' />
-      </div>
+      {activeModal === 'list' && (
+        <div>
+          <div className='absolute z-10 left-2 right-2 flex justify-between items-center transform -translate-y-1/2 top-1/2'>
+            <button className='bg-cover bg-gr-left-btn w-8 h-8' />
+            <button className='bg-cover bg-gr-right-btn w-8 h-8' />
+          </div>
+          <div>
+            {list.length !== 0 ? (
+              <GroupList list={list} />
+            ) : (
+              <p className='text-base-color text-3xl'>없음</p>
+            )}
+          </div>
+          <div className='absolute bottom-3 left-1/2 transform -translate-x-1/2 flex justify-center w-full max-w-md'>
+            <GroupButton
+              buttonText='그룹 생성'
+              onClickEventHandler={handleOpenCreateGroupModal}
+            />
+            <GroupButton
+              buttonText='그룹 참가'
+              onClickEventHandler={handleOpenJoinGroupModal}
+            />
+          </div>
+        </div>
+      )}
+      {activeModal === 'create' && <CreateGroup />}
     </Modal>
   );
 };
