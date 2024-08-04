@@ -14,6 +14,12 @@ export default {
         'help-mark-hover': 'url(src/assets/heatmap/questionmark_hover.png)',
         'help-bubble': 'url(src/assets/heatmap/help_bubble.png)',
         'modal-vertical': 'url(src/assets/heatmap/modal.png)',
+        'group-button': 'url(src/assets/group/group-button.png)',
+        'group-button-active': 'url(src/assets/group/group-button-active.png)',
+        'gr-btn-md': 'url(src/assets/group/gr-btn-md.png)',
+        'gr-btn-md-active': 'url(src/assets/group/gr-btn-md-active.png)',
+        'gr-left-btn': 'url(src/assets/group/left-btn.png)',
+        'gr-right-btn': 'url(src/assets/group/right-btn.png)',
       },
       gridTemplateColumns: {
         'custom-19': 'repeat(19, minmax(0, 1fr))',
