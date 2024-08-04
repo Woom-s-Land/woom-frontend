@@ -4,7 +4,8 @@ import axios from 'axios';
 import Modal from '../../common/Modal';
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
-
+// 현재 유저 닉네임 상태 받아와서 추가해야함
+// 500자 입력 제한 필요함
 const WriteLetter = ({
   onClose,
   onChange,
