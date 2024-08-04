@@ -20,6 +20,9 @@ export default {
         'gr-btn-md-active': 'url(src/assets/group/gr-btn-md-active.png)',
         'gr-left-btn': 'url(src/assets/group/left-btn.png)',
         'gr-right-btn': 'url(src/assets/group/right-btn.png)',
+        'gr-check': 'url(src/assets/group/check.png)',
+        'gr-check-fill': 'url(src/assets/group/check_fill.png)',
+        'gr-copy': 'url(src/assets/group/copy.png)',
       },
       gridTemplateColumns: {
         'custom-19': 'repeat(19, minmax(0, 1fr))',
