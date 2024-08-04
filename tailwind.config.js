@@ -29,6 +29,7 @@ export default {
       },
       colors: {
         'base-color': '#AA7959',
+        'point-color': '#613416',
       },
     },
   },
