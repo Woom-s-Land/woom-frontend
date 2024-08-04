@@ -9,7 +9,7 @@ const GroupList = ({ list }) => {
               <tr key={group.woomsId} className='my-3'>
                 <td className='text-2xl text-base-color'>{group.woomsTitle}</td>
                 <td>
-                  <DetailButton />
+                  <DetailButton buttonText='이동' />
                 </td>
                 {list[index + 1] && (
                   <>
@@ -17,7 +17,7 @@ const GroupList = ({ list }) => {
                       {list[index + 1].woomsTitle}
                     </td>
                     <td>
-                      <DetailButton />
+                      <DetailButton buttonText='이동' />
                     </td>
                   </>
                 )}
