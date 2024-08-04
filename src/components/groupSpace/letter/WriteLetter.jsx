@@ -25,7 +25,7 @@ const WriteLetter = ({
       <h2>{userNickname}에게</h2>
       <textarea value={content} onChange={handleContentChange} />
       <h2>보낸 날짜: {sendDateTime}</h2>
-      <button onClick={onNext}>편지 보내기</button>
+      <button onClick={onNext}>도착 날짜 고르기</button>
     </Modal>
   );
 };
