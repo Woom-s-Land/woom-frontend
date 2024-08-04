@@ -4,6 +4,7 @@ import Modal from '../common/Modal';
 import GroupButton from './GroupButton';
 import GroupList from './GroupList';
 import CreateGroup from './CreateGroup';
+import JoinGroup from './JoinGroup';
 
 const Group = () => {
   const [list, setList] = useState([
@@ -106,6 +107,7 @@ const Group = () => {
         </div>
       )}
       {activeModal === 'create' && <CreateGroup />}
+      {activeModal === 'join' && <JoinGroup />}
     </Modal>
   );
 };
