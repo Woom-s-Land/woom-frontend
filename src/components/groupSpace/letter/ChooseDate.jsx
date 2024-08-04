@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import DropDown from '../../common/DropDown';
@@ -7,8 +6,8 @@ import DropDown from '../../common/DropDown';
 const ChooseDate = ({ onClose, onChange, onSubmit, sendDateTime }) => {
   const [selectedDate, setSelectedDate] = useState('');
 
-  const handleDateChange = (e) => {
-    const dateOption = e.target.value;
+  const handleDateChange = (option) => {
+    const dateOption = option.value;
     let date = new Date(sendDateTime);
 
     switch (dateOption) {
@@ -28,25 +27,47 @@ const ChooseDate = ({ onClose, onChange, onSubmit, sendDateTime }) => {
 
     const formattedDate = date ? date.toISOString() : '';
     setSelectedDate(formattedDate);
-    onChange(formattedDate); // formattedDate를 직접 전달
+    onChange(formattedDate);
+  };
+
+  const dateOptions = [
+    { label: '내일', value: '1' },
+    { label: '사흘 후', value: '3' },
+    { label: '일주일 후', value: '7' },
+  ];
+
+  const formatSelectedDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${year}년 ${month}월 ${day}일`;
   };
 
   return (
     <Modal onClose={onClose}>
-      <div>
-        <h1>언제 전달해줄까?</h1>
-        sendDateTime: {sendDateTime}
-        <select onChange={handleDateChange}>
-          <option value=''>날짜 선택</option>
-          <option value='1'>내일</option>
-          <option value='3'>3일 후</option>
-          <option value='7'>7일 후</option>
-        </select>
-        {selectedDate && (
-          <p>선택한 날짜: {new Date(selectedDate).toLocaleString()}</p>
-        )}
-        <button onClick={onSubmit}>편지 보내기</button>
-      </div>
+      <section className='flex flex-col h-5/6 justify-between'>
+        <h1 className='text-4xl text-center mt-4'>편지를 언제 전달해줄까요?</h1>
+        <div className='flex justify-center mx-4'>
+          <div className='w-1/2'>
+            <DropDown
+              options={dateOptions}
+              placeholder='날짜 선택'
+              onSelect={handleDateChange}
+            />
+          </div>
+        </div>
+        <div className='relative w-full flex justify-center'>
+          {selectedDate && (
+            <p className='absolute text-center text-2xl'>
+              편지가 {formatSelectedDate(selectedDate)}에 도착해요!
+            </p>
+          )}
+        </div>
+        <div className='flex justify-center mt-8'>
+          <Button label={'편지 보내기'} onClick={onSubmit} />
+        </div>
+      </section>
     </Modal>
   );
 };
