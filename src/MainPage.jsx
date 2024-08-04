@@ -23,7 +23,7 @@ const MainPage = () => {
       <br />
       <button onClick={handleClick('/story-write')}>사연작성 모달</button>
       <br />
-      <button onClick={handleClick('/story/read')}>사연읽기 모달</button>
+      <button onClick={handleClick('/story-read')}>사연읽기 모달</button>
     </div>
   );
 };

@@ -8,7 +8,7 @@ import OauthHandler from './components/auth/OauthHandler';
 import Signup from './components/auth/Signup';
 import PhotoHeatMap from './components/groupSpace/photoHeatmap/PhotoHeatMap.jsx';
 import StoryWrite from './components/groupSpace/story/StoryWriteModal';
-
+import StoryRead from './components/groupSpace/story/StoryReadModal';
 import PasswordReset from './components/auth/PasswordReset';
 
 function App() {
@@ -24,6 +24,7 @@ function App() {
         <Route path='/photo' element={<Photo />} />
         <Route path='/heatmap' element={<PhotoHeatMap />} />
         <Route path='/story-write' element={<StoryWrite />} />
+        <Route path='/story-read' element={<StoryRead />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
       </Routes>
     </div>
