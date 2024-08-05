@@ -21,7 +21,12 @@ const MainPage = () => {
       <br />
       <button onClick={handleClick('/comment')}>방명록 모달</button>
       <br />
-      <button onClick={handleClick('/heatmap')}>사진 지도</button>    </div>
+      <button onClick={handleClick('/heatmap')}>사진 지도</button>
+      <br />
+      <button onClick={handleClick('/story-write')}>사연작성 모달</button>
+      <br />
+      <button onClick={handleClick('/story-read')}>사연읽기 모달</button>
+    </div>
   );
 };
 

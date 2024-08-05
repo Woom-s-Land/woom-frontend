@@ -14,6 +14,7 @@ export default {
         'help-mark-hover': 'url(src/assets/heatmap/questionmark_hover.png)',
         'help-bubble': 'url(src/assets/heatmap/help_bubble.png)',
         'modal-vertical': 'url(src/assets/heatmap/modal.png)',
+        'inputbox-story': 'url(src/assets/story/input-box-story.png)',
       },
       gridTemplateColumns: {
         'custom-19': 'repeat(19, minmax(0, 1fr))',
