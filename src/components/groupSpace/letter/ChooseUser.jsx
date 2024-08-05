@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Modal from '../../common/Modal';
+import ModalClose from '../../common/ModalClose';
 import Button from '../../common/Button';
 import DropDown from '../../common/DropDown';
 
@@ -16,26 +16,30 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
       woomsId: 2,
       woomsTitle: '그룹 2',
     },
+    {
+      woomsId: 3,
+      woomsTitle: '그룹 3',
+    },
   ]);
   const [users, setUsers] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedGroupLabel, setSelectedGroupLabel] = useState('그룹 선택');
   const [selectedUserLabel, setSelectedUserLabel] = useState('유저 선택');
 
-  // useEffect(() => {
-  //   const getGroups = async () => {
-  //     try {
-  //       const response = await axios.get(`${baseUrl}/api/wooms`, {
-  //         withCredentials: true,
-  //       });
-  //       setGroups(response.data);
-  //     } catch (error) {
-  //       console.error('Failed to fetch groups:', error);
-  //     }
-  //   };
+  useEffect(() => {
+    const getGroups = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/api/wooms`, {
+          withCredentials: true,
+        });
+        setGroups(response.data);
+      } catch (error) {
+        console.error('Failed to fetch groups:', error);
+      }
+    };
 
-  //   getGroups();
-  // }, []);
+    getGroups();
+  }, []);
 
   const handleGroupSelect = async (option) => {
     const groupId = option.value;
@@ -81,26 +85,30 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
   }));
 
   return (
-    <Modal onClose={onClose}>
+    <ModalClose onClose={onClose}>
       <section className='flex flex-col h-5/6 justify-between text-center'>
         <h1 className='text-4xl text-center mt-4'>누구에게 편지를 쓸까요?</h1>
-        <div className='flex items-center justify-between ml-5'>
-          <DropDown
-            options={groupOptions}
-            placeholder={selectedGroupLabel}
-            onSelect={handleGroupSelect}
-          />
-          <DropDown
-            options={userOptions}
-            placeholder={selectedUserLabel}
-            onSelect={handleUserSelect}
-          />
+        <div className='flex items-center justify-center space-x-4 mt-4'>
+          <div className='w-1/3 flex justify-center'>
+            <DropDown
+              options={groupOptions}
+              placeholder={selectedGroupLabel}
+              onSelect={handleGroupSelect}
+            />
+          </div>
+          <div className='w-1/3 flex justify-center'>
+            <DropDown
+              options={userOptions}
+              placeholder={selectedUserLabel}
+              onSelect={handleUserSelect}
+            />
+          </div>
         </div>
         <div className='flex justify-center mt-8'>
           <Button label={'편지 쓰기'} onClick={onNext} />
         </div>
       </section>
-    </Modal>
+    </ModalClose>
   );
 };
 

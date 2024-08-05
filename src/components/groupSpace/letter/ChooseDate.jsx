@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Modal from '../../common/Modal';
+import ModalClose from '../../common/ModalClose';
 import Button from '../../common/Button';
 import DropDown from '../../common/DropDown';
 
@@ -45,11 +45,11 @@ const ChooseDate = ({ onClose, onChange, onSubmit, sendDateTime }) => {
   };
 
   return (
-    <Modal onClose={onClose}>
-      <section className='flex flex-col h-5/6 justify-between'>
+    <ModalClose onClose={onClose}>
+      <section className='flex flex-col h-5/6 justify-between text-center'>
         <h1 className='text-4xl text-center mt-4'>편지를 언제 전달해줄까요?</h1>
-        <div className='flex justify-center mx-4'>
-          <div className='w-1/2'>
+        <div className='flex justify-center items-center mx-4'>
+          <div className='w-1/3 flex justify-center'>
             <DropDown
               options={dateOptions}
               placeholder='날짜 선택'
@@ -68,7 +68,7 @@ const ChooseDate = ({ onClose, onChange, onSubmit, sendDateTime }) => {
           <Button label={'편지 보내기'} onClick={onSubmit} />
         </div>
       </section>
-    </Modal>
+    </ModalClose>
   );
 };
 

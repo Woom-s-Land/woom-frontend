@@ -21,23 +21,22 @@ const DropDown = ({ options = [], placeholder, onSelect }) => {
   return (
     <div className='relative inline-block w-full text-center'>
       <div
-        className='flex items-center cursor-pointer w-full'
+        className='flex items-center cursor-pointer w-full justify-center'
         onClick={handleSelectClick}
       >
-        <div className='relative w-11/12 text-lg'>
+        <div className='relative w-full text-lg'>
           <img src={normal_box} alt='normal_box' className='w-full' />
           <p className='absolute inset-0 flex justify-center items-center text-black'>
             {selectedOption}
           </p>
         </div>
-        {/* <img src={drop_down} alt='drop_down' className='ml-2 w-[40px]' /> */}
       </div>
       {isOpen && (
-        <div className='absolute z-10 mt-1 w-full bg-transparent rounded-md'>
+        <div className='absolute z-10 w-full scrollbar rounded-md h-48 overflow-scroll'>
           {options.map((option, index) => (
             <div
               key={index}
-              className='relative flex items-center cursor-pointer mb-1 w-11/12 text-lg'
+              className='relative flex items-center cursor-pointer w-full text-lg justify-center'
               onClick={() => handleOptionClick(option)}
             >
               <img src={normal_box} alt='normal_box' className='w-full' />
