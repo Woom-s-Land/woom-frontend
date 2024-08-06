@@ -11,13 +11,14 @@ import PhotoHeatMap from './components/groupSpace/photoHeatmap/PhotoHeatMap.jsx'
 import StoryWrite from './components/groupSpace/story/StoryWriteModal';
 import StoryRead from './components/groupSpace/story/StoryReadModal';
 import PasswordReset from './components/auth/PasswordReset';
-import Modal from './components/common/Modal.jsx';
+
+import MyInfo from './components/navbar/MyInfo';
 
 function App() {
   return (
     <div>
-      {/* <Login /> */}
-      <Routes>
+      <MyInfo />
+      {/* <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/home' element={<Home />} />
         <Route path='/signup' element={<Signup />} />
@@ -29,7 +30,7 @@ function App() {
         <Route path='/story-write' element={<StoryWrite />} />
         <Route path='/story-read' element={<StoryRead />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
-      </Routes>
+      </Routes> */}
     </div>
   );
 }

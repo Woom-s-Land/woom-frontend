@@ -7,7 +7,7 @@ import GitHubLogo from '../../assets/logo/github.svg';
 import GoogleLogo from '../../assets/logo/google.svg';
 import PasswordReset from './PasswordReset'; // PasswordReset 컴포넌트를 임포트합니다.
 
-const baseUrl = 'http://i11e206.p.ssafy.io';
+const baseUrl = 'https://i11e206.p.ssafy.io';
 
 const Login = () => {
   const dispatch = useDispatch();
