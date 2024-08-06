@@ -22,7 +22,37 @@ export default {
       colors: {
         'base-color': '#AA7959',
       },
+      keyframes:{
+        flip: {
+          '0%': { transform: 'rotateY(0deg)' },
+          '100%': { transform: 'rotateY(180deg)' },
+        },
+      },
+      animation: {
+        flip: 'flip 0.5s forwards',
+      },
+      transform: ['hover', 'focus', 'group-hover'],
+      rotate: {
+        '180': '180deg',
+      },
+      perspective: {
+        '1000': '1000px'
+      }
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.backface-hidden': {
+          'backface-visibility': 'hidden',
+        },
+        '.perspective-1000': {
+          'perspective': '1000px',
+        },
+        '.rotate-y-180': {
+          'transform': 'rotateY(180deg)',
+        },
+      });
+    },
+  ],
 };
