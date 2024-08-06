@@ -65,7 +65,11 @@ const ChooseDate = ({ onClose, onChange, onSubmit, sendDateTime }) => {
           )}
         </div>
         <div className='flex justify-center mt-8'>
-          <Button label={'편지 보내기'} onClick={onSubmit} />
+          <Button
+            label={'편지 보내기'}
+            onClick={onSubmit}
+            disabled={!selectedDate}
+          />
         </div>
       </section>
     </ModalClose>

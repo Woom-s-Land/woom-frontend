@@ -14,8 +14,13 @@ const WriteLetter = ({
   const userInfo = useSelector((state) => state.auth.userInfo);
 
   const handleContentChange = (e) => {
-    setContent(e.target.value);
-    onChange(e.target.value);
+    const newContent = e.target.value;
+    const lines = newContent.split('\n');
+
+    if (lines.length <= 14) {
+      setContent(newContent);
+      onChange(newContent);
+    }
   };
 
   return (
@@ -46,6 +51,7 @@ const WriteLetter = ({
           <button
             onClick={onNext}
             className='py-2 px-4 bg-transparent rounded mb-0 absolute bottom-12 right-2'
+            disabled={content.trim() === ''}
           >
             편지 도착 날짜 선택
           </button>

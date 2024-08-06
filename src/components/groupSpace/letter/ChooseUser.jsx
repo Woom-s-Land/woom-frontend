@@ -32,6 +32,7 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
         const response = await axios.get(`${baseUrl}/api/wooms`, {
           withCredentials: true,
         });
+        console.log(response.data);
         setGroups(response.data);
       } catch (error) {
         console.error('Failed to fetch groups:', error);
@@ -105,7 +106,14 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
           </div>
         </div>
         <div className='flex justify-center mt-8'>
-          <Button label={'편지 쓰기'} onClick={onNext} />
+          <Button
+            label={'편지 쓰기'}
+            onClick={onNext}
+            // disabled={
+            //   selectedGroupLabel === '그룹 선택' ||
+            //   selectedUserLabel === '유저 선택'
+            // }
+          />
         </div>
       </section>
     </ModalClose>
