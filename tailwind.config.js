@@ -35,6 +35,10 @@ export default {
         'base-color': '#AA7959',
         'point-color': '#613416',
       },
+      fontSize: {
+        xxs: '0.6rem',
+        xxxs: '0.4rem',
+      },
     },
   },
   plugins: [],
