@@ -23,6 +23,7 @@ export default {
         'gr-check': 'url(src/assets/group/check.png)',
         'gr-check-fill': 'url(src/assets/group/check_fill.png)',
         'gr-copy': 'url(src/assets/group/copy.png)',
+        'inputbox-story': 'url(src/assets/story/input-box-story.png)',
       },
       gridTemplateColumns: {
         'custom-19': 'repeat(19, minmax(0, 1fr))',

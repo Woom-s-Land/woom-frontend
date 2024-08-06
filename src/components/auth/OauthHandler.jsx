@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { authActions } from '../../store/authSlice';
 
-const baseUrl = 'http://i11e206.p.ssafy.io';
+const baseUrl = 'https://i11e206.p.ssafy.io';
 
 const OauthHandler = () => {
   const navigate = useNavigate();
