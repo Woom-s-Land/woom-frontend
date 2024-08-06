@@ -128,6 +128,9 @@ const GroupDetail = () => {
         />
         <div className='text-md text-base-color'>초대코드 공유하기</div>
       </div>
+      <button className=' whitespace-nowrap text-sm active:bg-gr-btn-active bg-gr-btn bg-contain bg-no-repeat bg-center p-3 absolute bottom-1 right-8 text-center text-base-color'>
+        나가기
+      </button>
       {isClickCodeShare && (
         <div className='flex items-center absolute top-[105px] right-0'>
           <div
