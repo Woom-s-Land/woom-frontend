@@ -5,7 +5,7 @@ const initialAuthState = {
   userInfo: {
     email: 'znight1020@naver.com',
     nickname: '눈물나는문어',
-    costume: 1,
+    costume: 0,
   },
 };
 
