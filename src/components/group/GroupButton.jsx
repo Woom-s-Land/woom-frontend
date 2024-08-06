@@ -2,7 +2,7 @@ const GroupButton = ({ buttonText, onClickEventHandler }) => {
   return (
     <button
       onClick={onClickEventHandler}
-      className='mx-12 whitespace-nowrap active:bg-group-button-active bg-group-button bg-contain bg-no-repeat bg-center p-5 text-center text-2xl text-base-color'
+      className='mx-12 whitespace-nowrap active:bg-gr-btn-active bg-gr-btn bg-contain bg-no-repeat bg-center p-5 text-center text-2xl text-base-color'
     >
       {buttonText}
     </button>

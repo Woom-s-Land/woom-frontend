@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import GroupApi from '../../apis/GroupApi';
 import axios from 'axios';
 import Modal from '../common/Modal';
 const CreateGroup = () => {
@@ -24,22 +25,7 @@ const CreateGroup = () => {
   };
 
   const handleGroupNameConfirm = () => {
-    axios({
-      method: 'post',
-      url: 'https://i11e206.p.ssafy.io/api/wooms',
-      data: {
-        woomsTitle: groupNameRef.current,
-      },
-    })
-      .then((res) => {
-        setInviteCode(res.woomsInviteCode);
-        setIsGroupNameConfirmed(true);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsGroupNameConfirmed(true);
-        alert('그룹을 생성하지 못했습니다. 다시 시도해 주세요');
-      });
+    GroupApi.makeGroup(groupNameRef.current);
   };
 
   const getByteLength = (str) => {
@@ -65,7 +51,7 @@ const CreateGroup = () => {
           ref={groupNameRef}
           value={groupName}
           onChange={handleGroupNameChange}
-          className='w-2/3 mr-16 px-10 border-none focus:outline-none bg-group-button h-16 text-lg'
+          className='w-2/3 mr-16 px-10 border-none focus:outline-none bg-gr-btn h-16 text-lg'
           style={{
             backgroundSize: '100% 100%', // 세로 높이를 100%로 고정하고 가로 폭에 맞게 조정
             backgroundColor: 'transparent',
@@ -86,7 +72,7 @@ const CreateGroup = () => {
         <div className='flex items-center mb-4'>
           <label className='w-1/3 text-2xl text-base-color'>초대 코드</label>
           <div
-            className='w-2/3 mr-16 px-10 border-none focus:outline-none bg-group-button h-16 text-md flex items-center'
+            className='w-2/3 mr-16 px-10 border-none focus:outline-none bg-gr-btn h-16 text-md flex items-center'
             style={{
               backgroundSize: '100% 100%', // 세로 높이를 100%로 고정하고 가로 폭에 맞게 조정
               backgroundColor: 'transparent',

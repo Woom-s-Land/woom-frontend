@@ -67,18 +67,6 @@ const Group = () => {
     setActiveModal('join'); // 그룹 참가 모달 활성화
   };
 
-  //   useEffect(() => {
-  //     axios({
-  //       method: 'get',
-  //       url: 'http://i11e206.p.ssafy.io/api/wooms',
-  //     })
-  //       .then((res) => {
-  //         console.log(res);
-  //         setList(res.data);
-  //       })
-  //       .catch((err) => console.log(err));
-  //   }, []);
-  // useEffect(() => {}, [list]);
   return (
     <Modal>
       {activeModal === 'list' && (

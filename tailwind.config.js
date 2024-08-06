@@ -14,16 +14,19 @@ export default {
         'help-mark-hover': 'url(src/assets/heatmap/questionmark_hover.png)',
         'help-bubble': 'url(src/assets/heatmap/help_bubble.png)',
         'modal-vertical': 'url(src/assets/heatmap/modal.png)',
-        'group-button': 'url(src/assets/group/group-button.png)',
-        'group-button-active': 'url(src/assets/group/group-button-active.png)',
+        'gr-btn': 'url(src/assets/group/group-button.png)',
+        'gr-btn-active': 'url(src/assets/group/group-button-active.png)',
         'gr-btn-md': 'url(src/assets/group/gr-btn-md.png)',
         'gr-btn-md-active': 'url(src/assets/group/gr-btn-md-active.png)',
+        'gr-btn-md-blue': 'url(src/assets/group/gr-btn-md-blue.png)',
+        'gr-btn-md-blue-active':
+          'url(src/assets/group/gr-btn-md-blue-active.png)',
         'gr-left-btn': 'url(src/assets/group/left-btn.png)',
         'gr-right-btn': 'url(src/assets/group/right-btn.png)',
         'gr-check': 'url(src/assets/group/check.png)',
         'gr-check-fill': 'url(src/assets/group/check_fill.png)',
         'gr-copy': 'url(src/assets/group/copy.png)',
-        'inputbox-story': 'url(src/assets/story/input-box-story.png)',
+        'gr-external': 'url(src/assets/group/external.png)',
       },
       gridTemplateColumns: {
         'custom-19': 'repeat(19, minmax(0, 1fr))',
@@ -32,37 +35,11 @@ export default {
         'base-color': '#AA7959',
         'point-color': '#613416',
       },
-      keyframes:{
-        flip: {
-          '0%': { transform: 'rotateY(0deg)' },
-          '100%': { transform: 'rotateY(180deg)' },
-        },
+      fontSize: {
+        xxs: '0.6rem',
+        xxxs: '0.4rem',
       },
-      animation: {
-        flip: 'flip 0.5s forwards',
-      },
-      transform: ['hover', 'focus', 'group-hover'],
-      rotate: {
-        '180': '180deg',
-      },
-      perspective: {
-        '1000': '1000px'
-      }
     },
   },
-  plugins: [
-    function ({ addUtilities }) {
-      addUtilities({
-        '.backface-hidden': {
-          'backface-visibility': 'hidden',
-        },
-        '.perspective-1000': {
-          'perspective': '1000px',
-        },
-        '.rotate-y-180': {
-          'transform': 'rotateY(180deg)',
-        },
-      });
-    },
-  ],
+  plugins: [],
 };
