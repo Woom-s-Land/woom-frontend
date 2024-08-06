@@ -224,15 +224,15 @@ function UploadModal({ }) {
               <p className="text-red-500 absolute inset-0 flex justify-center items-center">변환 중...</p>
             ) : (
               pixelCanvas && (
-                <img src={pixelCanvas} alt="Pixelated" className="w-full h-full object-cover" />
+                <img src={pixelCanvas} alt="Pixelated" className="w-[200px] h-[200px] object-cover" />
               )
             )}
             <input 
               type="text" 
               value={caption} 
-              onChange={(e) => setCaption(e.target.value.slice(0, 10))} // Limit to 10 characters
-              placeholder="캡션을 입력하세요" 
-              className="mt-2 p-2 rounded w-full text-center absolute bottom-4"
+              onChange={(e) => setCaption(e.target.value.slice(0, 11))} // Limit to 10 characters
+              placeholder="캡션 작성 (최대 11자)" 
+              className="mt-2 p-2 rounded w-full text-center absolute bottom-4 focus:outline-none"
             />
           </div>
         </div>
@@ -241,7 +241,7 @@ function UploadModal({ }) {
       {isCropped && (
         <div className="flex flex-col items-center justify-center">
           <div className="w-full max-w-xs">
-            <label htmlFor="pixel-range" className="block mb-2 text-sm font-medium text-gray-900">
+            <label htmlFor="pixel-range" className="block mb-2 text-sm font-medium text-white">
               픽셀화 정도: {pixelScale}
             </label>
             <input 
@@ -251,7 +251,7 @@ function UploadModal({ }) {
               max="25" 
               value={pixelScale} 
               onChange={(e) => setPixelScale(parseInt(e.target.value))} 
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              className="w-full h-2 bg-base-color rounded-lg appearance-none cursor-pointer"
             />
           </div>
         </div>
