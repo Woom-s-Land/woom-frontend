@@ -14,6 +14,15 @@ export default {
         'help-mark-hover': 'url(src/assets/heatmap/questionmark_hover.png)',
         'help-bubble': 'url(src/assets/heatmap/help_bubble.png)',
         'modal-vertical': 'url(src/assets/heatmap/modal.png)',
+        'group-button': 'url(src/assets/group/group-button.png)',
+        'group-button-active': 'url(src/assets/group/group-button-active.png)',
+        'gr-btn-md': 'url(src/assets/group/gr-btn-md.png)',
+        'gr-btn-md-active': 'url(src/assets/group/gr-btn-md-active.png)',
+        'gr-left-btn': 'url(src/assets/group/left-btn.png)',
+        'gr-right-btn': 'url(src/assets/group/right-btn.png)',
+        'gr-check': 'url(src/assets/group/check.png)',
+        'gr-check-fill': 'url(src/assets/group/check_fill.png)',
+        'gr-copy': 'url(src/assets/group/copy.png)',
         'inputbox-story': 'url(src/assets/story/input-box-story.png)',
       },
       gridTemplateColumns: {
@@ -21,6 +30,7 @@ export default {
       },
       colors: {
         'base-color': '#AA7959',
+        'point-color': '#613416',
       },
     },
   },
