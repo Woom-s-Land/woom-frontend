@@ -1,16 +1,18 @@
-import nearBed from '../assets/home/home_active_bed.png';
-import nearDesk from '../assets/home/home_active_desk.png';
-import nearToilet from '../assets/home/home_active_toilet.png';
 import home from '../assets/home/home.png';
 import forwardHome from '../assets/home/forward_home.png';
+import bed from '../assets/home/home-bed.png';
+import desk from '../assets/home/home-desk.png';
+import toilet from '../assets/home/home-toilet.png';
+import forward from '../assets/home/home-forward.png';
 
 const init = {};
 const imageSrc = {
-  nearBed,
-  nearDesk,
-  nearToilet,
   home,
   forwardHome,
+  bed,
+  desk,
+  toilet,
+  forward,
 };
 
 const homeImages = Object.entries(imageSrc).reduce((images, [key, src]) => {
