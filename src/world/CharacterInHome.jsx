@@ -1,8 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import CharacterImages from './characterImages';
-import homeImages from './homeImages';
 import collisions from '../assets/home/home-collisions';
-import interactions from '../assets/home/home-interactions';
 import { Sprite, Container } from '@pixi/react';
 import {
   initializeCollisionMap,
@@ -64,14 +62,13 @@ const directionImages = {
 };
 
 // todo: 하드 코딩 된 것들 수정
-const Character = ({ setBackground }) => {
+const Character = ({
+  handleCharacterMove,
+  isActiveBed,
+  isActiveDesk,
+  isActiveToilet,
+}) => {
   const [boundaries, setBoundaries] = useState([]);
-  const [bedInteraction, setBedInteraction] = useState([]);
-  const [deskInteraction, setDeskInteraction] = useState([]);
-  const [toiletInteraction, setToiletInteraction] = useState([]);
-  const [isNearBed, setIsNearBed] = useState(false);
-  const [isNearDesk, setIsNearDesk] = useState(false);
-  const [isNearToilet, setIsNearToilet] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState(Direction.DOWN);
   const [charX, setCharX] = useState(270);
@@ -88,18 +85,8 @@ const Character = ({ setBackground }) => {
   // 경계 맵 생성
   useEffect(() => {
     const collisionMap = initializeCollisionMap(collisions, 61);
-    const bedInteractionMap = initializeCollisionMap(interactions, 61);
     setBoundaries(
       initializeBoundaries(collisionMap, BoundaryWidth, BoundaryHeight, 15)
-    );
-    setBedInteraction(
-      initializeBoundaries(bedInteractionMap, BoundaryWidth, BoundaryHeight, 21)
-    );
-    setDeskInteraction(
-      initializeBoundaries(bedInteractionMap, BoundaryWidth, BoundaryHeight, 19)
-    );
-    setToiletInteraction(
-      initializeBoundaries(bedInteractionMap, BoundaryWidth, BoundaryHeight, 17)
     );
   }, []);
 
@@ -118,6 +105,7 @@ const Character = ({ setBackground }) => {
   // 키 눌렀을 때 실행될 함수
   const handleArrowKeyDown = useCallback(
     (e) => {
+      handleCharacterMove(charX, charY);
       const ArrowKeys = {
         KeyW: { dir: Direction.UP, isMoveable: () => charY - 16 > 0 },
         KeyS: {
@@ -129,27 +117,33 @@ const Character = ({ setBackground }) => {
           isMoveable: () => charX + 16 < MAP_X - CHAR_WIDTH,
         },
         KeyA: { dir: Direction.LEFT, isMoveable: () => charX + 16 > 0 },
-        Space: { dir: direction, isMoveable: () => isNearBed || isNearToilet },
-        KeyE: { dir: direction, isMoveable: () => isNearDesk },
-        KeyR: { dir: direction, isMoveable: () => isNearDesk },
+      };
+
+      const InteractiveKeys = {
+        Space: {
+          dir: direction,
+          isActive: () => isActiveBed || isActiveToilet,
+        },
+        KeyE: { dir: direction, isActive: () => isActiveDesk },
+        KeyR: { dir: direction, isActive: () => isActiveDesk },
       };
 
       const key = ArrowKeys[e.code];
-      if (key) {
-        setIsAnimating(true);
-        if (e.code === 'KeyE' && key.isMoveable()) {
+      const ikey = InteractiveKeys[e.code];
+      if (ikey) {
+        if (e.code === 'KeyE' && ikey.isActive()) {
           // # todo: 편지 모달 만들어지면 timeout 안 하기
           setWriteLetter(true);
           setTimeout(() => {
             setWriteLetter(false);
           }, 1000);
-        } else if (e.code === 'KeyR' && key.isMoveable()) {
+        } else if (e.code === 'KeyR' && ikey.isActive()) {
           setReadLetter(true);
           setTimeout(() => {
             setReadLetter(false);
           }, 1000);
-        } else if (e.code === 'Space' && key.isMoveable()) {
-          if (isNearBed) {
+        } else if (e.code === 'Space' && ikey.isActive()) {
+          if (isActiveBed) {
             setIsInteractionBed(true);
             setTimeout(() => {
               setIsInteractionBed(false);
@@ -162,6 +156,9 @@ const Character = ({ setBackground }) => {
             }, 1500);
           }
         }
+      }
+      if (key) {
+        setIsAnimating(true);
         if (direction !== key.dir) {
           setDirection(key.dir);
           setStepIndex(0);
@@ -228,30 +225,18 @@ const Character = ({ setBackground }) => {
         case Direction.UP:
           newY = charY - MOVE_DISTANCE;
           collisionDetected = boundaryCollision(boundaries, newX, newY);
-          setIsNearBed(boundaryCollision(bedInteraction, newX, newY));
-          setIsNearDesk(boundaryCollision(deskInteraction, newX, newY));
-          setIsNearToilet(boundaryCollision(toiletInteraction, newX, newY));
           break;
         case Direction.DOWN:
           newY = charY + MOVE_DISTANCE;
           collisionDetected = boundaryCollision(boundaries, newX, newY);
-          setIsNearBed(boundaryCollision(bedInteraction, newX, newY));
-          setIsNearDesk(boundaryCollision(deskInteraction, newX, newY));
-          setIsNearToilet(boundaryCollision(toiletInteraction, newX, newY));
           break;
         case Direction.LEFT:
           newX = charX - MOVE_DISTANCE;
           collisionDetected = boundaryCollision(boundaries, newX, newY);
-          setIsNearBed(boundaryCollision(bedInteraction, newX, newY));
-          setIsNearDesk(boundaryCollision(deskInteraction, newX, newY));
-          setIsNearToilet(boundaryCollision(toiletInteraction, newX, newY));
           break;
         case Direction.RIGHT:
           newX = charX + MOVE_DISTANCE;
           collisionDetected = boundaryCollision(boundaries, newX, newY);
-          setIsNearBed(boundaryCollision(bedInteraction, newX, newY));
-          setIsNearDesk(boundaryCollision(deskInteraction, newX, newY));
-          setIsNearToilet(boundaryCollision(toiletInteraction, newX, newY));
           break;
         default:
           break;
@@ -262,13 +247,6 @@ const Character = ({ setBackground }) => {
       } else {
         setIsAnimating(false);
       }
-      if (isNearBed) {
-        setBackground(homeImages.nearBed);
-      } else if (isNearDesk) {
-        setBackground(homeImages.nearDesk);
-      } else if (isNearToilet) {
-        setBackground(homeImages.nearToilet);
-      } else setBackground(homeImages.home);
 
       lastFrameTimeRef.current = timestamp;
     }
@@ -287,14 +265,14 @@ const Character = ({ setBackground }) => {
       <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text='브로콜리맨' />
       {isInteractionBed && (
         <InteractionSpeechBubble
-          width={CHAR_WIDTH}
+          width={CHAR_HEIGHT}
           height={CHAR_HEIGHT}
           text='아직은 잠이 오지 않아'
         />
       )}
       {isInteractionToilet && (
         <InteractionSpeechBubble
-          width={CHAR_WIDTH}
+          width={CHAR_HEIGHT}
           height={CHAR_HEIGHT}
           text='끄응...'
         />
