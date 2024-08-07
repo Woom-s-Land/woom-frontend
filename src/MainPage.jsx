@@ -18,6 +18,20 @@ const MainPage = () => {
       <button onClick={handleClick('/login')}>로그인</button>
       <br />
       <button onClick={handleClick('/photo')}>사진 모달</button>
+      <br />
+      <button onClick={handleClick('/comment')}>방명록 모달</button>
+      <br />
+      <button onClick={handleClick('/heatmap')}>사진 지도</button>
+      <br />
+      <button onClick={handleClick('/group')}>그룹 목록</button>
+      <br />
+      <button onClick={handleClick('/creategroup')}>그룹 생성</button>
+      <br />
+      <button onClick={handleClick('/group-detail')}>그룹 상세</button>
+      <br />
+      <button onClick={handleClick('/story-write')}>사연작성 모달</button>
+      <br />
+      <button onClick={handleClick('/story-read')}>사연읽기 모달</button>
     </div>
   );
 };

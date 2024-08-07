@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from '../../common/Modal'
 
-function ItemModal({ group, onBack, onImageClick }) {
+function ItemModal({ group, onImageClick }) {
   const itemsPerPage = 6; // 한 페이지당 표시할 이미지 수
   const totalPages = Math.ceil(group.images.length / itemsPerPage);
 
@@ -23,19 +23,19 @@ function ItemModal({ group, onBack, onImageClick }) {
 
   // 빈 div를 추가하여 항상 6개의 요소가 있도록 함
   const emptyDivs = Array.from({ length: itemsPerPage - currentImages.length }, (_, index) => (
-    <div key={`empty-${index}`} className="w-32 h-32" />
+    <div key={`empty-${index}`} className="w-[138px] h-[161px]" />
   ));
 
   return (
-    <Modal onClose={onBack}>
+    <Modal>
       <div className="flex justify-center mt-4">
-        <div className="grid grid-cols-3 gap-4 max-w-[600px]">
+        <div className="grid grid-cols-3 gap-4">
           {currentImages.map((src, index) => (
             <div key={index} className="cursor-pointer">
               <img
                 src={src}
                 alt={`detail-${index}`}
-                className="w-32 h-32 object-cover"
+                className="w-[138px] h-[161px] object-cover"
                 onClick={() => onImageClick(src)}
               />
             </div>

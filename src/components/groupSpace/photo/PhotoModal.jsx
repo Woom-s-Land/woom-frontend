@@ -40,18 +40,11 @@ const imageGroups = [
   },
 ];
 
-function PhotoModal({ onClose }) {
+function PhotoModal({ }) {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-
-  const navigate = useNavigate();
-
-  const handleBack = () => {
-    navigate(-1); // 이전 페이지로 이동
-    onClose(); // 모달 닫기
-  };
 
   const itemsPerPage = 6;
   const totalPages = Math.ceil(imageGroups.length / itemsPerPage);
@@ -97,13 +90,12 @@ function PhotoModal({ onClose }) {
 
   return (
     <>
-      <Modal onClose={handleBack}>
+      <Modal>
         {selectedImage ? (
-          <DetailModal src={selectedImage} onClose={handleImageClose} />
+          <DetailModal src={selectedImage}/>
         ) : selectedGroup ? (
           <ItemModal
             group={selectedGroup}
-            onBack={handleBackToGroups}
             onImageClick={handleImageClick}
           />
         ) : (
@@ -119,12 +111,15 @@ function PhotoModal({ onClose }) {
             <div className="flex justify-center mt-4">
               <div className="grid grid-cols-3 gap-4 max-w-[600px]">
                 {currentGroups.map((group) => (
-                  <div key={group.date} onClick={() => handleGroupClick(group)} className="cursor-pointer">
+                  <div key={group.date} onClick={() => handleGroupClick(group)} className="cursor-pointer relative">
                     <img 
                       src={group.images[0]} 
                       alt={`Group ${group.date}`} 
-                      className="w-32 h-32 object-cover"
+                      className="w-[138px] h-[161px] object-cover"
                     />
+                    <div className='absolute bottom-0 w-full bg-white text-black text-center text-sm'>
+                      {group.date} 월
+                    </div>
                   </div>
                 ))}
                 {emptyDivs}
@@ -147,7 +142,7 @@ function PhotoModal({ onClose }) {
           </>
         )}
       </Modal>
-      {isUploadModalOpen && <UploadModal onClose={handleUploadClose} />} 
+      {isUploadModalOpen && <UploadModal/>} 
     </>
   );
 }

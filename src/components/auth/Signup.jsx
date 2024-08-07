@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const baseUrl = 'http://i11e206.p.ssafy.io';
+const baseUrl = 'https://i11e206.p.ssafy.io';
 
 const Signup = () => {
   const [values, setValues] = useState({
