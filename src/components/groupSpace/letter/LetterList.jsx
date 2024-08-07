@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import baseUrl from '../../../libs/axios/basicAxios';
 
+import LetterDetail from './LetterDetail';
+
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import leftBtn from '../../../assets/button/left-bt-up.png';
@@ -20,7 +22,7 @@ const LetterList = () => {
   const [totalPages, setTotalPages] = useState(0); // 편지 목록의 총 페이지 수 / page 최댓값: totalPages - 1
   const [letters, setLetters] = useState([
     {
-      id: 3,
+      id: 0,
       content: '안녕하세요 도언이 user4입니다.',
       receiveDate: '2024-08-02T00:22:19.633482',
       senderName: 'User Four',
@@ -28,31 +30,31 @@ const LetterList = () => {
       status: 'UNREAD',
     },
     {
-      id: 2,
+      id: 1,
       content: '안녕하세요 도언이 user3입니다.',
       receiveDate: '2024-08-12T00:22:19.633478',
-      senderName: 'User Three',
+      senderName: 'UserThreeAAAAA',
       receiverName: 'User One',
       status: 'UNREAD',
     },
     {
-      id: 1,
+      id: 2,
       content: '안녕하세요 도언이 user2입니다.',
       receiveDate: '2024-08-02T00:22:19.633467',
-      senderName: 'User Two',
+      senderName: '안녕안녕안녕안',
       receiverName: 'User One',
       status: 'READ',
     },
     {
-      id: 1,
+      id: 3,
       content: '안녕하세요 도언이 user2입니다.',
       receiveDate: '2024-08-02T00:22:19.633467',
-      senderName: 'User Two',
+      senderName: '안녕안녕안녕안',
       receiverName: 'User One',
       status: 'READ',
     },
     {
-      id: 1,
+      id: 4,
       content: '안녕하세요 도언이 user2입니다.',
       receiveDate: '2024-08-02T00:22:19.633467',
       senderName: 'User Two',
@@ -61,7 +63,7 @@ const LetterList = () => {
     },
   ]);
   const [comingLetters, setComingLetters] = useState(null);
-  // const [selectedLetter, setSelectedLetter] = useState(null);
+  const [selectedLetterId, setSelectedLetterId] = useState(null);
 
   // useEffect(() => {
   //   const getLetters = async () => {
@@ -124,7 +126,15 @@ const LetterList = () => {
     }
   };
 
-  return (
+  const openLetterDetail = (letterId) => {
+    setSelectedLetterId(letterId);
+  };
+
+  const closeLetterDetail = () => {
+    setSelectedLetterId(null);
+  };
+
+  return !selectedLetterId ? (
     <Modal>
       <div className='flex justify-center items-center mb-16'>
         <h1 className='absolute text-3xl top-9'>받은 편지함</h1>
@@ -134,19 +144,19 @@ const LetterList = () => {
       </div>
       <button
         onClick={handleLeft}
-        className='absolute left-4 top-1/2 transform -translate-y-1/2'
-        disabled={page === 0 ? true : false}
+        className='absolute left-3 top-1/2 transform -translate-y-1/2'
+        disabled={page === 0}
       >
-        <img src={leftBtn} alt='leftBtn' className='w-7' />
+        <img src={leftBtn} alt='leftBtn' className='w-6' />
       </button>
       <button
         onClick={handleRight}
-        className='absolute right-4 top-1/2 transform -translate-y-1/2'
-        disabled={page === totalPages - 1 ? true : false}
+        className='absolute right-3 top-1/2 transform -translate-y-1/2'
+        disabled={page === totalPages - 1}
       >
-        <img src={rightBtn} alt='rightBtn' className='w-7' />
+        <img src={rightBtn} alt='rightBtn' className='w-6' />
       </button>
-      <div>
+      <div onClick={openLetterDetail} className='cursor-pointer ml-10'>
         {letters.map((letter) => (
           <div key={letter.id} className='flex mb-6'>
             <div
@@ -159,13 +169,15 @@ const LetterList = () => {
             >
               {formatDate(letter.receiveDate)}
             </div>
-            <div className='basis-1/5'>
+            <div className='basis-1/6'>
               <button onClick={() => deleteLetter(letter.id)}>삭제</button>
             </div>
           </div>
         ))}
       </div>
     </Modal>
+  ) : (
+    <LetterDetail letterId={selectedLetterId} onClose={closeLetterDetail} />
   );
 };
 
