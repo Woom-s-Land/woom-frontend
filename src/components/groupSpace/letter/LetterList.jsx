@@ -9,6 +9,7 @@ import leftBtn from '../../../assets/button/left-bt-up.png';
 import rightBtn from '../../../assets/button/right-bt-up.png';
 import emptyHeart from '../../../assets/common/emptyHeart.png';
 import fullHeart from '../../../assets/common/fullHeart.png';
+import speechBubble from '../../../assets/common/speechBubble.png';
 
 // 날짜 형식을 변환하는 함수
 const formatDate = (dateString) => {
@@ -26,7 +27,7 @@ const LetterList = () => {
   const [letters, setLetters] = useState([
     {
       id: 0,
-      content: '안녕하세요 도언이 user4입니다.',
+      content: '안녕하세요 도언이 user1입니다.',
       receiveDate: '2024-08-02T00:22:19.633482',
       senderName: 'User Four',
       receiverName: 'User One',
@@ -34,7 +35,7 @@ const LetterList = () => {
     },
     {
       id: 1,
-      content: '안녕하세요 도언이 user3입니다.',
+      content: '안녕하세요 도언이 user2입니다.',
       receiveDate: '2024-08-12T00:22:19.633478',
       senderName: 'UserThreeAAAAA',
       receiverName: 'User One',
@@ -42,7 +43,7 @@ const LetterList = () => {
     },
     {
       id: 2,
-      content: '안녕하세요 도언이 user2입니다.',
+      content: '안녕하세요 도언이 user3입니다.',
       receiveDate: '2024-08-02T00:22:19.633467',
       senderName: '안녕안녕안녕안',
       receiverName: 'User One',
@@ -50,7 +51,7 @@ const LetterList = () => {
     },
     {
       id: 3,
-      content: '안녕하세요 도언이 user2입니다.',
+      content: '안녕하세요 도언이 user4입니다.',
       receiveDate: '2024-08-02T00:22:19.633467',
       senderName: '안녕안녕안녕안',
       receiverName: 'User One',
@@ -58,7 +59,7 @@ const LetterList = () => {
     },
     {
       id: 4,
-      content: '안녕하세요 도언이 user2입니다.',
+      content: '안녕하세요 도언이 user5입니다.',
       receiveDate: '2024-08-02T00:22:19.633467',
       senderName: 'User Two',
       receiverName: 'User One',
@@ -125,7 +126,7 @@ const LetterList = () => {
   };
 
   const handleRight = () => {
-    if (page < totalPages) {
+    if (page < totalPages - 1) {
       setPage(page + 1);
     }
   };
@@ -143,13 +144,14 @@ const LetterList = () => {
 
   const openLetterDetail = (letterId) => {
     setSelectedLetterId(letterId);
+    console.log(letterId);
   };
 
   const closeLetterDetail = () => {
     setSelectedLetterId(null);
   };
 
-  return !selectedLetterId ? (
+  return selectedLetterId === null ? (
     <Modal>
       <div className='flex justify-center items-center mb-16'>
         <h1 className='absolute text-3xl top-9'>받은 편지함</h1>
@@ -163,13 +165,22 @@ const LetterList = () => {
             className='absolute w-8 top-9 right-[62px]'
           />
         ) : (
-          <img
-            src={fullHeart}
-            alt='fullHeart'
-            className='absolute w-8 top-9 right-[62px] cursor-pointer'
-          />
+          <div className='group'>
+            <img
+              src={fullHeart}
+              alt='fullHeart'
+              className='absolute w-8 top-9 right-[62px] cursor-pointer'
+            />
+            <img
+              src={speechBubble}
+              alt='speechBubble'
+              className='absolute hidden group-hover:block right-0 -top-16'
+            />
+            <span className='absolute hidden group-hover:block right-5 -top-4'>
+              편지 오는 중...
+            </span>
+          </div>
         )}
-        <img src='' alt='' />
       </div>
       <button
         onClick={handleLeft}
@@ -190,7 +201,7 @@ const LetterList = () => {
           <div key={letter.id} className='flex mb-6 items-center'>
             <div
               className={`cursor-pointer text-3xl basis-2/5 ${letter.status === 'READ' ? 'text-gray-500' : ''}`}
-              onClick={() => openLetterDetail(letter.id)} // letterId를 함수에 넘겨줍니다.
+              onClick={() => openLetterDetail(letter.id)}
             >
               {letter.senderName}
             </div>
