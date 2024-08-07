@@ -219,7 +219,7 @@ function UploadModal({ }) {
         )
       ) : (
         <div className="flex flex-col items-center space-x-4 mb-4" style={{ marginTop: '15px' }}>
-          <div ref={polaroidRef} className="bg-white p-4 shadow-lg w-60 h-72 flex flex-col items-center relative">
+          <div ref={polaroidRef} className="bg-white p-4 shadow-lg w-[240px] h-[280px] flex flex-col items-center relative">
             {loading ? (
               <p className="text-red-500 absolute inset-0 flex justify-center items-center">변환 중...</p>
             ) : (
