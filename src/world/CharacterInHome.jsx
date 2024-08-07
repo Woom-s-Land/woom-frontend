@@ -20,7 +20,8 @@ const Direction = {
 
 const MAP_X = 488;
 const MAP_Y = 384;
-const SIZE = 60; // 캐릭터 사이즈 60*60
+const CHAR_WIDTH = 40; // 캐릭터 사이즈
+const CHAR_HEIGHT = 60;
 const BoundaryWidth = 8; // 충돌박스의 너비
 const BoundaryHeight = 8;
 const MOVE_DISTANCE = 7; // 한 프레임별 움직일 거리
@@ -121,11 +122,11 @@ const Character = ({ setBackground }) => {
         KeyW: { dir: Direction.UP, isMoveable: () => charY - 16 > 0 },
         KeyS: {
           dir: Direction.DOWN,
-          isMoveable: () => charY + 24 < MAP_Y - SIZE,
+          isMoveable: () => charY + 24 < MAP_Y - CHAR_HEIGHT,
         },
         KeyD: {
           dir: Direction.RIGHT,
-          isMoveable: () => charX + 16 < MAP_X - SIZE,
+          isMoveable: () => charX + 16 < MAP_X - CHAR_WIDTH,
         },
         KeyA: { dir: Direction.LEFT, isMoveable: () => charX + 16 > 0 },
         Space: { dir: direction, isMoveable: () => isNearBed || isNearToilet },
@@ -280,19 +281,23 @@ const Character = ({ setBackground }) => {
         image={directionImages[direction][stepIndex]}
         x={0}
         y={0}
-        width={60}
-        height={60}
+        width={CHAR_WIDTH}
+        height={CHAR_HEIGHT}
       />
-      <Nickname width={60} height={60} text='브로콜리맨' />
+      <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text='브로콜리맨' />
       {isInteractionBed && (
         <InteractionSpeechBubble
-          width={60}
-          height={60}
+          width={CHAR_WIDTH}
+          height={CHAR_HEIGHT}
           text='아직은 잠이 오지 않아'
         />
       )}
       {isInteractionToilet && (
-        <InteractionSpeechBubble width={60} height={60} text='끄응...' />
+        <InteractionSpeechBubble
+          width={CHAR_WIDTH}
+          height={CHAR_HEIGHT}
+          text='끄응...'
+        />
       )}
     </Container>
   );

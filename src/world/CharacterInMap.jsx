@@ -20,7 +20,8 @@ const Direction = {
 
 const MAP_WIDTH = 2048;
 const MAP_HEIGHT = 1536;
-const SIZE = 80; // 캐릭터 사이즈
+const CHAR_WIDTH = 40; // 캐릭터 사이즈
+const CHAR_HEIGHT = 60;
 const MOVE_DISTANCE = 14; // 한 프레임별 움직일 거리
 const FRAME_INTERVAL = 60; // 프레임이 전환될 간격
 const STEP_COUNT = 6;
@@ -326,10 +327,10 @@ const Character = ({
         image={directionImages[direction][stepIndex]}
         x={0}
         y={0}
-        width={SIZE}
-        height={SIZE}
+        width={CHAR_WIDTH}
+        height={CHAR_HEIGHT}
       />
-      <Nickname width={SIZE} height={SIZE} text='브로콜리맨' />
+      <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text='브로콜리맨' />
     </Container>
   );
 };
