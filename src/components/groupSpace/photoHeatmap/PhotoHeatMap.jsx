@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import data from './dummy';
 import dotImages from './dotImages';
 import emptyImg from '../../../assets/heatmap/empty.png';
@@ -7,7 +8,7 @@ const imgList = {
   1: [dotImages.dot2_1, dotImages.dot2_2, dotImages.dot2_3, dotImages.dot2_4],
   2: [dotImages.dot3_1, dotImages.dot3_2, dotImages.dot3_3, dotImages.dot3_4],
 };
-const PhotoHeatMap = () => {
+const PhotoHeatMap = ({ onClose }) => {
   const groupColor = 1;
 
   const getImageSrc = (value) => {
@@ -24,13 +25,36 @@ const PhotoHeatMap = () => {
         return imgList[groupColor][3];
     }
   };
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      onClose();
+    }
+  };
 
+  const handleOutsideClick = (e) => {
+    if (e.target.classList.contains('modal-overlay')) {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
   const emptyImageSrc = emptyImg;
 
   return (
-    <div className='modal-overlay fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
+    <div
+      onClick={handleOutsideClick}
+      className='modal-overlay fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'
+    >
       <div className='bg-modal-vertical bg-cover p-5 bg-center w-[470px] h-[550px] relative flex flex-col items-center'>
-        <button className='absolute top-8 left-8 w-6 h-6 bg-close-bt bg-cover' />
+        <button
+          onClick={onClose}
+          className='absolute top-8 left-8 w-6 h-6 bg-close-bt bg-cover'
+        />
         <div className='absolute top-7 flex justify-center items-center'>
           <p className='text-3xl mt-1 text-base-color'>채 움</p>
           <div className='w-4' />

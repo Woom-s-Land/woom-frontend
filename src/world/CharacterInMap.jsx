@@ -68,6 +68,9 @@ const Character = ({
   setBackgroundY,
   backgroundX,
   backgroundY,
+  isOpenPhoto,
+  isOpenPhotomap,
+  isOpenGuestbook,
   setCharacterX,
   setCharacterY,
   setIsInteractive,
@@ -135,7 +138,7 @@ const Character = ({
         setIsInteractive(true);
       }
       const key = ArrowKeys[e.code];
-      if (key) {
+      if (key && !isOpenPhoto && !isOpenPhotomap && !isOpenGuestbook) {
         setIsAnimating(true);
         if (direction !== key.dir) {
           setDirection(key.dir);
@@ -147,7 +150,16 @@ const Character = ({
         }
       }
     },
-    [charX, charY, stepIndex, direction, isAnimating]
+    [
+      charX,
+      charY,
+      stepIndex,
+      direction,
+      isAnimating,
+      isOpenPhoto,
+      isOpenPhotomap,
+      isOpenGuestbook,
+    ]
   );
 
   // 키를 누르다 뗐을 때 실행할 함수
