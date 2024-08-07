@@ -89,7 +89,11 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
                   onClick={handleLeft}
                 />
                 {/* 캐릭터 assets 정리 후 이미지 경로 수정 예정(동적으로 변경 예정) */}
-                <img src={char_1} alt='char_1' className='w-1/2' />
+                <img
+                  src={costumeList[costume]}
+                  alt='char_1'
+                  className='w-1/3 mx-5'
+                />
                 <img
                   src={rightBtn}
                   alt='rightBtn'
@@ -99,7 +103,7 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
               </div>
             </section>
             <section className='flex flex-col items-center w-1/2 space-y-2'>
-              <div className='relative w-11/12 max-w-sm'>
+              <div className='relative w-11/12 max-w-sm mr-5'>
                 <img src={dialogImg} alt='대화 상자' className='w-full h-24' />
                 <input
                   type='text'
@@ -108,7 +112,7 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
                   className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
                 />
               </div>
-              <div className='relative w-11/12 max-w-sm'>
+              <div className='relative w-11/12 max-w-sm mr-5'>
                 <img src={dialogImg} alt='대화 상자' className='w-full h-24' />
                 <input
                   type='text'
@@ -117,7 +121,7 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
                   className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
                 />
               </div>
-              <div className='relative w-11/12 max-w-sm'>
+              <div className='relative w-11/12 max-w-sm mr-5'>
                 <img src={dialogImg} alt='대화 상자' className='w-full h-24' />
                 <button
                   onClick={handleModal}
