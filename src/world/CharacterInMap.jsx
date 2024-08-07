@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import CharacterImages from './characterImages';
-import mapImages from './mapImages';
 import collisions from '../assets/map/map_collisions';
-import interactions from '../assets/map/map-interactions';
+
 import {
   initializeCollisionMap,
   initializeBoundaries,
@@ -69,21 +68,19 @@ const Character = ({
   setBackgroundY,
   backgroundX,
   backgroundY,
-  setMapImage,
+  setCharacterX,
+  setCharacterY,
+  setIsInteractive,
 }) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState(Direction.DOWN);
   const [charX, setCharX] = useState(width / 2);
   const [charY, setCharY] = useState(height / 2);
   const [isAnimating, setIsAnimating] = useState(false);
-
   const [collision, setCollision] = useState([]);
   const [photoInteraction, setPhotoInteraction] = useState([]);
   const [photomapInteraction, setPhotomapInteraction] = useState([]);
   const [guestbookInteraction, setGuestbookInteraction] = useState([]);
-  const [isNearPhoto, setIsNearPhoto] = useState(false);
-  const [isNearPhotomap, setIsNearPhotomap] = useState(false);
-  const [isNearGuestbook, setIsNearGuestbook] = useState(false);
 
   const animationFrameRef = useRef(null);
   const lastFrameTimeRef = useRef(0);
@@ -107,19 +104,6 @@ const Character = ({
     );
     coll.push(...coll2);
     setCollision(coll);
-
-    const interactionMap = initializeCollisionMap(interactions, 64);
-    setPhotoInteraction(
-      initializeBoundaries(interactionMap, BoundaryWidth, BoundaryHeight, 93991)
-    );
-
-    setPhotomapInteraction(
-      initializeBoundaries(interactionMap, BoundaryWidth, BoundaryHeight, 93990)
-    );
-
-    setGuestbookInteraction(
-      initializeBoundaries(interactionMap, BoundaryWidth, BoundaryHeight, 93989)
-    );
   }, []);
 
   // 충돌 or 상호작용 여부 판정 함수
@@ -140,13 +124,16 @@ const Character = ({
   // 키 눌렀을 때 실행될 함수
   const handleArrowKeyDown = useCallback(
     (e) => {
+      setIsInteractive(false);
       const ArrowKeys = {
         KeyW: { dir: Direction.UP },
         KeyS: { dir: Direction.DOWN },
         KeyD: { dir: Direction.RIGHT },
         KeyA: { dir: Direction.LEFT },
       };
-
+      if (e.code === 'Space') {
+        setIsInteractive(true);
+      }
       const key = ArrowKeys[e.code];
       if (key) {
         setIsAnimating(true);
@@ -197,31 +184,8 @@ const Character = ({
     };
   }, [isAnimating, stepIndex, direction]);
 
-  const setNearList = (newX, newY) => {
-    setIsNearPhoto(
-      boundaryCollision(photoInteraction, newX, newY, backgroundX, backgroundY)
-    );
-    setIsNearPhotomap(
-      boundaryCollision(
-        photomapInteraction,
-        newX,
-        newY,
-        backgroundX,
-        backgroundY
-      )
-    );
-    setIsNearGuestbook(
-      boundaryCollision(
-        guestbookInteraction,
-        newX,
-        newY,
-        backgroundX,
-        backgroundY
-      )
-    );
-  };
+  // 실제로 캐릭터가 맵의 어느 위치에 있는지 계산해주는 함수
   const getCharPos = (charX, charY, mapX, mapY) => {
-    console.log(charX - mapX, charY - mapY);
     return [charX - mapX, charY - mapY];
   };
 
@@ -299,6 +263,8 @@ const Character = ({
         flushSync(() => {
           setCharX(newX);
           setCharY(newY);
+          setCharacterX(newX);
+          setCharacterY(newY);
           setBackgroundX(newBackgroundX);
           setBackgroundY(newBackgroundY);
         });
