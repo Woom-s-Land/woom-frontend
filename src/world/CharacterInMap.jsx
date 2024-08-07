@@ -20,7 +20,8 @@ const Direction = {
 
 const MAP_WIDTH = 2048;
 const MAP_HEIGHT = 1536;
-const SIZE = 80; // 캐릭터 사이즈
+const CHAR_WIDTH = 40; // 캐릭터 사이즈
+const CHAR_HEIGHT = 60;
 const MOVE_DISTANCE = 14; // 한 프레임별 움직일 거리
 const FRAME_INTERVAL = 60; // 프레임이 전환될 간격
 const STEP_COUNT = 6;
@@ -74,8 +75,6 @@ const Character = ({
   const [direction, setDirection] = useState(Direction.DOWN);
   const [charX, setCharX] = useState(width / 2);
   const [charY, setCharY] = useState(height / 2);
-  const [isStopX, setIsStopX] = useState(0);
-  const [isStopY, setIsStopY] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
   const [collision, setCollision] = useState([]);
@@ -94,9 +93,20 @@ const Character = ({
 
   useEffect(() => {
     const collisionMap = initializeCollisionMap(collisions, 64);
-    setCollision(
-      initializeBoundaries(collisionMap, BoundaryWidth, BoundaryHeight, 29870)
+    const coll = initializeBoundaries(
+      collisionMap,
+      BoundaryWidth,
+      BoundaryHeight,
+      29870
     );
+    const coll2 = initializeBoundaries(
+      collisionMap,
+      BoundaryWidth,
+      BoundaryHeight,
+      93988
+    );
+    coll.push(...coll2);
+    setCollision(coll);
 
     const interactionMap = initializeCollisionMap(interactions, 64);
     setPhotoInteraction(
@@ -210,6 +220,11 @@ const Character = ({
       )
     );
   };
+  const getCharPos = (charX, charY, mapX, mapY) => {
+    console.log(charX - mapX, charY - mapY);
+    return [charX - mapX, charY - mapY];
+  };
+
   const animate = (timestamp) => {
     if (!lastFrameTimeRef.current) {
       lastFrameTimeRef.current = timestamp;
@@ -223,63 +238,54 @@ const Character = ({
       let newY = charY;
       let newBackgroundX = backgroundX;
       let newBackgroundY = backgroundY;
-
+      // Center인지 확인하는 함수
+      const isCenterX = () => charX == width / 2;
+      const isCenterY = () => charY == height / 2;
       switch (direction) {
         case Direction.UP:
-          if (isStopY !== 0) {
-            newY -= MOVE_DISTANCE;
-            if (newY <= height / 2) setIsStopY(0);
+          if (newBackgroundY + MOVE_DISTANCE <= 0 && isCenterY()) {
+            newBackgroundY += MOVE_DISTANCE;
           } else {
-            newBackgroundY = backgroundY + MOVE_DISTANCE;
-            if (newBackgroundY >= 0) {
-              setIsStopY(-1);
-              newBackgroundY = 0;
-            }
+            newY -= MOVE_DISTANCE;
           }
-          setNearList(newX, newY);
           break;
         case Direction.DOWN:
-          if (isStopY !== 0) {
-            newY += MOVE_DISTANCE;
-            if (newY >= height / 2) setIsStopY(0);
+          if (
+            newBackgroundY - MOVE_DISTANCE >= -MAP_HEIGHT + height &&
+            isCenterY()
+          ) {
+            newBackgroundY -= MOVE_DISTANCE;
           } else {
-            newBackgroundY = backgroundY - MOVE_DISTANCE;
-            if (newBackgroundY <= height - MAP_HEIGHT) {
-              if (isStopY !== 1) setIsStopY(1);
-              newBackgroundY = height - MAP_HEIGHT;
-            }
+            newY += MOVE_DISTANCE;
           }
-          setNearList(newX, newY);
           break;
         case Direction.LEFT:
-          if (isStopX !== 0) {
-            newX -= MOVE_DISTANCE;
-            if (newX <= width / 2) setIsStopX(0);
+          if (newBackgroundX + MOVE_DISTANCE <= 0 && isCenterX()) {
+            newBackgroundX += MOVE_DISTANCE;
           } else {
-            newBackgroundX = backgroundX + MOVE_DISTANCE;
-            if (newBackgroundX > 0) {
-              setIsStopX(-1);
-              newBackgroundX = 0;
-            }
+            newX -= MOVE_DISTANCE;
           }
-          setNearList(newX, newY);
           break;
         case Direction.RIGHT:
-          if (isStopX !== 0) {
-            newX += MOVE_DISTANCE;
-            if (newX >= width / 2) setIsStopX(0);
+          if (
+            newBackgroundX - MOVE_DISTANCE >= -MAP_WIDTH + width &&
+            isCenterX()
+          ) {
+            newBackgroundX -= MOVE_DISTANCE;
           } else {
-            newBackgroundX = backgroundX - MOVE_DISTANCE;
-            if (newBackgroundX <= width - MAP_WIDTH) {
-              setIsStopX(1);
-              newBackgroundX = width - MAP_WIDTH;
-            }
+            newX += MOVE_DISTANCE;
           }
-          setNearList(newX, newY);
           break;
         default:
           break;
       }
+      // 경계에 왔을 경우 카메라 고정
+      if (newBackgroundX > 0) newBackgroundX = 0;
+      if (newBackgroundX < -MAP_WIDTH + width)
+        newBackgroundX = -MAP_WIDTH + width;
+      if (newBackgroundY > 0) newBackgroundY = 0;
+      if (newBackgroundY < -MAP_HEIGHT + height)
+        newBackgroundY = -MAP_HEIGHT + height;
 
       if (
         !boundaryCollision(
@@ -300,10 +306,6 @@ const Character = ({
         setIsAnimating(false);
       }
 
-      if (isNearPhoto) setMapImage(mapImages.nearPhoto);
-      else if (isNearPhotomap) setMapImage(mapImages.nearPhotomap);
-      else if (isNearGuestbook) setMapImage(mapImages.nearGuestbook);
-      else setMapImage(mapImages.map);
       lastFrameTimeRef.current = timestamp;
     }
     animationFrameRef.current = requestAnimationFrame(animate);
@@ -315,10 +317,10 @@ const Character = ({
         image={directionImages[direction][stepIndex]}
         x={0}
         y={0}
-        width={SIZE}
-        height={SIZE}
+        width={CHAR_WIDTH}
+        height={CHAR_HEIGHT}
       />
-      <Nickname width={SIZE} height={SIZE} text='브로콜리맨' />
+      <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text='브로콜리맨' />
     </Container>
   );
 };

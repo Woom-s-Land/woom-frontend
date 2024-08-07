@@ -1,4 +1,4 @@
-import { Text, Graphics } from '@pixi/react';
+import { Text, Graphics, Container } from '@pixi/react';
 import * as PIXI from 'pixi.js';
 import '../App.css';
 
@@ -9,39 +9,45 @@ const InteractionSpeechBubble = ({ width, height, text }) => {
     fontSize: 11,
     fontFamily: 'DungGeunMo',
   });
+  const length = text.length;
+  const padding = 10;
+  const boxWidth = length * 12;
+  const boxHeight = 30;
   return (
     <>
-      <Graphics
-        draw={(g) => {
-          g.beginFill(0xb1805f);
-          g.drawRoundedRect(-(width / 2), height - 105, width * 2.1, 30, 20);
-          g.lineStyle(3, 0xe7ca88, 1);
-          g.endFill();
-        }}
-      />
-      <Graphics
-        draw={(g) => {
-          g.beginFill(0xb1805f);
-          g.drawCircle(width - 32, height - 66, 5);
-          g.lineStyle(1, 0xe7ca88, 1);
-          g.endFill();
-        }}
-      />
-      <Graphics
-        draw={(g) => {
-          g.beginFill(0xb1805f);
-          g.drawCircle(width - 32, height - 55, 3);
-          g.lineStyle(1, 0xe7ca88, 1);
-          g.endFill();
-        }}
-      />
-      <Text
-        text={text}
-        x={width / 2 + 2}
-        y={height - 90}
-        anchor={0.5}
-        style={textStyle}
-      />
+      <Container x={width / 2} y={-boxHeight - padding}>
+        <Graphics
+          draw={(g) => {
+            g.beginFill(0xb1805f);
+            g.drawRoundedRect(
+              -boxWidth / 2,
+              -boxHeight / 2,
+              boxWidth, // 너비
+              boxHeight, // 높이
+              15 // 둥글기
+            );
+            g.lineStyle(3, 0xe7ca88, 1);
+            g.endFill();
+          }}
+        />
+        <Graphics
+          draw={(g) => {
+            g.beginFill(0xb1805f);
+            g.drawCircle(0, boxHeight - padding / 2, 5);
+            g.lineStyle(1, 0xe7ca88, 1);
+            g.endFill();
+          }}
+        />
+        <Graphics
+          draw={(g) => {
+            g.beginFill(0xb1805f);
+            g.drawCircle(0, boxHeight + padding / 2, 3);
+            g.lineStyle(1, 0xe7ca88, 1);
+            g.endFill();
+          }}
+        />
+        <Text text={text} x={0} y={0} anchor={0.5} style={textStyle} />
+      </Container>
     </>
   );
 };
