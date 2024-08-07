@@ -25,7 +25,7 @@ const JoinGroup = () => {
           <input
             type='text'
             ref={inviteCodeRef}
-            className='w-3/4 px-10 border-none focus:outline-none bg-group-button h-16 text-lg'
+            className='w-3/4 px-10 border-none focus:outline-none bg-gr-btn h-16 text-lg'
             style={{
               backgroundSize: '100% 100%', // 세로 높이를 100%로 고정하고 가로 폭에 맞게 조정
               backgroundColor: 'transparent',

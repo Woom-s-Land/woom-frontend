@@ -26,6 +26,9 @@ const MainPage = () => {
       <button onClick={handleClick('/group')}>그룹 목록</button>
       <br />
       <button onClick={handleClick('/creategroup')}>그룹 생성</button>
+      <br />
+      <button onClick={handleClick('/group-detail')}>그룹 상세</button>
+      <br />
       <button onClick={handleClick('/story-write')}>사연작성 모달</button>
       <br />
       <button onClick={handleClick('/story-read')}>사연읽기 모달</button>

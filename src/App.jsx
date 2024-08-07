@@ -13,12 +13,13 @@ import CreateGroup from './components/group/CreateGroup.jsx';
 import StoryWrite from './components/groupSpace/story/StoryWriteModal';
 import StoryRead from './components/groupSpace/story/StoryReadModal';
 import PasswordReset from './components/auth/PasswordReset';
-
+import GroupDetail from './components/group/GroupDetail.jsx';
 import MyInfo from './components/navbar/MyInfo';
 
 function App() {
   return (
     <div>
+      <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/home' element={<Home />} />
         <Route path='/signup' element={<Signup />} />
@@ -29,9 +30,11 @@ function App() {
         <Route path='/heatmap' element={<PhotoHeatMap />} />
         <Route path='/group' element={<Group />} />
         <Route path='/creategroup' element={<CreateGroup />} />
+        <Route path='/group-detail' element={<GroupDetail />} />
         <Route path='/story-write' element={<StoryWrite />} />
         <Route path='/story-read' element={<StoryRead />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
+      </Routes>
     </div>
   );
 }
