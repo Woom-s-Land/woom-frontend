@@ -94,9 +94,20 @@ const Character = ({
 
   useEffect(() => {
     const collisionMap = initializeCollisionMap(collisions, 64);
-    setCollision(
-      initializeBoundaries(collisionMap, BoundaryWidth, BoundaryHeight, 29870)
+    const coll = initializeBoundaries(
+      collisionMap,
+      BoundaryWidth,
+      BoundaryHeight,
+      29870
     );
+    const coll2 = initializeBoundaries(
+      collisionMap,
+      BoundaryWidth,
+      BoundaryHeight,
+      93988
+    );
+    coll.push(...coll2);
+    setCollision(coll);
 
     const interactionMap = initializeCollisionMap(interactions, 64);
     setPhotoInteraction(
