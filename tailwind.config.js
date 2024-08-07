@@ -27,6 +27,7 @@ export default {
         'gr-check-fill': 'url(src/assets/group/check_fill.png)',
         'gr-copy': 'url(src/assets/group/copy.png)',
         'gr-external': 'url(src/assets/group/external.png)',
+        'inputbox-story': 'url(src/assets/story/input-box-story.png)',
       },
       gridTemplateColumns: {
         'custom-19': 'repeat(19, minmax(0, 1fr))',
