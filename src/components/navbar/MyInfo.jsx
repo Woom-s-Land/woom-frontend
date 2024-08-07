@@ -7,29 +7,15 @@ import { authActions } from '../../store/authSlice';
 import Modal from '../common/Modal';
 import Button from '../common/Button';
 import PasswordChange from './PasswordChange';
-// todo: 캐릭터 assets 정리 후 수정 예정
-import char_1 from '../../assets/1/d1.png';
+
+import BasicImages from './characterBasicImages';
 import rightBtn from '../../assets/button/right-bt-up.png';
 import leftBtn from '../../assets/button/left-bt-up.png';
 import dialogImg from '../../assets/dialog/dialog box big.png';
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
-// todo: 캐릭터 assets 정리 후 수정 예정
-const costumeList = [
-  'd0',
-  'd1',
-  'd2',
-  'd3',
-  'd4',
-  'd5',
-  'd6',
-  'd7',
-  'd8',
-  'd9',
-  'd10',
-  'd11',
-  'd12',
-];
+
+const costumeList = BasicImages;
 
 const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
   const dispatch = useDispatch();
@@ -60,12 +46,10 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
 
   const handleLeft = () => {
     setCostume(costume - 1 < 0 ? costumeList.length - 1 : costume - 1);
-    console.log(costume);
   };
 
   const handleright = () => {
     setCostume((costume + 1) % costumeList.length);
-    console.log(costume);
   };
 
   const changeInfo = async () => {

@@ -111,12 +111,15 @@ function PhotoModal({ }) {
             <div className="flex justify-center mt-4">
               <div className="grid grid-cols-3 gap-4 max-w-[600px]">
                 {currentGroups.map((group) => (
-                  <div key={group.date} onClick={() => handleGroupClick(group)} className="cursor-pointer">
+                  <div key={group.date} onClick={() => handleGroupClick(group)} className="cursor-pointer relative">
                     <img 
                       src={group.images[0]} 
                       alt={`Group ${group.date}`} 
-                      className="w-32 h-32 object-cover"
+                      className="w-[138px] h-[161px] object-cover"
                     />
+                    <div className='absolute bottom-0 w-full bg-white text-black text-center text-sm'>
+                      {group.date} 월
+                    </div>
                   </div>
                 ))}
                 {emptyDivs}
