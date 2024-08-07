@@ -3,6 +3,9 @@ import CharacterInMap from './CharacterInMap';
 import mapImages from './mapImages';
 import { Stage, Sprite, Container } from '@pixi/react';
 import { OutlineFilter } from '@pixi/filter-outline';
+import PhotoModal from '../components/groupSpace/photo/PhotoModal';
+import PhotoHeatMap from '../components/groupSpace/photoHeatmap/PhotoHeatMap';
+import CommentModal from '../components/groupSpace/comment/CommentModal';
 
 const outlineStyle = new OutlineFilter(4, 0xbcff89);
 
@@ -20,6 +23,11 @@ const Map = () => {
   const [isNearGuestbook, setIsNearGuestbook] = useState(false);
 
   const [isInteractive, setIsInteractive] = useState(false);
+
+  const [isOpenPhoto, setIsOpenPhoto] = useState(false);
+  const [isOpenPhotomap, setIsOpenPhotomap] = useState(false);
+  const [isOpenGuestbook, setIsOpenGuestbook] = useState(false);
+
   const photoX = 1417;
   const photoY = 227;
   const photoWidth = 266;
@@ -47,6 +55,28 @@ const Map = () => {
     };
   }, [characterX, characterY, backgroundX, backgroundY, width, height]);
 
+  useEffect(() => {
+    if (isInteractive) {
+      setIsOpenPhoto(false);
+      setIsOpenPhotomap(false);
+      setIsOpenGuestbook(false);
+
+      if (isNearPhoto) setIsOpenPhoto(true);
+      else if (isNearPhotomap) setIsOpenPhotomap(true);
+      else if (isNearGuestbook) setIsOpenGuestbook(true);
+    }
+  }, [isInteractive]);
+
+  const handleClosePhoto = () => {
+    setIsOpenPhoto(false);
+  };
+  const handleClosePhotomap = () => {
+    setIsOpenPhotomap(false);
+  };
+  const handleCloseGuestbook = () => {
+    console.log('click');
+    setIsOpenGuestbook(false);
+  };
   const isNear = (
     charX,
     charY,
@@ -127,12 +157,18 @@ const Map = () => {
             setBackgroundY={setBackgroundY}
             backgroundX={backgroundX}
             backgroundY={backgroundY}
+            isOpenPhoto={isOpenPhoto}
+            isOpenPhotomap={isOpenPhotomap}
+            isOpenGuestbook={isOpenGuestbook}
             setIsInteractive={setIsInteractive}
             setCharacterX={setCharacterX} // 캐릭터의 X 위치를 상위 컴포넌트로 전달
             setCharacterY={setCharacterY} // 캐릭터의 Y 위치를 상위 컴포넌트로 전달
           />
         </Container>
       </Stage>
+      {isOpenPhoto && <PhotoModal onClose={handleClosePhoto} />}
+      {isOpenPhotomap && <PhotoHeatMap onClose={handleClosePhotomap} />}
+      {isOpenGuestbook && <CommentModal onClose={handleCloseGuestbook} />}
     </div>
   );
 };
