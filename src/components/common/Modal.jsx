@@ -1,23 +1,19 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Modal({ children, onCloseHandler }) {
+function Modal({ children, onClose }) {
   const navigate = useNavigate();
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Escape') {
-      goBack();
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      onClose();
     }
   };
 
-  const handleOutsideClick = (event) => {
-    if (event.target.classList.contains('modal-overlay')) {
-      goBack();
+  const handleOutsideClick = (e) => {
+    if (e.target.classList.contains('modal-overlay')) {
+      onClose();
     }
-  };
-
-  const goBack = () => {
-    navigate(-1); // 이전 페이지로 이동
   };
 
   useEffect(() => {
@@ -35,7 +31,7 @@ function Modal({ children, onCloseHandler }) {
       <div className='bg-modal-bg bg-cover bg-center p-0 rounded-lg w-[700px] h-[447px] relative flex flex-col justify-center'>
         <button
           className='absolute top-5 left-7 w-6 h-6 bg-close-bt bg-cover'
-          onClick={onCloseHandler} // 닫기 버튼 클릭 시 이전 페이지로 이동
+          onClick={onClose} // 닫기 버튼 클릭 시 이전 페이지로 이동
         />
         {children}
       </div>

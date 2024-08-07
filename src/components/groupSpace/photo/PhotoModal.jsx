@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ItemModal from './ItemModal';
 import DetailModal from './DetailModal';
 import UploadModal from './UploadModal';
-import Modal from '../../common/Modal'
+import Modal from '../../common/Modal';
 
 const imageGroups = [
   {
@@ -40,7 +40,7 @@ const imageGroups = [
   },
 ];
 
-function PhotoModal({ }) {
+function PhotoModal({ onClose }) {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
@@ -82,40 +82,50 @@ function PhotoModal({ }) {
     setIsUploadModalOpen(false);
   };
 
-  const currentGroups = imageGroups.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+  const currentGroups = imageGroups.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
 
-  const emptyDivs = Array.from({ length: itemsPerPage - currentGroups.length }, (_, index) => (
-    <div key={`empty-${index}`} className="w-32 h-32" />
-  ));
+  const emptyDivs = Array.from(
+    { length: itemsPerPage - currentGroups.length },
+    (_, index) => <div key={`empty-${index}`} className='w-32 h-32' />
+  );
 
   return (
     <>
-      <Modal>
+      <Modal onClose={onClose}>
         {selectedImage ? (
-          <DetailModal src={selectedImage}/>
+          <DetailModal src={selectedImage} onClose={handleImageClose} />
         ) : selectedGroup ? (
           <ItemModal
             group={selectedGroup}
             onImageClick={handleImageClick}
+            onClose={handleBackToGroups}
           />
         ) : (
           <>
-            <div className="absolute top-4 right-6 flex items-center p-2 rounded cursor-pointer" 
+            <div
+              className='absolute top-4 right-6 flex items-center p-2 rounded cursor-pointer'
               onClick={handleUploadClick}
               style={{ backgroundColor: '#aa7959' }}
             >
-              <div className="w-6 h-6 bg-plus-bt bg-cover"></div>
-              <span className="ml-2 text-sm">사진 추가</span>
+              <div className='w-6 h-6 bg-plus-bt bg-cover'></div>
+              <span className='ml-2 text-sm'>사진 추가</span>
             </div>
 
-            <div className="flex justify-center mt-4">
-              <div className="grid grid-cols-3 gap-4 max-w-[600px]">
+            <div className='flex justify-center mt-4'>
+              <div className='grid grid-cols-3 gap-4 max-w-[600px]'>
                 {currentGroups.map((group) => (
-                  <div key={group.date} onClick={() => handleGroupClick(group)} className="cursor-pointer relative">
-                    <img 
-                      src={group.images[0]} 
-                      alt={`Group ${group.date}`} 
-                      className="w-[138px] h-[161px] object-cover"
+                  <div
+                    key={group.date}
+                    onClick={() => handleGroupClick(group)}
+                    className='cursor-pointer relative'
+                  >
+                    <img
+                      src={group.images[0]}
+                      alt={`Group ${group.date}`}
+                      className='w-[138px] h-[161px] object-cover'
                     />
                     <div className='absolute bottom-0 w-full bg-white text-black text-center text-sm'>
                       {group.date} 월
@@ -126,7 +136,7 @@ function PhotoModal({ }) {
               </div>
             </div>
             <div>
-              <div className="absolute left-2 right-2 flex justify-between items-center transform -translate-y-1/2 top-1/2">
+              <div className='absolute left-2 right-2 flex justify-between items-center transform -translate-y-1/2 top-1/2'>
                 <button
                   className={`w-8 h-8 bg-left-bt bg-cover ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
                   onClick={handlePrevPage}
@@ -142,7 +152,7 @@ function PhotoModal({ }) {
           </>
         )}
       </Modal>
-      {isUploadModalOpen && <UploadModal/>} 
+      {isUploadModalOpen && <UploadModal onClose={handleUploadClose} />}
     </>
   );
 }
