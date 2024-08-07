@@ -31,14 +31,13 @@ const costumeList = [
   'd12',
 ];
 
-const MyInfo = () => {
+const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
   const dispatch = useDispatch();
 
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [nickname, setNickname] = useState(userInfo.nickname);
   const [costume, setCostume] = useState(userInfo.costume);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -93,61 +92,65 @@ const MyInfo = () => {
   };
 
   return (
-    <Modal>
-      <div className='relative flex justify-between items-center mb-6'>
-        <section className='flex flex-col items-center w-1/2'>
-          <div className='flex w-full items-center justify-center'>
-            <img
-              src={leftBtn}
-              alt='leftBtn'
-              className='w-1/12 cursor-pointer'
-              onClick={handleLeft}
-            />
-            {/* 캐릭터 assets 정리 후 이미지 경로 수정 예정(동적으로 변경 예정) */}
-            <img src={char_1} alt='char_1' className='w-2/3' />
-            <img
-              src={rightBtn}
-              alt='rightBtn'
-              className='w-1/12 cursor-pointer'
-              onClick={handleright}
-            />
+    <div>
+      {isOpen && (
+        <Modal onCloseHandler={handleCloseMyInfo}>
+          <div className='relative flex justify-between items-center mb-6'>
+            <section className='flex flex-col items-center w-1/2'>
+              <div className='flex w-full items-center justify-center'>
+                <img
+                  src={leftBtn}
+                  alt='leftBtn'
+                  className='w-1/12 cursor-pointer'
+                  onClick={handleLeft}
+                />
+                {/* 캐릭터 assets 정리 후 이미지 경로 수정 예정(동적으로 변경 예정) */}
+                <img src={char_1} alt='char_1' className='w-1/2' />
+                <img
+                  src={rightBtn}
+                  alt='rightBtn'
+                  className='w-1/12 cursor-pointer'
+                  onClick={handleright}
+                />
+              </div>
+            </section>
+            <section className='flex flex-col items-center w-1/2 space-y-2'>
+              <div className='relative w-11/12 max-w-sm'>
+                <img src={dialogImg} alt='대화 상자' className='w-full h-24' />
+                <input
+                  type='text'
+                  value={nickname}
+                  onChange={handleChange}
+                  className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
+                />
+              </div>
+              <div className='relative w-11/12 max-w-sm'>
+                <img src={dialogImg} alt='대화 상자' className='w-full h-24' />
+                <input
+                  type='text'
+                  value={userInfo.email}
+                  disabled
+                  className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
+                />
+              </div>
+              <div className='relative w-11/12 max-w-sm'>
+                <img src={dialogImg} alt='대화 상자' className='w-full h-24' />
+                <button
+                  onClick={handleModal}
+                  className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl text-left'
+                >
+                  비밀번호 변경
+                </button>
+              </div>
+            </section>
+            <div className='absolute translate-y-[182px] left-1/2 transform -translate-x-1/2'>
+              <Button label={'저장'} onClick={changeInfo}></Button>
+            </div>
           </div>
-        </section>
-        <section className='flex flex-col items-center w-1/2 space-y-2'>
-          <div className='relative w-11/12 max-w-sm'>
-            <img src={dialogImg} alt='대화 상자' className='w-full h-24' />
-            <input
-              type='text'
-              value={nickname}
-              onChange={handleChange}
-              className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
-            />
-          </div>
-          <div className='relative w-11/12 max-w-sm'>
-            <img src={dialogImg} alt='대화 상자' className='w-full h-24' />
-            <input
-              type='text'
-              value={userInfo.email}
-              disabled
-              className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl'
-            />
-          </div>
-          <div className='relative w-11/12 max-w-sm'>
-            <img src={dialogImg} alt='대화 상자' className='w-full h-24' />
-            <button
-              onClick={handleModal}
-              className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 p-2 bg-transparent border border-transparent rounded focus:outline-none text-xl text-left'
-            >
-              비밀번호 변경
-            </button>
-          </div>
-        </section>
-        <div className='absolute translate-y-[182px] left-1/2 transform -translate-x-1/2'>
-          <Button label={'저장'} onClick={changeInfo}></Button>
-        </div>
-      </div>
-      {isModalOpen && <PasswordChange onClose={handleModal} />}
-    </Modal>
+          {isModalOpen && <PasswordChange onClose={handleModal} />}
+        </Modal>
+      )}
+    </div>
   );
 };
 
