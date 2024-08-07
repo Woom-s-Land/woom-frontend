@@ -16,6 +16,11 @@ import PasswordReset from './components/auth/PasswordReset';
 import GroupDetail from './components/group/GroupDetail.jsx';
 import MyInfo from './components/navbar/MyInfo';
 
+import ChooseUser from './components/groupSpace/letter/ChooseUser';
+import WriteLetter from './components/groupSpace/letter/WriteLetter';
+import MainLetter from './components/groupSpace/letter/MainLetter';
+import DropDown from './components/common/DropDown.jsx';
+
 function App() {
   return (
     <div>
