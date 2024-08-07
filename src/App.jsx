@@ -4,7 +4,7 @@ import Home from './world/Home.jsx';
 import Map from './world/Map.jsx';
 import Login from './components/auth/Login';
 import Photo from './components/groupSpace/photo/PhotoModal';
-import Comment from './components/groupSpace/comment/CommentModal.jsx'
+import Comment from './components/groupSpace/comment/CommentModal.jsx';
 import OauthHandler from './components/auth/OauthHandler';
 import Signup from './components/auth/Signup';
 import PhotoHeatMap from './components/groupSpace/photoHeatmap/PhotoHeatMap.jsx';
@@ -15,6 +15,7 @@ import StoryRead from './components/groupSpace/story/StoryReadModal';
 import PasswordReset from './components/auth/PasswordReset';
 import GroupDetail from './components/group/GroupDetail.jsx';
 import MyInfo from './components/navbar/MyInfo';
+import Loading from './components/common/Loading.jsx';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path='/group-detail' element={<GroupDetail />} />
         <Route path='/story-write' element={<StoryWrite />} />
         <Route path='/story-read' element={<StoryRead />} />
+        <Route path='/loading' element={<Loading />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
       </Routes>
     </div>
