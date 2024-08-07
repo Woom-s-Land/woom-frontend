@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Modal({ children }) {
+function Modal({ children, onCloseHandler }) {
   const navigate = useNavigate();
 
   const handleKeyDown = (event) => {
@@ -35,7 +35,7 @@ function Modal({ children }) {
       <div className='bg-modal-bg bg-cover bg-center p-0 rounded-lg w-[700px] h-[447px] relative flex flex-col justify-center'>
         <button
           className='absolute top-5 left-7 w-6 h-6 bg-close-bt bg-cover'
-          onClick={goBack} // 닫기 버튼 클릭 시 이전 페이지로 이동
+          onClick={onCloseHandler} // 닫기 버튼 클릭 시 이전 페이지로 이동
         />
         {children}
       </div>

@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Main from './MainPage.jsx';
 import Home from './world/Home.jsx';
 import Map from './world/Map.jsx';
 import Login from './components/auth/Login';
 import Photo from './components/groupSpace/photo/PhotoModal';
-import Comment from './components/groupSpace/comment/CommentModal.jsx'
+import Comment from './components/groupSpace/comment/CommentModal.jsx';
 import OauthHandler from './components/auth/OauthHandler';
 import Signup from './components/auth/Signup';
 import PhotoHeatMap from './components/groupSpace/photoHeatmap/PhotoHeatMap.jsx';
@@ -12,9 +13,9 @@ import Group from './components/group/Group.jsx';
 import CreateGroup from './components/group/CreateGroup.jsx';
 import StoryWrite from './components/groupSpace/story/StoryWriteModal';
 import StoryRead from './components/groupSpace/story/StoryReadModal';
+import Header from './components/navbar/Menubar.jsx';
 import PasswordReset from './components/auth/PasswordReset';
 import GroupDetail from './components/group/GroupDetail.jsx';
-import MyInfo from './components/navbar/MyInfo';
 
 import ChooseUser from './components/groupSpace/letter/ChooseUser';
 import WriteLetter from './components/groupSpace/letter/WriteLetter';
@@ -23,7 +24,8 @@ import DropDown from './components/common/DropDown.jsx';
 
 function App() {
   return (
-    <div>
+    <div className='App'>
+      <Header />
       <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/home' element={<Home />} />
