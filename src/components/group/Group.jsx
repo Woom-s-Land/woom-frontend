@@ -37,6 +37,9 @@ const Group = ({ isOpen, handleCloseGroup }) => {
   const handleNextPage = () => {
     setPage((prev) => Math.min(totalPage, prev + 1));
   };
+  const handleOpenGroupListModal = () => {
+    setActiveModal('list'); // 그룹 목록 모달 활성화
+  };
   const handleOpenCreateGroupModal = () => {
     console.log('create');
     setActiveModal('create'); // 그룹 생성 모달 활성화
@@ -94,7 +97,12 @@ const Group = ({ isOpen, handleCloseGroup }) => {
             </div>
           )}
           {activeModal === 'create' && <CreateGroup onClose={handleClose} />}
-          {activeModal === 'join' && <JoinGroup onClose={handleClose} />}
+          {activeModal === 'join' && (
+            <JoinGroup
+              onClose={handleClose}
+              onSuccess={handleOpenGroupListModal}
+            />
+          )}
           {activeModal === 'detail' && <GroupDetail onClose={handleClose} />}
         </Modal>
       )}
