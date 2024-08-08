@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import axios from 'axios';
@@ -47,7 +47,7 @@ function StoryWriteModal() {
       const response = await api.post(`/api/wooms/${woomsId}/stories`, {
         content: story,
       });
-      
+
       if (response.status === 200) {
         console.log('사연 작성 성공:', response.data);
         // 성공 했을 때 우째 할지 추가 해볼게요
@@ -61,30 +61,34 @@ function StoryWriteModal() {
   };
 
   return (
-    <>
-      <Modal>
-        <div className="absolute inset-x-0 top-7 text-3xl mt-1 text-base-color">사연 작성</div>
-        <div className="absolute inset-x-5 top-20 flex justify-center items-center">
-          <div className="relative w-[440px] h-[280px] bg-inputbox-story bg-center bg-cover">
-            <textarea
-              value={story}
-              onChange={handleChange}
-              placeholder="여기에 사연을 작성해 주세요"
-              maxLength={maxLength}
-              className="absolute inset-0 w-full h-full pt-5 pr-8 pl-8 rounded-md bg-transparent text-white outline-none"
-              disabled={isLoading}
-            />
-            <div className="absolute bottom-1 right-4 text-white text-sm">
-              {story.length}/{maxLength}
-            </div>
+    <Modal>
+      <div className='absolute inset-x-0 top-7 text-3xl mt-1 text-base-color'>
+        사연 작성
+      </div>
+      <div className='absolute inset-x-5 top-20 flex justify-center items-center'>
+        <div className='relative w-[440px] h-[280px] bg-inputbox-story bg-center bg-cover'>
+          <textarea
+            value={story}
+            onChange={handleChange}
+            placeholder='여기에 사연을 작성해 주세요'
+            maxLength={maxLength}
+            className='resize-none absolute inset-0 w-full h-full pt-5 pr-8 pl-8 rounded-md bg-transparent text-white outline-none'
+            disabled={isLoading}
+          />
+          <div className='absolute bottom-1 right-4 text-white text-sm'>
+            {story.length}/{maxLength}
           </div>
         </div>
-        <div className="absolute inset-x-0 bottom-1 flex justify-center items-center">
-          <Button label={isLoading ? '제출 중...' : '사연 제출하기'} onClick={handleSubmit} disabled={isLoading || !woomsId} />
-          {isLoading && <div className="loader">로딩 중...</div>}
-        </div>
-      </Modal>
-    </>
+      </div>
+      <div className='absolute inset-x-0 bottom-1 flex justify-center items-center'>
+        <Button
+          label={isLoading ? '제출 중...' : '사연 제출하기'}
+          onClick={handleSubmit}
+          disabled={isLoading || !woomsId}
+        />
+        {isLoading && <div className='loader'>로딩 중...</div>}
+      </div>
+    </Modal>
   );
 }
 
