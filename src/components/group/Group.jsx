@@ -6,7 +6,7 @@ import GroupList from './GroupList';
 import CreateGroup from './CreateGroup';
 import JoinGroup from './JoinGroup';
 
-const Group = () => {
+const Group = ({isOpen, handleCloseGroup}) => {
   const [list, setList] = useState([
     {
       woomsId: 0,
@@ -68,7 +68,8 @@ const Group = () => {
   };
 
   return (
-    <Modal>
+    <div>
+    {isOpen && <Modal onCloseHandler={handleCloseGroup}>
       {activeModal === 'list' && (
         <div>
           <div className='absolute z-10 left-2 right-2 flex justify-between items-center transform -translate-y-1/2 top-1/2'>
@@ -97,6 +98,8 @@ const Group = () => {
       {activeModal === 'create' && <CreateGroup />}
       {activeModal === 'join' && <JoinGroup />}
     </Modal>
+    }
+    </div>
   );
 };
 

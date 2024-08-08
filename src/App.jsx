@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Main from './MainPage.jsx';
 import Home from './world/Home.jsx';
@@ -12,16 +13,22 @@ import Group from './components/group/Group.jsx';
 import CreateGroup from './components/group/CreateGroup.jsx';
 import StoryWrite from './components/groupSpace/story/StoryWriteModal';
 import StoryRead from './components/groupSpace/story/StoryReadModal';
+import Header from './components/navbar/Menubar.jsx';
 import PasswordReset from './components/auth/PasswordReset';
 import GroupDetail from './components/group/GroupDetail.jsx';
 import MyInfo from './components/navbar/MyInfo';
 import LetterList from './components/groupSpace/letter/LetterList.jsx';
+import Loading from './components/common/Loading.jsx';
+import ChooseUser from './components/groupSpace/letter/ChooseUser';
+import WriteLetter from './components/groupSpace/letter/WriteLetter';
+import MainLetter from './components/groupSpace/letter/MainLetter';
+import DropDown from './components/common/DropDown.jsx';
 
 function App() {
   return (
-    <div>
-      <LetterList />
-      {/* <Routes>
+    <div className='App'>
+      <Header />
+      <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/home' element={<Home />} />
         <Route path='/signup' element={<Signup />} />
@@ -35,8 +42,9 @@ function App() {
         <Route path='/group-detail' element={<GroupDetail />} />
         <Route path='/story-write' element={<StoryWrite />} />
         <Route path='/story-read' element={<StoryRead />} />
+        <Route path='/loading' element={<Loading />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
-      </Routes> */}
+      </Routes>
     </div>
   );
 }

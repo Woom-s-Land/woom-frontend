@@ -3,10 +3,10 @@ import pixelit from '../../../libs/pixelit';
 import html2canvas from 'html2canvas';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from './cropImage'; // cropImage 유틸리티 함수
-import Modal from '../../common/Modal'
-import Button from '../../common/Button'
+import Modal from '../../common/Modal';
+import Button from '../../common/Button';
 
-function UploadModal({ }) {
+const UploadModal = ({ onClose }) => {
   const [files, setFiles] = useState([]);
   const [pixelCanvas, setPixelCanvas] = useState(null);
   const [pixelScale, setPixelScale] = useState(13);
@@ -71,7 +71,8 @@ function UploadModal({ }) {
         const px = new pixelit({
           to: canvas,
           scale: scale || pixelScale,
-          palette: [ // 사용자 정의 팔레트 설정 (RGB 값)
+          palette: [
+            // 사용자 정의 팔레트 설정 (RGB 값)
             [46, 34, 47],
             [62, 53, 70],
             [98, 85, 101],
@@ -135,8 +136,8 @@ function UploadModal({ }) {
             [240, 79, 120],
             [246, 129, 129],
             [252, 167, 144],
-            [253, 203, 176]
-          ]
+            [253, 203, 176],
+          ],
         });
         px.setFromImgSource(img.src).draw().pixelate().convertPalette();
         setPixelCanvas(canvas.toDataURL());
@@ -173,10 +174,10 @@ function UploadModal({ }) {
   };
 
   return (
-    <Modal>
+    <Modal onClose={onClose}>
       {!pixelCanvas && !loading ? (
         imageSrc ? (
-          <div className="relative w-full h-64">
+          <div className='relative w-full h-64'>
             <Cropper
               image={imageSrc}
               crop={crop}
@@ -186,8 +187,8 @@ function UploadModal({ }) {
               onCropComplete={handleCropComplete}
               onZoomChange={setZoom}
             />
-            <button 
-              className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded"
+            <button
+              className='absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded'
               onClick={handleCrop}
             >
               자르기
@@ -197,76 +198,96 @@ function UploadModal({ }) {
           <div
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            className="w-[300px] h-[200px] border-2 border-dashed p-4 mb-4 text-center mx-auto"
+            className='w-[300px] h-[200px] border-2 border-dashed p-4 mb-4 text-center mx-auto'
             style={{ borderColor: '#aa7959' }}
           >
-            <p style={{ color: '#aa7959' }}>여기에 파일을 드래그 앤 드롭하세요!</p>
-            <label className="cursor-pointer">
-              <img 
-                src="src/assets/button/file-bt.png" 
-                alt="파일 선택 아이콘"
-                className="w-20 h-20 mx-auto"
+            <p style={{ color: '#aa7959' }}>
+              여기에 파일을 드래그 앤 드롭하세요!
+            </p>
+            <label className='cursor-pointer'>
+              <img
+                src='src/assets/button/file-bt.png'
+                alt='파일 선택 아이콘'
+                className='w-20 h-20 mx-auto'
               />
-              <input 
-                type="file" 
-                accept="image/*" 
-                onChange={handleFileChange} 
-                multiple 
-                className="hidden" 
+              <input
+                type='file'
+                accept='image/*'
+                onChange={handleFileChange}
+                multiple
+                className='hidden'
               />
             </label>
           </div>
         )
       ) : (
-        <div className="flex flex-col items-center space-x-4 mb-4" style={{ marginTop: '15px' }}>
-          <div ref={polaroidRef} className="bg-white p-4 shadow-lg w-60 h-72 flex flex-col items-center relative">
+        <div
+          className='flex flex-col items-center space-x-4 mb-4'
+          style={{ marginTop: '15px' }}
+        >
+          <div
+            ref={polaroidRef}
+            className='bg-white p-4 shadow-lg w-[240px] h-[280px] flex flex-col items-center relative'
+          >
             {loading ? (
-              <p className="text-red-500 absolute inset-0 flex justify-center items-center">변환 중...</p>
+              <p className='text-red-500 absolute inset-0 flex justify-center items-center'>
+                변환 중...
+              </p>
             ) : (
               pixelCanvas && (
-                <img src={pixelCanvas} alt="Pixelated" className="w-[200px] h-[200px] object-cover" />
+                <img
+                  src={pixelCanvas}
+                  alt='Pixelated'
+                  className='w-[200px] h-[200px] object-cover'
+                />
               )
             )}
-            <input 
-              type="text" 
-              value={caption} 
+            <input
+              type='text'
+              value={caption}
               onChange={(e) => setCaption(e.target.value.slice(0, 11))} // Limit to 10 characters
-              placeholder="캡션 작성 (최대 11자)" 
-              className="mt-2 p-2 rounded w-full text-center absolute bottom-4 focus:outline-none"
+              placeholder='캡션 작성 (최대 11자)'
+              className='mt-2 p-2 rounded w-full text-center absolute bottom-4 focus:outline-none'
             />
           </div>
         </div>
       )}
-      <canvas id="pixelitcanvas" ref={canvasRef} className="hidden"></canvas>
+      <canvas id='pixelitcanvas' ref={canvasRef} className='hidden'></canvas>
       {isCropped && (
-        <div className="flex flex-col items-center justify-center">
-          <div className="w-full max-w-xs">
-            <label htmlFor="pixel-range" className="block mb-2 text-sm font-medium text-white">
+        <div className='flex flex-col items-center justify-center'>
+          <div className='w-full max-w-xs'>
+            <label
+              htmlFor='pixel-range'
+              className='block mb-2 text-sm font-medium text-white'
+            >
               픽셀화 정도: {pixelScale}
             </label>
-            <input 
-              id="pixel-range" 
-              type="range" 
-              min="2" 
-              max="25" 
-              value={pixelScale} 
-              onChange={(e) => setPixelScale(parseInt(e.target.value))} 
-              className="w-full h-2 bg-base-color rounded-lg appearance-none cursor-pointer"
+            <input
+              id='pixel-range'
+              type='range'
+              min='2'
+              max='25'
+              value={pixelScale}
+              onChange={(e) => setPixelScale(parseInt(e.target.value))}
+              className='w-full h-2 bg-base-color rounded-lg appearance-none cursor-pointer'
             />
           </div>
         </div>
       )}
-      <div className="flex justify-end space-x-2" style={{ marginRight: '20px' }}>
+      <div
+        className='flex justify-end space-x-2'
+        style={{ marginRight: '20px' }}
+      >
         {pixelCanvas && !loading && (
-        <>
-          <Button label="다시 자르기" onClick={handleNewTransform} />
-          <Button label="다운로드" onClick={handleDownload} />
-          <Button label="업로드" onClick={handleUpload} />
-        </>
+          <>
+            <Button label='다시 자르기' onClick={handleNewTransform} />
+            <Button label='다운로드' onClick={handleDownload} />
+            <Button label='업로드' onClick={handleUpload} />
+          </>
         )}
       </div>
     </Modal>
   );
-}
+};
 
 export default UploadModal;

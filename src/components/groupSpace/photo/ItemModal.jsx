@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Modal from '../../common/Modal'
+import Modal from '../../common/Modal';
 
-function ItemModal({ group, onImageClick }) {
+const ItemModal = ({ group, onImageClick, onClose }) => {
   const itemsPerPage = 6; // 한 페이지당 표시할 이미지 수
   const totalPages = Math.ceil(group.images.length / itemsPerPage);
 
@@ -19,23 +19,27 @@ function ItemModal({ group, onImageClick }) {
     }
   };
 
-  const currentImages = group.images.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+  const currentImages = group.images.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
 
   // 빈 div를 추가하여 항상 6개의 요소가 있도록 함
-  const emptyDivs = Array.from({ length: itemsPerPage - currentImages.length }, (_, index) => (
-    <div key={`empty-${index}`} className="w-32 h-32" />
-  ));
+  const emptyDivs = Array.from(
+    { length: itemsPerPage - currentImages.length },
+    (_, index) => <div key={`empty-${index}`} className='w-[138px] h-[161px]' />
+  );
 
   return (
-    <Modal>
-      <div className="flex justify-center mt-4">
-        <div className="grid grid-cols-3 gap-4 max-w-[600px]">
+    <Modal onClose={onClose}>
+      <div className='flex justify-center mt-4'>
+        <div className='grid grid-cols-3 gap-4'>
           {currentImages.map((src, index) => (
-            <div key={index} className="cursor-pointer">
+            <div key={index} className='cursor-pointer'>
               <img
                 src={src}
                 alt={`detail-${index}`}
-                className="w-32 h-32 object-cover"
+                className='w-[138px] h-[161px] object-cover'
                 onClick={() => onImageClick(src)}
               />
             </div>
@@ -46,7 +50,7 @@ function ItemModal({ group, onImageClick }) {
       <div>
         {/* 이전페이지 이동 버튼 */}
         {/* 다음페이지 이동 버튼 */}
-        <div className="absolute left-2 right-2 flex justify-between items-center transform -translate-y-1/2 top-1/2">
+        <div className='absolute left-2 right-2 flex justify-between items-center transform -translate-y-1/2 top-1/2'>
           <button
             className={`w-8 h-8 bg-left-bt bg-cover ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
             onClick={handlePrevPage}
@@ -61,6 +65,6 @@ function ItemModal({ group, onImageClick }) {
       </div>
     </Modal>
   );
-}
+};
 
 export default ItemModal;
