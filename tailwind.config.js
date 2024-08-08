@@ -27,6 +27,9 @@ export default {
         'gr-check-fill': 'url(src/assets/group/check_fill.png)',
         'gr-copy': 'url(src/assets/group/copy.png)',
         'gr-external': 'url(src/assets/group/external.png)',
+        'bgm-o': 'url(src/assets/menu/bgm-o.png)',
+        'bgm-x': 'url(src/assets/menu/bgm-x.png)',
+        'menu': 'url(src/assets/menu/menu.png)',
       },
       gridTemplateColumns: {
         'custom-19': 'repeat(19, minmax(0, 1fr))',
