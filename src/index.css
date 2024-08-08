@@ -11,3 +11,8 @@
 body {
   font-family: 'Dunggeunmo';
 }
+
+.scrollbar::-webkit-scrollbar {
+  width: 10px;
+  display: none;
+}

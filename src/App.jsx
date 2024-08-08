@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Main from './MainPage.jsx';
 import Home from './world/Home.jsx';
 import Map from './world/Map.jsx';
 import Login from './components/auth/Login';
 import Photo from './components/groupSpace/photo/PhotoModal';
-import Comment from './components/groupSpace/comment/CommentModal.jsx'
+import Comment from './components/groupSpace/comment/CommentModal.jsx';
 import OauthHandler from './components/auth/OauthHandler';
 import Signup from './components/auth/Signup';
 import PhotoHeatMap from './components/groupSpace/photoHeatmap/PhotoHeatMap.jsx';
@@ -12,13 +13,20 @@ import Group from './components/group/Group.jsx';
 import CreateGroup from './components/group/CreateGroup.jsx';
 import StoryWrite from './components/groupSpace/story/StoryWriteModal';
 import StoryRead from './components/groupSpace/story/StoryReadModal';
+import Header from './components/navbar/Menubar.jsx';
 import PasswordReset from './components/auth/PasswordReset';
 import GroupDetail from './components/group/GroupDetail.jsx';
 import MyInfo from './components/navbar/MyInfo';
+import Loading from './components/common/Loading.jsx';
+import ChooseUser from './components/groupSpace/letter/ChooseUser';
+import WriteLetter from './components/groupSpace/letter/WriteLetter';
+import MainLetter from './components/groupSpace/letter/MainLetter';
+import DropDown from './components/common/DropDown.jsx';
 
 function App() {
   return (
-    <div>
+    <div className='App'>
+      <Header />
       <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/home' element={<Home />} />
@@ -33,6 +41,7 @@ function App() {
         <Route path='/group-detail' element={<GroupDetail />} />
         <Route path='/story-write' element={<StoryWrite />} />
         <Route path='/story-read' element={<StoryRead />} />
+        <Route path='/loading' element={<Loading />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
       </Routes>
     </div>
