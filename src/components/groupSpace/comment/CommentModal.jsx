@@ -165,7 +165,7 @@ const mockComments = [
     createdDate: '2024-08-01T02:08:58.677Z',
   },
   {
-    nickname: 'User3',
+    nickname: '마늘입니다람쥐',
     content: 'This is a comment 3',
     costume: 4,
     createdDate: '2024-08-01T03:08:58.677Z',
@@ -194,12 +194,12 @@ const mockComments = [
     costume: 4,
     createdDate: '2024-08-01T07:08:58.677Z',
   },
-  {
-    nickname: 'User8',
-    content: 'This is a comment 8',
-    costume: 2,
-    createdDate: '2024-08-01T08:08:58.677Z',
-  },
+  // {
+  //   nickname: 'User8',
+  //   content: 'This is a comment 8',
+  //   costume: 2,
+  //   createdDate: '2024-08-01T08:08:58.677Z',
+  // },
 ];
 
 const Comment = ({ onClose }) => {
@@ -257,16 +257,16 @@ const Comment = ({ onClose }) => {
   return (
     <Modal onClose={onClose}>
       <div className='px-4'>
-        <h2 className='text-2xl mt-4 mb-4'>방명록</h2>
+        <h2 className='text-2xl mt-4 mb-4 text-base-color'>방명록</h2>
         <form onSubmit={handleSubmit} className='items-center'>
           <div
-            className='relative ml-20 mb-5 bg-center bg-no-repeat flex items-center justify-between'
+            className='relative ml-32 mb-5 bg-center bg-no-repeat flex items-center justify-between'
             style={{
               backgroundImage: `url('src/assets/comment/input-box.png')`,
               backgroundSize: 'contain',
               backgroundPosition: 'center',
               height: '50px',
-              width: '500px',
+              width: '470px',
             }}
           >
             <input
@@ -274,39 +274,40 @@ const Comment = ({ onClose }) => {
               value={inputValue}
               onChange={handleInputChange}
               placeholder='댓글을 입력하세요'
-              className='w-[350px] h-[30px] ml-9 text-sm placeholder-white'
+              className='w-[350px] h-[30px] ml-9 text-sm placeholder-white outline-none'
               style={{
                 fontSize: '12px',
                 border: 'none',
                 background: 'transparent',
               }}
             />
-            <Button
-              label='작성'
-              type='submit'
-              className='h-[30px] text-sm'
-              style={{ marginLeft: '20px' }} // 왼쪽 여백 추가
-            />
+            <Button label='작성' type='submit' className='h-[30px] text-sm' />
           </div>
         </form>
         <ul className='list-none'>
           {comments.map((comment, index) => (
-            <li key={index} className='flex items-start mb-1'>
-              <div className='flex-col items-center mt-1 ml-5'>
-                <img
-                  src={`src/assets/profile/profile-${comment.costume}.png`}
-                  alt='프로필 이미지'
-                  className='w-10 h-10 rounded-full'
-                />
-                <span className='text-xs mt-1'>{comment.nickname}</span>
+            <li
+              key={index}
+              className='flex items-center mb-1'
+              style={{ height: '70px' }}
+            >
+              <div className='flex justify-center items-center basis-1/5'>
+                <div className='flex flex-col items-center'>
+                  <img
+                    src={`src/assets/profile/profile-${comment.costume}.png`}
+                    alt='프로필 이미지'
+                    className='w-9 h-9 rounded-full'
+                  />
+                  <span className='text-xs mt-1'>{comment.nickname}</span>
+                </div>
               </div>
               <div
-                className='absolute ml-20 bg-center bg-no-repeat rounded overflow-hidden mr-10'
+                className='absolute ml-32 bg-center bg-no-repeat rounded overflow-hidden mr-10'
                 style={{
                   backgroundImage: `url('src/assets/comment/dialoge-box.png')`,
                   backgroundSize: 'contain',
                   backgroundPosition: 'center',
-                  width: '500px',
+                  width: '470px',
                   height: '50px',
                 }}
               >

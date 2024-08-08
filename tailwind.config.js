@@ -30,7 +30,8 @@ export default {
         'inputbox-story': 'url(src/assets/story/input-box-story.png)',
         'bgm-o': 'url(src/assets/menu/bgm-o.png)',
         'bgm-x': 'url(src/assets/menu/bgm-x.png)',
-        'menu': 'url(src/assets/menu/menu.png)',
+        menu: 'url(src/assets/menu/menu.png)',
+        'inputbox-comment': 'url(src/assets/comment/input-box-comment.png)',
       },
       gridTemplateColumns: {
         'custom-19': 'repeat(19, minmax(0, 1fr))',
