@@ -17,6 +17,7 @@ import Header from './components/navbar/Menubar.jsx';
 import PasswordReset from './components/auth/PasswordReset';
 import GroupDetail from './components/group/GroupDetail.jsx';
 import MyInfo from './components/navbar/MyInfo';
+import LetterList from './components/groupSpace/letter/LetterList.jsx';
 import Loading from './components/common/Loading.jsx';
 import ChooseUser from './components/groupSpace/letter/ChooseUser';
 import WriteLetter from './components/groupSpace/letter/WriteLetter';
