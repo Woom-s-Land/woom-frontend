@@ -17,7 +17,7 @@ function Header() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies(['authToken']);
+  const [cookies, setCookie, removeCookie] = useCookies(['Authorization']);
 
   const handleCloseMyInfo = () => {
     setIsMyInfoOpen(false);
@@ -48,13 +48,13 @@ function Header() {
 
       if (success) {
         // 쿠키에서 토큰 삭제
-        removeCookie('authToken', { path: '/' });
+        removeCookie('Authorization', { path: '/' });
 
         // Redux 상태 초기화
         dispatch(authActions.logout());
 
         // 로그인 페이지로 리디렉션
-        navigate('/login');
+        navigate('/');
       } else {
         console.error('로그아웃 실패');
       }

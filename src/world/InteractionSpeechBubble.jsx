@@ -5,14 +5,15 @@ import '../App.css';
 const InteractionSpeechBubble = ({ width, height, text }) => {
   const textStyle = new PIXI.TextStyle({
     align: 'center',
-    fill: '#ffffff', // # todo: 폰트 색상 적용 안 됨 확인
-    fontSize: 11,
+    fill: 0xffffff,
+    fontSize: 13,
     fontFamily: 'DungGeunMo',
   });
   const length = text.length;
   const padding = 10;
   const boxWidth = length * 12;
   const boxHeight = 30;
+  console.log(textStyle);
   return (
     <>
       <Container x={width / 2} y={-boxHeight - padding}>
@@ -26,7 +27,6 @@ const InteractionSpeechBubble = ({ width, height, text }) => {
               boxHeight, // 높이
               15 // 둥글기
             );
-            g.lineStyle(3, 0xe7ca88, 1);
             g.endFill();
           }}
         />
@@ -34,7 +34,6 @@ const InteractionSpeechBubble = ({ width, height, text }) => {
           draw={(g) => {
             g.beginFill(0xb1805f);
             g.drawCircle(0, boxHeight - padding / 2, 5);
-            g.lineStyle(1, 0xe7ca88, 1);
             g.endFill();
           }}
         />
@@ -42,7 +41,6 @@ const InteractionSpeechBubble = ({ width, height, text }) => {
           draw={(g) => {
             g.beginFill(0xb1805f);
             g.drawCircle(0, boxHeight + padding / 2, 3);
-            g.lineStyle(1, 0xe7ca88, 1);
             g.endFill();
           }}
         />
