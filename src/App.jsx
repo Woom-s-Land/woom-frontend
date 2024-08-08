@@ -32,7 +32,7 @@ function App() {
         <Route path='/' element={<Main />} />
         <Route path='/home' element={<Home />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/map' element={<Map />} />
+        <Route path='/map/:woomsId' element={<Map />} />
         <Route path='/login' element={<Login />} />
         <Route path='/photo' element={<Photo />} />
         <Route path='/comment' element={<Comment />} />
@@ -44,6 +44,7 @@ function App() {
         <Route path='/story-read' element={<StoryRead />} />
         <Route path='/loading' element={<Loading />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
+        <Route path='/letter' element={<MainLetter />} />
       </Routes>
     </div>
   );

@@ -1,22 +1,43 @@
 import { useState, useRef } from 'react';
 import Modal from '../common/Modal';
 import DetailButton from './DetailButton';
+import GroupApi from '../../apis/GroupApi';
+import { Spinner } from '@chakra-ui/react';
 
-const JoinGroup = () => {
+const JoinGroup = ({ onClose, onSuccess }) => {
   const inviteCodeRef = useRef('');
   const [groupName, setGroupName] = useState('');
   const [icon, setIcon] = useState('bg-gr-check');
-  const handleCheckGroupExists = () => {
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const handleCheckGroupExists = async () => {
     // #todo:  axios
-    setGroupName('이이공육');
-    setIcon('bg-gr-check-fill');
+    try {
+      const data = await GroupApi.getGroupTitle(inviteCodeRef.current);
+      console.log(data);
+      setGroupName(data);
+      setIcon('bg-gr-check-fill');
+    } catch (err) {
+      console.log('group join error');
+      setError(true);
+    }
   };
-  const handleJoinGroup = () => {
-    // #todo: 요청 성공 시 목록으로 돌아감
-    // #todo: 혹은 요청 성공 시 초기 상태로 되돌림
+  const handleJoinGroup = async () => {
+    // #todo-check: 요청 성공 시 목록으로 돌아감
+    setLoading(true);
+    try {
+      const data = await GroupApi.requestGroup(inviteCodeRef.current);
+      setTimeout(() => {
+        setLoading(false);
+        onSuccess();
+      }, 2000);
+    } catch (err) {
+      console.log('group join error');
+      setError(true);
+    }
   };
   return (
-    <Modal>
+    <Modal onClose={onClose}>
       <div className='flex flex-col items-center justify-center mb-4'>
         <label className='w-full text-2xl text-base-color mb-2'>
           초대 코드 입력
@@ -37,10 +58,16 @@ const JoinGroup = () => {
               }
             }}
           />
-          <button
-            onClick={handleCheckGroupExists}
-            className={`absolute ${icon} right-[130px] p-2 bg-contain w-5 h-5 bg-no-repeat`}
-          />
+          {!loading ? (
+            <button
+              onClick={handleCheckGroupExists}
+              className={`absolute ${icon} right-[130px] p-2 bg-contain w-5 h-5 bg-no-repeat`}
+            />
+          ) : (
+            <div className='absolute right-[130px] p-2 w-5 h-5'>
+              <Spinner size='xs' />
+            </div>
+          )}
         </div>
       </div>
       {groupName.length !== 0 && (
@@ -48,7 +75,7 @@ const JoinGroup = () => {
           <div className='text-2xl text-center text-point-color p-5'>
             {groupName}
           </div>
-          <DetailButton buttonText='참가' />
+          <DetailButton buttonText='참가' onClick={handleJoinGroup} />
         </div>
       )}
     </Modal>

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import GroupApi from '../../apis/GroupApi';
 import Modal from '../common/Modal';
+import { useDispatch, useSelector } from 'react-redux';
 import DetailMenuButton from './DetailMenuButton';
 import DetailButtonBlue from './DetailButtonBlue';
 import MemberInfo from './MemberInfo';
 
 const ITEMS_PER_PAGE = 8; // 페이지당 항목 수
 
-const GroupDetail = () => {
+const GroupDetail = ({ onClose }) => {
   const [groupInfo, setGroupInfo] = useState({});
   const [requestingUser, setRequestingUser] = useState([]);
   const [groupPage, setGroupPage] = useState(0);
@@ -16,9 +17,11 @@ const GroupDetail = () => {
   const [isClickBasic, setIsClickBasic] = useState(true);
   const [isClickEnter, setIsClickEnter] = useState(false);
   const [isClickCodeShare, setIsClickCodeShare] = useState(false);
-  const [inviteCode, setInviteCode] = useState('dagkdsa-45dasdg');
   const [copySuccess, setCopySuccess] = useState(false);
   const [icon, setIcon] = useState('bg-gr-copy');
+  const [error, setError] = useState(false);
+
+  const woomsId = window.location.pathname;
 
   const handleClickEnter = () => {
     setIsClickEnter(true);
@@ -67,39 +70,36 @@ const GroupDetail = () => {
   };
 
   useEffect(() => {
-    setGroupInfo({
-      woomsId: 0,
-      woomsInviteCode: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      woomsTitle: '이이공육',
-      mapColorStatus: 'RED',
-      userInfoDtoList: [
-        // Sample data
-        { uuid: '1', name: '김도예', nickname: '바보', costume: 0 },
-        { uuid: '2', name: '송도언', nickname: '멍청이', costume: 0 },
-        { uuid: '3', name: '이현수', nickname: '똥개', costume: 0 },
+    const getGroupInfo = async () => {
+      try {
+        const data = await GroupApi.getGroupInfo(woomsId);
+        setGroupInfo(data);
+      } catch (err) {
+        setError(err);
+      }
+    };
 
-        // Add more sample data as needed
-      ],
-    });
-    setRequestingUser([
-      // Sample data
-      { uuid: '4', name: '신청자1', nickname: '신청닉1', costume: 0 },
-      { uuid: '5', name: '신청자2', nickname: '신청닉2', costume: 0 },
-      { uuid: '6', name: '신청자3', nickname: '신청닉1', costume: 0 },
-      { uuid: '7', name: '신청자4', nickname: '신청닉2', costume: 0 },
-      { uuid: '8', name: '신청자5', nickname: '신청닉1', costume: 0 },
-      { uuid: '9', name: '신청자6', nickname: '신청닉2', costume: 0 },
-      { uuid: '10', name: '신청자7', nickname: '신청닉1', costume: 0 },
-      { uuid: '11', name: '신청자8', nickname: '신청닉2', costume: 0 },
-      { uuid: '12', name: '신청자9', nickname: '신청닉1', costume: 0 },
-      { uuid: '13', name: '신청자10', nickname: '신청닉2', costume: 0 },
-      { uuid: '14', name: '신청자11', nickname: '신청닉네임입니', costume: 0 },
-      { uuid: '15', name: '신청자12', nickname: '신청닉2', costume: 0 },
-    ]);
+    // #todo uuid로 방장 비교
+    const getRequestUser = async (woomsId, requestPage) => {
+      try {
+        const data = await GroupApi.getRequestUser(woomsId, requestPage);
+        setRequestingUser(data);
+      } catch (err) {
+        setError(err);
+      }
+    };
+    getGroupInfo();
   }, []);
+
+  const handleWithdraw = () => {
+    GroupApi.withdraw(woomsId);
+  };
+
   const groupMaxPage =
     Math.ceil((groupInfo.userInfoDtoList?.length || 0) / ITEMS_PER_PAGE) - 1;
+
   const requestMaxPage = Math.ceil(requestingUser.length / ITEMS_PER_PAGE) - 1;
+
   const currentGroupMembers = groupInfo.userInfoDtoList
     ? groupInfo.userInfoDtoList.slice(
         groupPage * ITEMS_PER_PAGE,
@@ -113,9 +113,9 @@ const GroupDetail = () => {
   );
 
   return (
-    <Modal>
+    <Modal onClose={onClose}>
       <div className='absolute top-16 left-20 text-2xl text-point-color'>
-        {groupInfo.woomsTitle}
+        {groupInfo.woomsDto.woomsTitle}
       </div>
       <div
         onClick={handleClickInvite}
@@ -128,7 +128,10 @@ const GroupDetail = () => {
         />
         <div className='text-md text-base-color'>초대코드 공유하기</div>
       </div>
-      <button className=' whitespace-nowrap text-sm active:bg-gr-btn-active bg-gr-btn bg-contain bg-no-repeat bg-center p-3 absolute bottom-1 right-8 text-center text-base-color'>
+      <button
+        onClick={handleWithdraw}
+        className=' whitespace-nowrap text-sm active:bg-gr-btn-active bg-gr-btn bg-contain bg-no-repeat bg-center p-3 absolute bottom-1 right-8 text-center text-base-color'
+      >
         나가기
       </button>
       {isClickCodeShare && (
@@ -140,7 +143,7 @@ const GroupDetail = () => {
               backgroundColor: 'transparent',
             }}
           >
-            {inviteCode}
+            {groupInfo.woomsDto.woomsInviteCode}
           </div>
           <button
             onClick={handleCopy}
@@ -165,7 +168,7 @@ const GroupDetail = () => {
         )}
       </div>
 
-      {isClickBasic ? (
+      {isClickBasic && (
         <div className='mt-28 grid grid-cols-4 gap-2 mx-10'>
           {groupInfo.userInfoDtoList &&
             groupInfo.userInfoDtoList.length > ITEMS_PER_PAGE && (
@@ -192,7 +195,8 @@ const GroupDetail = () => {
             </div>
           ))}
         </div>
-      ) : (
+      )}
+      {isClickEnter && (
         <div className='mt-28 grid grid-cols-4 gap-2 mx-8'>
           {requestingUser && requestingUser.length > ITEMS_PER_PAGE && (
             <div className='absolute z-10 left-2 right-2 flex justify-between items-center transform -translate-y-1/2 top-[270px]'>
