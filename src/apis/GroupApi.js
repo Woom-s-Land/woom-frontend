@@ -123,6 +123,21 @@ const delegateAdmin = async (woomsId, uuid) => {
     .catch((err) => {
       return err;
     });
+  return data;
+};
+
+const withdraw = async (woomsId) => {
+  const data = await basicAxios({
+    method: ' delete',
+    url: `/wooms/${woomsId}/users`,
+  })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      return err;
+    });
+  return data;
 };
 const GroupApi = {
   getMyGroup,
@@ -134,5 +149,6 @@ const GroupApi = {
   responseRequest,
   changeGroupColor,
   delegateAdmin,
+  withdraw,
 };
 export default GroupApi;
