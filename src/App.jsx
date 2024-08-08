@@ -16,7 +16,8 @@ import StoryRead from './components/groupSpace/story/StoryReadModal';
 import Header from './components/navbar/Menubar.jsx';
 import PasswordReset from './components/auth/PasswordReset';
 import GroupDetail from './components/group/GroupDetail.jsx';
-
+import MyInfo from './components/navbar/MyInfo';
+import Loading from './components/common/Loading.jsx';
 import ChooseUser from './components/groupSpace/letter/ChooseUser';
 import WriteLetter from './components/groupSpace/letter/WriteLetter';
 import MainLetter from './components/groupSpace/letter/MainLetter';
@@ -40,6 +41,7 @@ function App() {
         <Route path='/group-detail' element={<GroupDetail />} />
         <Route path='/story-write' element={<StoryWrite />} />
         <Route path='/story-read' element={<StoryRead />} />
+        <Route path='/loading' element={<Loading />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
       </Routes>
     </div>
