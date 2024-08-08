@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
 import MenuButton from './MenuButton';
 import MyInfo from './MyInfo';
 import Group from '../group/Group';
@@ -17,7 +16,6 @@ function Header() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies(['Authorization']);
 
   const handleCloseMyInfo = () => {
     setIsMyInfoOpen(false);
@@ -47,9 +45,6 @@ function Header() {
       const success = await logout();
 
       if (success) {
-        // 쿠키에서 토큰 삭제
-        removeCookie('Authorization', { path: '/' });
-
         // Redux 상태 초기화
         dispatch(authActions.logout());
 
