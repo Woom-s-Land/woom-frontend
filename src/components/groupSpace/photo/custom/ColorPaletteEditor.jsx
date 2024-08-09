@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from '../../../common/Modal';
 import Button from '../../../common/Button';
 import ColorButton from './ColorButton';
-import paletteData from '../../../../assets/photo/palette.json'; // JSON 파일의 경로를 설정하세요
+import paletteData from '../../../../assets/photo/palette.json';
 
 const ColorPaletteEditor = ({ onClose, onUpdatePalette }) => {
   const [palettes, setPalettes] = useState([]);
@@ -39,11 +39,14 @@ const ColorPaletteEditor = ({ onClose, onUpdatePalette }) => {
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className='py-2 px-4 bg-teal-500 text-white rounded'
           >
-            {`팔레트 선택`}
+            {` 팔레트를 선택해주세요. `}
           </button>
 
           {isDropdownOpen && (
-            <div className='absolute top-full mt-2 w-full bg-white border border-gray-300 shadow-lg z-10'>
+            <div
+              className='absolute top-full mt-2 w-full bg-white border border-gray-300 shadow-lg z-10'
+              style={{ maxHeight: '200px', overflowY: 'auto' }}
+            >
               {palettes.map((_, index) => (
                 <button
                   key={index}
@@ -58,13 +61,17 @@ const ColorPaletteEditor = ({ onClose, onUpdatePalette }) => {
         </div>
 
         <div className='flex flex-col gap-2 mb-4'>
-          {paletteChunks.map((chunk, rowIndex) => (
-            <div key={rowIndex} className='flex flex-wrap gap-2'>
-              {chunk.map((color, colorIndex) => (
-                <ColorButton key={colorIndex} color={color} />
-              ))}
-            </div>
-          ))}
+          {paletteChunks.map((chunk, rowIndex) =>
+            rowIndex < 4 ? (
+              <div key={rowIndex} className='flex flex-wrap gap-2'>
+                {chunk.map((color, colorIndex) => (
+                  <ColorButton key={colorIndex} color={color} />
+                ))}
+              </div>
+            ) : (
+              void 0
+            )
+          )}
         </div>
 
         <Button
