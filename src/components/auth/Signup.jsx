@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
 
 const Signup = () => {
+  const navigate = useNavigate();
+
   const [values, setValues] = useState({
     name: '',
     email: '',
@@ -62,9 +65,10 @@ const Signup = () => {
         password: values.password,
       });
       console.log(response.data);
-      // 회원가입 성공 시 로그인 페이지로 이동
+      navigate('/login');
     } catch (error) {
       console.error(error);
+      alert(error.response.data.message);
     }
   };
 

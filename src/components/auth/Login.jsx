@@ -3,9 +3,9 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { authActions } from '../../store/authSlice';
 import axios from 'axios';
+import PasswordReset from './PasswordReset';
 import GitHubLogo from '../../assets/logo/github.svg';
 import GoogleLogo from '../../assets/logo/google.svg';
-import PasswordReset from './PasswordReset'; // PasswordReset 컴포넌트를 임포트합니다.
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
 
@@ -136,27 +136,27 @@ const Login = () => {
             {isModalOpen && <PasswordReset onClose={handleModal} />}
           </section>
         </form>
-      </section>
-      <section className='mt-4 space-y-2 w-full max-w-sm'>
-        <button
-          className='w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-700 flex items-center justify-center space-x-5'
-          onClick={() => socialLogin('google')}
-        >
-          <img src={GoogleLogo} alt='GoogleLogo' className='w-6 h-6' />
-          <span>Google</span>
-        </button>
-        <div className='group relative'>
+        <section className='mt-4 space-y-2 w-full max-w-sm'>
           <button
-            className='w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 flex items-center justify-center space-x-5'
-            onClick={() => socialLogin('github')}
+            className='w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-700 flex items-center justify-center space-x-5'
+            onClick={() => socialLogin('google')}
           >
-            <img src={GitHubLogo} alt='GitHubLogo' className='w-6 h-6' />
-            <span>GitHub</span>
+            <img src={GoogleLogo} alt='GoogleLogo' className='w-6 h-6' />
+            <span>Google</span>
           </button>
-          <small className='text-gray-600 absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-gray-100 p-2 rounded shadow-md w-max'>
-            github 프로필 설정에서 이메일을 public으로 설정해주세요.
-          </small>
-        </div>
+          <div className='group relative'>
+            <button
+              className='w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 flex items-center justify-center space-x-5'
+              onClick={() => socialLogin('github')}
+            >
+              <img src={GitHubLogo} alt='GitHubLogo' className='w-6 h-6' />
+              <span>GitHub</span>
+            </button>
+            <small className='text-gray-600 absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-gray-100 p-2 rounded shadow-md w-max'>
+              github 프로필 설정에서 이메일을 public으로 설정해주세요.
+            </small>
+          </div>
+        </section>
       </section>
     </div>
   );
