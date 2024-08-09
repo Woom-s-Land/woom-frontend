@@ -13,7 +13,7 @@ const InteractionSpeechBubble = ({ width, height, text }) => {
   const padding = 10;
   const boxWidth = length * 12;
   const boxHeight = 30;
-  console.log(textStyle);
+
   return (
     <>
       <Container x={width / 2} y={-boxHeight - padding}>
