@@ -4,8 +4,8 @@ import baseUrl from '../../../libs/axios/basicAxios';
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 
-import inputBoxImage from 'src/assets/comment/input-box.png';
-import dialogBoxImage from 'src/assets/comment/dialog-box.png';
+// import inputBoxImage from 'src/assets/comment/input-box.png';
+// import dialogBoxImage from 'src/assets/comment/dialog-box.png';
 
 const Comment = ({ onClose }) => {
   const pathname = window.location.pathname;

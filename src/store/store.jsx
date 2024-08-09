@@ -1,4 +1,4 @@
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
 import authReducer from './authSlice';
@@ -14,9 +14,6 @@ const store = configureStore({
   reducer: {
     auth: persistedReducer,
   },
-  middleware: getDefaultMiddleware({
-    serializableCheck: false,
-  }),
   devTools: process.env.NODE_ENV !== 'production',
 });
 
