@@ -21,7 +21,7 @@ const formatDate = (dateString) => {
   return `${year}.${month}.${day}`;
 };
 
-const LetterList = () => {
+const LetterList = ({ onClose }) => {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0); // 편지 목록의 총 페이지 수 / page 최댓값: totalPages - 1
   const [letters, setLetters] = useState([
@@ -152,7 +152,7 @@ const LetterList = () => {
   };
 
   return selectedLetterId === null ? (
-    <Modal>
+    <Modal onClose={onClose}>
       <div className='flex justify-center items-center mb-16'>
         <h1 className='absolute text-3xl top-9'>받은 편지함</h1>
         <span className='absolute top-[37px] right-60 text-3xl'>

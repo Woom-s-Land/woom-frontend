@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 
 import ChooseUser from './ChooseUser';
 import WriteLetter from './WriteLetter';
@@ -7,7 +6,7 @@ import ChooseDate from './ChooseDate';
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
 
-const MainLetter = () => {
+const MainLetter = ({ isOpen, onClose }) => {
   const [selectedUser, setSelectedUser] = useState({});
   const [selectedDate, setSelectedDate] = useState('');
   const [content, setContent] = useState('');
@@ -19,6 +18,7 @@ const MainLetter = () => {
 
   useEffect(() => {
     setSendDateTime(new Date().toISOString());
+    console.log(isUserModalOpen, isLetterModalOpen, isDateModalOpen);
   }, []);
 
   const handleContentChange = (content) => {
@@ -29,6 +29,11 @@ const MainLetter = () => {
     setSelectedUser(userInfo);
   };
 
+  // const handleCloseBtn = () => {
+  //   handleClose();
+  //   setUserModalOpen(true);
+  //   setLetterModalOpen(false);
+  // };
   const handleSelectedDate = (date) => {
     setSelectedDate(date);
   };
@@ -44,49 +49,53 @@ const MainLetter = () => {
   };
 
   const sendLetter = async () => {
-    try {
-      const response = await axios.post(
-        `${baseUrl}/api/letters`,
-        {
-          targetUserUuid: selectedUser.uuid,
-          content: content,
-          receiveDateTime: selectedDate,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
+    // try {
+    //   const response = await axios.post(
+    //     `${baseUrl}/api/letters`,
+    //     {
+    //       targetUserUuid: selectedUser.uuid,
+    //       content: content,
+    //       receiveDateTime: selectedDate,
+    //     },
+    //     {
+    //       withCredentials: true,
+    //     }
+    //   );
+    //   console.log(response);
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
   return (
     <div>
-      {isUserModalOpen && (
-        <ChooseUser
-          onClose={() => setUserModalOpen(false)}
-          onChange={handleSelectedUser}
-          onNext={openWriteLetter}
-        />
-      )}
-      {isLetterModalOpen && (
-        <WriteLetter
-          onClose={() => setLetterModalOpen(false)}
-          onChange={handleContentChange}
-          userNickname={selectedUser.nickname}
-          sendDateTime={sendDateTime}
-          onNext={openDate}
-        />
-      )}
-      {isDateModalOpen && (
-        <ChooseDate
-          onClose={() => setDateModalOpen(false)}
-          sendDateTime={sendDateTime}
-          onChange={handleSelectedDate}
-          onSubmit={sendLetter}
-        />
+      {isOpen && (
+        <>
+          {isUserModalOpen && (
+            <ChooseUser
+              onClose={onClose}
+              onChange={handleSelectedUser}
+              onNext={openWriteLetter}
+            />
+          )}
+          {isLetterModalOpen && (
+            <WriteLetter
+              onClose={onClose}
+              onChange={handleContentChange}
+              userNickname={selectedUser.nickname}
+              sendDateTime={sendDateTime}
+              onNext={openDate}
+            />
+          )}
+          {isDateModalOpen && (
+            <ChooseDate
+              onClose={onClose}
+              sendDateTime={sendDateTime}
+              onChange={handleSelectedDate}
+              onSubmit={sendLetter}
+            />
+          )}
+        </>
       )}
     </div>
   );

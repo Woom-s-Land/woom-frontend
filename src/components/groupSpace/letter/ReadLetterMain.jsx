@@ -5,7 +5,7 @@ import LetterDetail from './LetterDetail';
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
 
-const MainLetter = () => {
+const ReadLetterMain = ({ isOpen, onClose }) => {
   const [letters, setLetters] = useState([
     {
       id: 3,
@@ -56,17 +56,25 @@ const MainLetter = () => {
 
   return (
     <div>
-      <h1>편지 관리</h1>
-      {!selectedLetter ? (
-        <LetterList letters={letters} onLetterClick={handleLetterClick} />
-      ) : (
-        <LetterDetail
-          letter={selectedLetter}
-          onBack={() => setSelectedLetter(null)}
-        />
+      {isOpen && (
+        <>
+          <h1>편지 관리</h1>
+          {!selectedLetter ? (
+            <LetterList
+              onClose={onClose}
+              letters={letters}
+              onLetterClick={handleLetterClick}
+            />
+          ) : (
+            <LetterDetail
+              letter={selectedLetter}
+              onBack={() => setSelectedLetter(null)}
+            />
+          )}
+        </>
       )}
     </div>
   );
 };
 
-export default MainLetter;
+export default ReadLetterMain;
