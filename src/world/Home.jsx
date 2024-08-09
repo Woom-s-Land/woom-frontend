@@ -4,16 +4,36 @@ import { Stage, Sprite, useApp } from '@pixi/react';
 import { OutlineFilter } from '@pixi/filter-outline';
 import homeImages from './homeImages';
 import Character from './CharacterInHome';
+import ReadLetterMain from '../components/groupSpace/letter/ReadLetterMain';
+import MainLetter from '../components/groupSpace/letter/MainLetter';
+// import { useDispatch, useSelector } from 'react-redux';
 
 const MAP_X = 488;
 const MAP_Y = 384;
 
 const Home = () => {
+  // const dispatch = useDispatch();
+
+  // const userInfo = useSelector((state) => state.auth.userInfo);
+  // const [nickname, setNickname] = useState(userInfo.nickname);
+  // const [costume, setCostume] = useState(userInfo.costume);
+
   const [background, setBackground] = useState(homeImages.home);
   const [isActiveBed, setIsActiveBed] = useState(false);
   const [isActiveDesk, setIsActiveDesk] = useState(false);
   const [isActiveToilet, setIsActiveToilet] = useState(false);
   const [isInBathroom, setIsInBathroom] = useState(true);
+
+  const [isOpenWriteLetter, setIsOpenWriteLetter] = useState(false);
+  const [isOpenReadLetter, setIsOpenReadLetter] = useState(false);
+
+  const handleWriteLetterClose = () => {
+    setIsOpenWriteLetter(false);
+  };
+
+  const handleReadLetterClose = () => {
+    setIsOpenReadLetter(false);
+  };
   const handleCharacterMove = useCallback((charX, charY) => {
     const bedX = 376;
     const bedY = 20;
@@ -69,9 +89,23 @@ const Home = () => {
           isActiveBed={isActiveBed}
           isActiveDesk={isActiveDesk}
           isActiveToilet={isActiveToilet}
+          setIsOpenWriteLetter={setIsOpenWriteLetter}
+          setIsOpenReadLetter={setIsOpenReadLetter}
         />
         {isInBathroom && <Sprite image={homeImages.forward} x={0} y={144} />}
       </Stage>
+      {isOpenWriteLetter && (
+        <MainLetter
+          isOpen={isOpenWriteLetter}
+          onClose={handleWriteLetterClose}
+        />
+      )}
+      {isOpenReadLetter && (
+        <ReadLetterMain
+          isOpen={isOpenReadLetter}
+          onClose={handleReadLetterClose}
+        />
+      )}
     </div>
   );
 };

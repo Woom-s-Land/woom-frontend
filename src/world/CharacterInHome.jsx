@@ -22,7 +22,7 @@ const CHAR_WIDTH = 40; // 캐릭터 사이즈
 const CHAR_HEIGHT = 60;
 const BoundaryWidth = 8; // 충돌박스의 너비
 const BoundaryHeight = 8;
-const MOVE_DISTANCE = 7; // 한 프레임별 움직일 거리
+const MOVE_DISTANCE = 11; // 한 프레임별 움직일 거리
 const FRAME_INTERVAL = 60; // 프레임이 전환될 간격
 
 // #todo: 추후 캐릭터 코스튬, 닉네임 사용자 정보에 맞게 수정
@@ -67,6 +67,8 @@ const Character = ({
   isActiveBed,
   isActiveDesk,
   isActiveToilet,
+  setIsOpenReadLetter,
+  setIsOpenWriteLetter,
 }) => {
   const [boundaries, setBoundaries] = useState([]);
   const [stepIndex, setStepIndex] = useState(0);
@@ -76,8 +78,6 @@ const Character = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const [isInteractionBed, setIsInteractionBed] = useState(false);
   const [isInteractionToilet, setIsInteractionToilet] = useState(false);
-  const [writeLetter, setWriteLetter] = useState(false);
-  const [readLetter, setReadLetter] = useState(false);
 
   const animationFrameRef = useRef(null);
   const lastFrameTimeRef = useRef(0);
@@ -133,15 +133,13 @@ const Character = ({
       if (ikey) {
         if (e.code === 'KeyE' && ikey.isActive()) {
           // # todo: 편지 모달 만들어지면 timeout 안 하기
-          setWriteLetter(true);
-          setTimeout(() => {
-            setWriteLetter(false);
-          }, 1000);
+          console.log(e.code);
+          setIsOpenReadLetter(false);
+          setIsOpenWriteLetter(true);
         } else if (e.code === 'KeyR' && ikey.isActive()) {
-          setReadLetter(true);
-          setTimeout(() => {
-            setReadLetter(false);
-          }, 1000);
+          console.log(e.code);
+          setIsOpenReadLetter(true);
+          setIsOpenWriteLetter(false);
         } else if (e.code === 'Space' && ikey.isActive()) {
           if (isActiveBed) {
             setIsInteractionBed(true);
