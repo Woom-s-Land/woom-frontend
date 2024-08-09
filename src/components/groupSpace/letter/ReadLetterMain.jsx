@@ -40,7 +40,7 @@ const ReadLetterMain = ({ isOpen, onClose }) => {
   useEffect(() => {
     const fetchLetters = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/api/letters`); // API 엔드포인트 수정
+        const response = await axios.get(`${baseUrl}/api/letters`);
         setLetters(response.data.content);
       } catch (error) {
         console.error('Error fetching letters:', error);
