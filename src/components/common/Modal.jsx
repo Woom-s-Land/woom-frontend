@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 function Modal({ children, onClose }) {
-  const navigate = useNavigate();
-
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
       onClose();
