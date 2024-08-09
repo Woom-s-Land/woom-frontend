@@ -2,11 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialAuthState = {
   isAuthenticated: false,
-  userInfo: {
-    email: 'znight1020@naver.com',
-    nickname: '눈물나는문어',
-    costume: 0,
-  },
+  userInfo: {},
 };
 
 const authSlice = createSlice({
@@ -18,6 +14,7 @@ const authSlice = createSlice({
     },
     logout(state) {
       state.isAuthenticated = false;
+      state.userInfo = initialAuthState.userInfo;
     },
     setUserInfo(state, action) {
       state.userInfo = action.payload;

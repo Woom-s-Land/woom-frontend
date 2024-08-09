@@ -5,6 +5,7 @@ import Cropper from 'react-easy-crop';
 import getCroppedImg from './cropImage'; // cropImage 유틸리티 함수
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';
+import ColorPaletteEditor from './custom/ColorPaletteEditor';
 
 const UploadModal = ({ onClose }) => {
   const [files, setFiles] = useState([]);
@@ -17,6 +18,18 @@ const UploadModal = ({ onClose }) => {
   const [zoom, setZoom] = useState(1);
   const [croppedArea, setCroppedArea] = useState(null);
   const [isCropped, setIsCropped] = useState(false);
+  const [palette, setPalette] = useState([
+    [46, 34, 47],
+    [62, 53, 70],
+    [98, 85, 101],
+    [150, 108, 108],
+    [171, 148, 122],
+    [255, 255, 255],
+  ]);
+  const [showPaletteEditor, setShowPaletteEditor] = useState(false);
+  const [showPixelCanvas, setShowPixelCanvas] = useState(true);
+  const [showButtons, setShowButtons] = useState(true);
+
   const canvasRef = useRef(null);
   const polaroidRef = useRef(null);
 
@@ -64,85 +77,23 @@ const UploadModal = ({ onClose }) => {
     if (croppedArea && imageSrc) {
       setLoading(true);
       const croppedImage = await getCroppedImg(imageSrc, croppedArea);
-      const canvas = canvasRef.current;
-      const img = new Image();
-      img.src = croppedImage;
-      img.onload = () => {
-        const px = new pixelit({
-          to: canvas,
-          scale: scale || pixelScale,
-          palette: [
-            // 사용자 정의 팔레트 설정 (RGB 값)
-            [46, 34, 47],
-            [62, 53, 70],
-            [98, 85, 101],
-            [150, 108, 108],
-            [171, 148, 122],
-            [105, 79, 98],
-            [127, 112, 138],
-            [155, 171, 178],
-            [199, 220, 208],
-            [255, 255, 255],
-            [110, 39, 39],
-            [179, 56, 49],
-            [234, 79, 54],
-            [245, 125, 74],
-            [174, 35, 52],
-            [232, 59, 59],
-            [251, 107, 29],
-            [247, 150, 23],
-            [249, 194, 43],
-            [122, 48, 69],
-            [158, 69, 57],
-            [205, 104, 61],
-            [230, 144, 78],
-            [251, 185, 84],
-            [76, 62, 36],
-            [103, 102, 51],
-            [162, 169, 71],
-            [213, 224, 75],
-            [251, 255, 134],
-            [22, 90, 76],
-            [35, 144, 99],
-            [30, 188, 115],
-            [145, 219, 105],
-            [205, 223, 108],
-            [49, 54, 56],
-            [55, 78, 74],
-            [84, 126, 100],
-            [146, 169, 132],
-            [178, 186, 144],
-            [11, 94, 101],
-            [11, 138, 143],
-            [14, 175, 155],
-            [48, 225, 185],
-            [143, 248, 226],
-            [50, 51, 83],
-            [72, 74, 119],
-            [77, 101, 180],
-            [77, 155, 230],
-            [143, 211, 255],
-            [69, 41, 63],
-            [107, 62, 117],
-            [144, 94, 169],
-            [168, 132, 243],
-            [234, 173, 237],
-            [117, 60, 84],
-            [162, 75, 111],
-            [207, 101, 127],
-            [237, 128, 153],
-            [131, 28, 93],
-            [195, 36, 84],
-            [240, 79, 120],
-            [246, 129, 129],
-            [252, 167, 144],
-            [253, 203, 176],
-          ],
-        });
-        px.setFromImgSource(img.src).draw().pixelate().convertPalette();
-        setPixelCanvas(canvas.toDataURL());
-        setLoading(false);
-      };
+      if (scale === 26) {
+        setPixelCanvas(croppedImage);
+      } else {
+        const canvas = canvasRef.current;
+        const img = new Image();
+        img.src = croppedImage;
+        img.onload = () => {
+          const px = new pixelit({
+            to: canvas,
+            scale: scale || pixelScale,
+            palette: palette,
+          });
+          px.setFromImgSource(img.src).draw().pixelate().convertPalette();
+          setPixelCanvas(canvas.toDataURL());
+        };
+      }
+      setLoading(false);
     }
   };
 
@@ -150,7 +101,7 @@ const UploadModal = ({ onClose }) => {
     if (isCropped) {
       handleTransform(pixelScale);
     }
-  }, [pixelScale, isCropped]);
+  }, [pixelScale, isCropped, palette]);
 
   const handleCrop = async () => {
     if (croppedArea && imageSrc) {
@@ -173,8 +124,30 @@ const UploadModal = ({ onClose }) => {
     setPixelScale(13);
   };
 
+  const handlePaletteEdit = () => {
+    setShowPixelCanvas(false); // 사진 숨기기
+    setShowButtons(false);
+    setShowPaletteEditor(true);
+  };
+
+  const handlePaletteUpdate = (newPalette) => {
+    setPalette(newPalette);
+    setShowPixelCanvas(true); // 사진 다시 표시하기
+    setShowButtons(true);
+  };
+
   return (
     <Modal onClose={onClose}>
+      {showPaletteEditor && (
+        <ColorPaletteEditor
+          onClose={() => {
+            setShowPaletteEditor(false);
+            setShowPixelCanvas(true); // 사진 다시 표시하기
+            setShowButtons(true);
+          }}
+          onUpdatePalette={handlePaletteUpdate}
+        />
+      )}
       {!pixelCanvas && !loading ? (
         imageSrc ? (
           <div className='relative w-full h-64'>
@@ -221,36 +194,38 @@ const UploadModal = ({ onClose }) => {
           </div>
         )
       ) : (
-        <div
-          className='flex flex-col items-center space-x-4 mb-4'
-          style={{ marginTop: '15px' }}
-        >
+        showPixelCanvas && (
           <div
-            ref={polaroidRef}
-            className='bg-white p-4 shadow-lg w-[240px] h-[280px] flex flex-col items-center relative'
+            className='flex flex-col items-center space-x-4 mb-4'
+            style={{ marginTop: '15px' }}
           >
-            {loading ? (
-              <p className='text-red-500 absolute inset-0 flex justify-center items-center'>
-                변환 중...
-              </p>
-            ) : (
-              pixelCanvas && (
-                <img
-                  src={pixelCanvas}
-                  alt='Pixelated'
-                  className='w-[200px] h-[200px] object-cover'
-                />
-              )
-            )}
-            <input
-              type='text'
-              value={caption}
-              onChange={(e) => setCaption(e.target.value.slice(0, 11))} // Limit to 10 characters
-              placeholder='캡션 작성 (최대 11자)'
-              className='mt-2 p-2 rounded w-full text-center absolute bottom-4 focus:outline-none'
-            />
+            <div
+              ref={polaroidRef}
+              className='bg-white p-4 shadow-lg w-[240px] h-[280px] flex flex-col items-center relative'
+            >
+              {loading ? (
+                <p className='text-red-500 absolute inset-0 flex justify-center items-center'>
+                  변환 중...
+                </p>
+              ) : (
+                pixelCanvas && (
+                  <img
+                    src={pixelCanvas}
+                    alt='Pixelated'
+                    className='w-[200px] h-[200px] object-cover'
+                  />
+                )
+              )}
+              <input
+                type='text'
+                value={caption}
+                onChange={(e) => setCaption(e.target.value.slice(0, 11))} // Limit to 10 characters
+                placeholder='캡션 작성 (최대 11자)'
+                className='mt-2 p-2 rounded w-full text-center absolute bottom-4 focus:outline-none'
+              />
+            </div>
           </div>
-        </div>
+        )
       )}
       <canvas id='pixelitcanvas' ref={canvasRef} className='hidden'></canvas>
       {isCropped && (
@@ -266,7 +241,7 @@ const UploadModal = ({ onClose }) => {
               id='pixel-range'
               type='range'
               min='2'
-              max='25'
+              max='26' // Range 수정
               value={pixelScale}
               onChange={(e) => setPixelScale(parseInt(e.target.value))}
               className='w-full h-2 bg-base-color rounded-lg appearance-none cursor-pointer'
@@ -278,8 +253,9 @@ const UploadModal = ({ onClose }) => {
         className='flex justify-end space-x-2'
         style={{ marginRight: '20px' }}
       >
-        {pixelCanvas && !loading && (
+        {showButtons && pixelCanvas && !loading && (
           <>
+            <Button label='팔레트 편집' onClick={handlePaletteEdit} />
             <Button label='다시 자르기' onClick={handleNewTransform} />
             <Button label='다운로드' onClick={handleDownload} />
             <Button label='업로드' onClick={handleUpload} />
