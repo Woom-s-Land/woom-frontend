@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { authActions } from '../../store/authSlice';
+import Loading from '../common/Loading';
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
 
@@ -30,7 +31,7 @@ const OauthHandler = () => {
     getUserInfo();
   }, [navigate, dispatch]);
 
-  return <div>로그인 중입니다...</div>;
+  return <Loading />;
 };
 
 export default OauthHandler;

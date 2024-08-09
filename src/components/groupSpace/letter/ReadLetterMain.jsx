@@ -5,7 +5,7 @@ import LetterDetail from './LetterDetail';
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
 
-const MainLetter = () => {
+const ReadLetterMain = ({ isOpen, onClose }) => {
   const [letters, setLetters] = useState([
     {
       id: 3,
@@ -40,7 +40,7 @@ const MainLetter = () => {
   useEffect(() => {
     const fetchLetters = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/api/letters`); // API 엔드포인트 수정
+        const response = await axios.get(`${baseUrl}/api/letters`);
         setLetters(response.data.content);
       } catch (error) {
         console.error('Error fetching letters:', error);
@@ -56,17 +56,25 @@ const MainLetter = () => {
 
   return (
     <div>
-      <h1>편지 관리</h1>
-      {!selectedLetter ? (
-        <LetterList letters={letters} onLetterClick={handleLetterClick} />
-      ) : (
-        <LetterDetail
-          letter={selectedLetter}
-          onBack={() => setSelectedLetter(null)}
-        />
+      {isOpen && (
+        <>
+          <h1>편지 관리</h1>
+          {!selectedLetter ? (
+            <LetterList
+              onClose={onClose}
+              letters={letters}
+              onLetterClick={handleLetterClick}
+            />
+          ) : (
+            <LetterDetail
+              letter={selectedLetter}
+              onBack={() => setSelectedLetter(null)}
+            />
+          )}
+        </>
       )}
     </div>
   );
 };
 
-export default MainLetter;
+export default ReadLetterMain;

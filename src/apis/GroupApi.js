@@ -1,10 +1,9 @@
-import { data } from 'autoprefixer';
 import basicAxios from '../libs/axios/basicAxios';
 
-const getMyGroup = async () => {
+const getMyGroup = async (page) => {
   const data = await basicAxios({
     method: 'get',
-    url: '/wooms',
+    url: `/wooms?page=${page}`,
   })
     .then((res) => {
       return res.data;
@@ -55,7 +54,7 @@ const getGroupTitle = async (inviteCode) => {
     });
   return data;
 };
-const makeGroup = async (woomsTitle) => {
+const createGroup = async (woomsTitle) => {
   const data = await basicAxios({
     method: 'post',
     url: '/wooms',
@@ -124,16 +123,32 @@ const delegateAdmin = async (woomsId, uuid) => {
     .catch((err) => {
       return err;
     });
+  return data;
+};
+
+const withdraw = async (woomsId) => {
+  const data = await basicAxios({
+    method: ' delete',
+    url: `/wooms/${woomsId}/users`,
+  })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      return err;
+    });
+  return data;
 };
 const GroupApi = {
   getMyGroup,
   getGroupTitle,
   getRequestUser,
   getGroupInfo,
-  makeGroup,
+  createGroup,
   requestGroup,
   responseRequest,
   changeGroupColor,
   delegateAdmin,
+  withdraw,
 };
 export default GroupApi;

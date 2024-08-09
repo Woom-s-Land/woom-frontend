@@ -21,7 +21,7 @@ const MAP_WIDTH = 2048;
 const MAP_HEIGHT = 1536;
 const CHAR_WIDTH = 40; // 캐릭터 사이즈
 const CHAR_HEIGHT = 60;
-const MOVE_DISTANCE = 14; // 한 프레임별 움직일 거리
+const MOVE_DISTANCE = 22; // 한 프레임별 움직일 거리
 const FRAME_INTERVAL = 60; // 프레임이 전환될 간격
 const STEP_COUNT = 6;
 

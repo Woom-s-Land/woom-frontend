@@ -7,20 +7,7 @@ import DropDown from '../../common/DropDown';
 const baseUrl = 'https://i11e206.p.ssafy.io';
 
 const ChooseUser = ({ onClose, onChange, onNext }) => {
-  const [groups, setGroups] = useState([
-    {
-      woomsId: 1,
-      woomsTitle: '그룹 1',
-    },
-    {
-      woomsId: 2,
-      woomsTitle: '그룹 2',
-    },
-    {
-      woomsId: 3,
-      woomsTitle: '그룹 3',
-    },
-  ]);
+  const [groups, setGroups] = useState([]);
   const [users, setUsers] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedGroupLabel, setSelectedGroupLabel] = useState('그룹 선택');
@@ -28,12 +15,20 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
 
   useEffect(() => {
     const getGroups = async () => {
+      let allGroups = [];
       try {
-        const response = await axios.get(`${baseUrl}/api/wooms`, {
+        const response = await axios.get(`${baseUrl}/api/wooms?page=0`, {
           withCredentials: true,
         });
         console.log(response.data);
-        setGroups(response.data);
+
+        for (let i = 0; i < response.data.totalPages; i++) {
+          const response = await axios.get(`${baseUrl}/api/wooms?page=${i}`, {
+            withCredentials: true,
+          });
+          allGroups = [...allGroups, ...response.data.content];
+        }
+        setGroups(allGroups);
       } catch (error) {
         console.error('Failed to fetch groups:', error);
       }
@@ -89,7 +84,7 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
     <ModalClose onClose={onClose}>
       <section className='flex flex-col h-5/6 justify-between text-center'>
         <h1 className='text-4xl text-center mt-4'>누구에게 편지를 쓸까요?</h1>
-        <div className='flex items-center justify-center space-x-4 mt-4'>
+        <div className='flex items-center justify-center space-x-4 mt-4 '>
           <div className='w-1/3 flex justify-center'>
             <DropDown
               options={groupOptions}
