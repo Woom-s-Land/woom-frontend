@@ -43,7 +43,7 @@ function App() {
 
   return (
     <div className='App'>
-      {/* <WriteLetterMain /> */}
+      <WriteLetterMain />
       <PlayBgm playOnPage={playOnPage} />
       <Header />
       <Routes>

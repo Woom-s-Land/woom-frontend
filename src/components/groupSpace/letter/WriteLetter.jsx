@@ -24,7 +24,7 @@ const WriteLetter = ({
   };
 
   return (
-    <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
+    <div className='letter fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
       <div className='relative w-2/6 flex flex-col items-center'>
         <img src={letter} alt='letter' className='w-full' />
         <div className='absolute top-0 w-full h-full flex flex-col items-center'>
