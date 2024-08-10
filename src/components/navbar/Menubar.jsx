@@ -6,16 +6,19 @@ import MyInfo from './MyInfo';
 import Group from '../group/Group';
 import { logout } from '../../apis/LogoutApi';
 import { authActions } from '../../store/authSlice'; // Redux 액션 임포트
+import { settingActions } from '../../store/settingSlice'; // Redux 액션 임포트
 import BgmPlayer from '../bgm/BgmPlayer'; // BGM 플레이어 컴포넌트 임포트
+import { useSelector } from 'react-redux';
 
 function Header() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMyInfoOpen, setIsMyInfoOpen] = useState(false);
   const [isGroupOpen, setIsGroupOpen] = useState(false);
-  const [isMuted, setIsMuted] = useState(false); // 음소거 상태 추가
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const [isMuted, setIsMuted] = useState(false); // 음소거 상태 추가
+  const isPlaying = useSelector((state) => state.setting.audioIsPlaying);
 
   const handleCloseMyInfo = () => {
     setIsMyInfoOpen(false);
@@ -59,7 +62,11 @@ function Header() {
   };
 
   const toggleMute = () => {
-    setIsMuted((prevIsMuted) => !prevIsMuted);
+    if (isPlaying) {
+      dispatch(settingActions.pauseAudio());
+    } else {
+      dispatch(settingActions.playAudio());
+    }
   };
 
   return (
@@ -67,7 +74,7 @@ function Header() {
       <div className='absolute top-6 right-6 flex gap-2'>
         <button
           aria-label='BGM 음소거 토글'
-          className={`bg-cover w-8 h-8 ${isMuted ? 'bg-bgm-x' : 'bg-bgm-o'}`}
+          className={`bg-cover w-8 h-8 ${isPlaying ? 'bg-bgm-x' : 'bg-bgm-o'}`}
           onClick={toggleMute}
         />
         <button
@@ -100,7 +107,7 @@ function Header() {
       )}
       <MyInfo isOpen={isMyInfoOpen} handleCloseMyInfo={handleCloseMyInfo} />
       <Group isOpen={isGroupOpen} handleCloseGroup={handleCloseGroup} />
-      <BgmPlayer isMuted={isMuted} />{' '}
+      {/* <BgmPlayer isMuted={isMuted} />{' '} */}
       {/* BGMPlayer 컴포넌트에 음소거 상태 전달 */}
     </header>
   );
