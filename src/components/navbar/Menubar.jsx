@@ -67,12 +67,12 @@ function Header() {
       <div className='absolute top-6 right-6 flex gap-2'>
         <button
           aria-label='BGM 음소거 토글'
-          className={`bg-cover w-8 h-8 ${isMuted ? 'bg-bgm-x' : 'bg-bgm-o'}`}
+          className={`bg-cover w-12 h-12 ${isMuted ? 'bg-bgm-x' : 'bg-bgm-o'}`}
           onClick={toggleMute}
         />
         <button
           aria-label='메뉴 토글'
-          className='bg-cover bg-menu w-8 h-8'
+          className='bg-cover bg-menu w-12 h-12'
           onClick={toggleMenu}
         />
       </div>
@@ -100,7 +100,7 @@ function Header() {
       )}
       <MyInfo isOpen={isMyInfoOpen} handleCloseMyInfo={handleCloseMyInfo} />
       <Group isOpen={isGroupOpen} handleCloseGroup={handleCloseGroup} />
-      <BgmPlayer isMuted={isMuted} />{' '}
+      {/* <BgmPlayer isMuted={isMuted} />{' '} */}
       {/* BGMPlayer 컴포넌트에 음소거 상태 전달 */}
     </header>
   );
