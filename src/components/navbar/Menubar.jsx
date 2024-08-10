@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import MenuButton from './MenuButton';
 import MyInfo from './MyInfo';
 import Group from '../group/Group';
@@ -13,6 +13,9 @@ function Header() {
   const [isMyInfoOpen, setIsMyInfoOpen] = useState(false);
   const [isGroupOpen, setIsGroupOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false); // 음소거 상태 추가
+
+  const location = useLocation(); // 현재 어떤 url 에 접속해있는지 확인
+  const isMapPage = location.pathname.startsWith('/map/'); // 그룹공간에 있다면 true
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -63,8 +66,8 @@ function Header() {
   };
 
   return (
-    <header>
-      <div className='absolute top-6 right-6 flex gap-2'>
+    <header className={`${isMapPage ? 'header-hidden' : void 0}`}>
+      <div className='w-full absolute top-4 right-6 flex gap-4 justify-end'>
         <button
           aria-label='BGM 음소거 토글'
           className={`bg-cover w-12 h-12 ${isMuted ? 'bg-bgm-x' : 'bg-bgm-o'}`}
@@ -82,7 +85,7 @@ function Header() {
             className='fixed inset-0 opacity-50 z-10'
             onClick={toggleMenu}
           ></div>
-          <nav className='absolute top-14 right-1 m-0 p-0 z-20 rounded flex flex-col space-y-1'>
+          <nav className='absolute top-16 right-1 m-0 p-0 z-20 rounded flex flex-col space-y-1'>
             <MenuButton
               buttonText='내 정보 수정'
               onClickEventHandler={handleMyInfoClick}
