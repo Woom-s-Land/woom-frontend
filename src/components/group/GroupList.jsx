@@ -1,11 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import ButtonDetail from './ButtonDetail';
+import { useDispatch } from 'react-redux';
+import { groupActions } from '../../store/groupSlice';
 
 const GroupList = ({ list, onClose, handleDetail }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const moveToGroup = (woomsId) => () => {
-    navigate(`/map/${woomsId}`);
+  const moveToGroup = (group) => () => {
+    dispatch(groupActions.setGroupInfo(group));
+    navigate(`/map/${group.woomsId}`);
     onClose();
   };
 
@@ -14,17 +18,12 @@ const GroupList = ({ list, onClose, handleDetail }) => {
       {list.map((group, index) => (
         <div className='flex items-center justify-center' key={group.woomsId}>
           <div
-            onClick={() => handleDetail(group.woomsId)}
+            onClick={() => handleDetail(group)}
             className='text-2xl cursor-pointer z-20 text-base-color min-w-[150px]'
           >
             {group.woomsTitle}
           </div>
-          <div>
-            <ButtonDetail
-              buttonText='이동'
-              onClick={moveToGroup(group.woomsId)}
-            />
-          </div>
+          <ButtonDetail buttonText='이동' onClick={moveToGroup(group)} />
         </div>
       ))}
     </div>
