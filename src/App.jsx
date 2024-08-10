@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 import Main from './MainPage.jsx';
 import Home from './world/Home.jsx';
 import Map from './world/Map.jsx';
@@ -23,10 +25,25 @@ import ChooseUser from './components/groupSpace/letter/ChooseUser';
 import WriteLetter from './components/groupSpace/letter/WriteLetter';
 import MainLetter from './components/groupSpace/letter/MainLetter';
 import DropDown from './components/common/DropDown.jsx';
+import PlayBgm from './components/bgm/PlayBgm.jsx';
 
 function App() {
+  const location = useLocation();
+
+  // 음악을 재생할 페이지 정의
+  const playMusicOnPages = ['/home', '/map/:woomsId'];
+
+  // 현재 경로가 음악을 재생할 페이지와 일치하는지 확인
+  const playOnPage = playMusicOnPages.some((path) => {
+    // 경로 파라미터 처리 (예: /map/:woomsId)
+    return new RegExp(`^${path.replace(/:\w+/, '\\w+')}($|/)`).test(
+      location.pathname
+    );
+  });
+
   return (
     <div className='App'>
+      <PlayBgm playOnPage={playOnPage} />
       <Header />
       <Routes>
         <Route path='/' element={<Main />} />

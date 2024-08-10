@@ -16,6 +16,7 @@
     "@pixi/react": "^7.1.2",
     "@reduxjs/toolkit": "^2.2.6",
     "axios": "^1.7.2",
+    "howler": "^2.2.4",
     "html2canvas": "^1.4.1",
     "jest": "^29.7.0",
     "pixi.js": "^7.4.2",

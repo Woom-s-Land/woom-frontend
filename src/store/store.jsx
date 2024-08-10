@@ -2,17 +2,28 @@ import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
 import authReducer from './authSlice';
+import settingReducer from './settingSlice';
 
-const persistConfig = {
-  key: 'root',
+const persistConfigAuth = {
+  key: 'auth',
   storage: storageSession,
 };
 
-const persistedReducer = persistReducer(persistConfig, authReducer);
+const persistConfigSetting = {
+  key: 'setting',
+  storage: storageSession,
+};
+
+const persistedAuthReducer = persistReducer(persistConfigAuth, authReducer);
+const persistedSettingReducer = persistReducer(
+  persistConfigSetting,
+  settingReducer
+);
 
 const store = configureStore({
   reducer: {
-    auth: persistedReducer,
+    auth: persistedAuthReducer,
+    setting: persistedSettingReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
