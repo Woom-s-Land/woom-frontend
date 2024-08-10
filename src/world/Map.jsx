@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import CharacterInMap from './CharacterInMap';
-import mapImages from './mapImages';
+import mapImages from '../utils/mapImages';
 import { Stage, Sprite, Container } from '@pixi/react';
 import { OutlineFilter } from '@pixi/filter-outline';
 import PhotoModal from '../components/groupSpace/photo/PhotoModal';

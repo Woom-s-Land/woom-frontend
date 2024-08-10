@@ -25,6 +25,10 @@ const store = configureStore({
     auth: persistedAuthReducer,
     setting: persistedSettingReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
   devTools: process.env.NODE_ENV !== 'production',
 });
 

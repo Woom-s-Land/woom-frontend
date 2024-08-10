@@ -4,9 +4,6 @@ import baseUrl from '../../../libs/axios/basicAxios';
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 
-// import inputBoxImage from 'src/assets/comment/input-box.png';
-// import dialogBoxImage from 'src/assets/comment/dialog-box.png';
-
 const Comment = ({ onClose }) => {
   const pathname = window.location.pathname;
   const woomsId = pathname.split('/')[2];
@@ -78,9 +75,8 @@ const Comment = ({ onClose }) => {
         <h2 className='text-2xl mt-4 mb-4 text-base-color'>방명록</h2>
         <form onSubmit={handleSubmit} className='items-center'>
           <div
-            className='relative ml-32 mb-5 bg-center bg-no-repeat flex items-center justify-between'
+            className='relative ml-32 mb-5 flex items-center justify-between bg-inputbox-comment'
             style={{
-              backgroundImage: `url(${inputBoxImage})`,
               backgroundSize: 'contain',
               backgroundPosition: 'center',
               height: '50px',
@@ -120,9 +116,8 @@ const Comment = ({ onClose }) => {
                 </div>
               </div>
               <div
-                className='absolute ml-32 bg-center bg-no-repeat rounded overflow-hidden mr-10'
+                className='absolute ml-32 bg-center bg-no-repeat rounded overflow-hidden mr-10 bg-dialoguebox-comment'
                 style={{
-                  backgroundImage: `url(${dialogBoxImage})`,
                   backgroundSize: 'contain',
                   backgroundPosition: 'center',
                   width: '470px',
