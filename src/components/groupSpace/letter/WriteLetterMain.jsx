@@ -5,7 +5,7 @@ import ChooseUser from './ChooseUser';
 import WriteLetter from './WriteLetter';
 import ChooseDate from './ChooseDate';
 
-const WriteLetterMain = ({ isOpen = true, onClose }) => {
+const WriteLetterMain = ({ isOpen, onClose }) => {
   const [selectedUser, setSelectedUser] = useState({});
   const [selectedDate, setSelectedDate] = useState('');
   const [content, setContent] = useState('');

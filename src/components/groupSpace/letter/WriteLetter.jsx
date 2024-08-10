@@ -32,12 +32,12 @@ const WriteLetter = ({
         <div className='absolute top-0 w-full h-full flex flex-col items-center'>
           <div className='absolute top-6 left-[34px]'>
             <span className='text-xl font-bold'>{userNickname}</span>
-            <span className='text-xl font-bold'>에게</span>
+            <span className='text-xl xf'>에게</span>
           </div>
           <textarea
             value={content}
             onChange={handleContentChange}
-            className='absolute top-14 w-11/12 h-2/3 p-4 rounded resize-none bg-transparent overflow-hidden focus:outline-none leading-relaxed'
+            className='absolute top-14 w-11/12 h-2/3 p-4 rounded resize-none bg-transparent overflow-hidden focus:outline-none leading-relaxed font-semibold'
             placeholder='편지 내용을 입력하세요!'
             maxLength={350}
           />
@@ -47,16 +47,14 @@ const WriteLetter = ({
             </p>
             <p className='text-lg font-bold'>{userInfo.nickname} 올림</p>
           </div>
-
           <div className='flex text-lg py-2 px-4 bg-transparent rounded mb-0 absolute bottom-14 right-2 font-bold hover:underline decoration-wavy text-yellow-600'>
-            <img src={smileEmoji} alt='smileEmoji' className='w-6' />
+            <img src={smileEmoji} alt='smileEmoji' className='w-6 mr-1' />
             <button onClick={onNext} disabled={content.trim() === ''}>
               편지 도착 날짜 선택
             </button>
           </div>
-
           <div className='flex text-lg py-2 px-4 bg-transparent rounded mb-0 absolute bottom-4 right-2 font-bold hover:underline decoration-wavy text-red-600'>
-            <img src={sadEmoji} alt='sadEmoji' className='w-6' />
+            <img src={sadEmoji} alt='sadEmoji' className='w-6 mr-1' />
             <button onClick={onClose}>편지 다음에 쓰기</button>
           </div>
         </div>

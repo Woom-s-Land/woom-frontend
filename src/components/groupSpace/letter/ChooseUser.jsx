@@ -45,7 +45,7 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
 
     if (groupId) {
       try {
-        const response = await baseUrl.get('/wooms/${groupId}/info', {
+        const response = await baseUrl.get(`/wooms/${groupId}/info`, {
           withCredentials: true,
         });
         console.log(response.data.userInfoDtoList);
@@ -107,10 +107,10 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
           <Button
             label={'편지 쓰기'}
             onClick={onNext}
-            // disabled={
-            //   selectedGroupLabel === '그룹 선택' ||
-            //   selectedUserLabel === '유저 선택'
-            // }
+            disabled={
+              selectedGroupLabel === '그룹 선택' ||
+              selectedUserLabel === '유저 선택'
+            }
           />
         </div>
       </section>

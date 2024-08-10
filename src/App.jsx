@@ -26,6 +26,7 @@ import WriteLetter from './components/groupSpace/letter/WriteLetter';
 import WriteLetterMain from './components/groupSpace/letter/WriteLetterMain.jsx';
 import DropDown from './components/common/DropDown.jsx';
 import PlayBgm from './components/bgm/PlayBgm.jsx';
+import ReadLetterMain from './components/groupSpace/letter/ReadLetterMain.jsx';
 
 function App() {
   const location = useLocation();
@@ -43,7 +44,6 @@ function App() {
 
   return (
     <div className='App'>
-      <WriteLetterMain />
       <PlayBgm playOnPage={playOnPage} />
       <Header />
       <Routes>
