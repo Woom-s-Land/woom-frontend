@@ -17,7 +17,6 @@ function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMyInfoOpen, setIsMyInfoOpen] = useState(false);
   const [isGroupOpen, setIsGroupOpen] = useState(false);
-  // const [isMuted, setIsMuted] = useState(false); // 음소거 상태 추가
   const isPlaying = useSelector((state) => state.setting.audioIsPlaying);
 
   const handleCloseMyInfo = () => {
@@ -107,8 +106,6 @@ function Header() {
       )}
       <MyInfo isOpen={isMyInfoOpen} handleCloseMyInfo={handleCloseMyInfo} />
       <Group isOpen={isGroupOpen} handleCloseGroup={handleCloseGroup} />
-      {/* <BgmPlayer isMuted={isMuted} />{' '} */}
-      {/* BGMPlayer 컴포넌트에 음소거 상태 전달 */}
     </header>
   );
 }
