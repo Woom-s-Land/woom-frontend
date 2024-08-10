@@ -31,7 +31,8 @@ export default {
         'bgm-o': 'url(src/assets/menu/bgm-o.png)',
         'bgm-x': 'url(src/assets/menu/bgm-x.png)',
         menu: 'url(src/assets/menu/menu.png)',
-        'inputbox-comment': 'url(src/assets/comment/input-box-comment.png)',
+        'inputbox-comment': 'url(./assets/comment/input-box.png)',
+        'dialoguebox-comment': 'url(./assets/comment/dialoge-box.png)',
       },
       gridTemplateColumns: {
         'custom-19': 'repeat(19, minmax(0, 1fr))',
