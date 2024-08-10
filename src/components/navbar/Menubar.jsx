@@ -79,7 +79,7 @@ function Header() {
       {isMenuOpen && (
         <>
           <div
-            className='fixed inset-0 bg-black opacity-50 z-10'
+            className='fixed inset-0 opacity-50 z-10'
             onClick={toggleMenu}
           ></div>
           <nav className='absolute top-14 right-1 m-0 p-0 z-20 rounded flex flex-col space-y-1'>
