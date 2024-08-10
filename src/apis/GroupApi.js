@@ -1,144 +1,144 @@
 import basicAxios from '../libs/axios/basicAxios';
 
 const getMyGroup = async (page) => {
-  const data = await basicAxios({
-    method: 'get',
-    url: `/wooms?page=${page}`,
-  })
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      return err;
+  try {
+    const res = await basicAxios({
+      method: 'get',
+      url: `/wooms?page=${page}`,
     });
-  return data;
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
 };
+
 const getRequestUser = async (woomsId, page) => {
-  const data = await basicAxios({
-    method: 'get',
-    url: `/wooms/${woomsId}/enrollment?page=${page}`,
-  })
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      return err;
+  try {
+    const res = await basicAxios({
+      method: 'get',
+      url: `/wooms/${woomsId}/enrollment?page=${page}`,
     });
-  return data;
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
 };
 
 const getGroupInfo = async (woomsId) => {
-  const data = await basicAxios({
-    method: 'get',
-    url: `/wooms/${woomsId}/info`,
-  })
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      return err;
+  try {
+    const res = await basicAxios({
+      method: 'get',
+      url: `/wooms/${woomsId}/info`,
     });
-  return data;
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
 };
 
 const getGroupTitle = async (inviteCode) => {
-  const data = await basicAxios({
-    method: 'get',
-    url: `/wooms/${inviteCode}/name`,
-  })
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      return err;
+  try {
+    const res = await basicAxios({
+      method: 'get',
+      url: `/wooms/${inviteCode}/name`,
     });
-  return data;
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
 };
+
 const createGroup = async (woomsTitle) => {
-  const data = await basicAxios({
-    method: 'post',
-    url: '/wooms',
-    data: {
-      woomsTitle: woomsTitle,
-    },
-  })
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      return err;
+  try {
+    const res = await basicAxios({
+      method: 'post',
+      url: '/wooms',
+      data: {
+        woomsTitle: woomsTitle,
+      },
     });
-  return data;
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
 };
 
 const requestGroup = async (inviteCode) => {
-  const data = await basicAxios({
-    method: 'post',
-    url: `/wooms/${inviteCode}/users`,
-  })
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      return err;
+  try {
+    const res = await basicAxios({
+      method: 'post',
+      url: `/wooms/${inviteCode}/users`,
     });
-  return data;
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
 };
 
-const responseRequest = async (woomsId, uuid) => {
-  const data = await basicAxios({
-    method: 'patch',
-    url: `/wooms/${woomsId}/users/${uuid}`,
-  })
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      return err;
+const responseRequest = async (woomsId, uuid, status) => {
+  try {
+    const res = await basicAxios({
+      method: 'patch',
+      url: `/wooms/${woomsId}/users/${uuid}`,
+      data: {
+        status: status,
+      },
     });
-  return data;
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
 };
 
 const changeGroupColor = async (woomsId, color) => {
-  const data = await basicAxios({
-    method: 'patch',
-    url: `/wooms/${woomsId}/colors/${color}`,
-  })
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      return err;
+  try {
+    const res = await basicAxios({
+      method: 'patch',
+      url: `/wooms/${woomsId}/colors/${color}`,
     });
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const isAdmin = async (woomsId) => {
+  try {
+    const res = await basicAxios({
+      method: 'get',
+      url: `/wooms/${woomsId}/admin`,
+    });
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
 };
 
 const delegateAdmin = async (woomsId, uuid) => {
-  const data = await basicAxios({
-    method: 'patch',
-    url: `/wooms/${woomsId}/admins/delegations?userUuid=${uuid}`,
-  })
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      return err;
+  try {
+    const res = await basicAxios({
+      method: 'patch',
+      url: `/wooms/${woomsId}/admins/delegations`,
+      data: { userUuid: uuid },
     });
-  return data;
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
 };
 
 const withdraw = async (woomsId) => {
-  const data = await basicAxios({
-    method: ' delete',
-    url: `/wooms/${woomsId}/users`,
-  })
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      return err;
+  try {
+    const res = await basicAxios({
+      method: 'delete',
+      url: `/wooms/${woomsId}/users`,
     });
-  return data;
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
 };
+
 const GroupApi = {
   getMyGroup,
   getGroupTitle,
@@ -150,5 +150,6 @@ const GroupApi = {
   changeGroupColor,
   delegateAdmin,
   withdraw,
+  isAdmin,
 };
 export default GroupApi;
