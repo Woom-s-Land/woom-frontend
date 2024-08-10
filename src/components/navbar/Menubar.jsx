@@ -7,7 +7,6 @@ import Group from '../group/Group';
 import { logout } from '../../apis/LogoutApi';
 import { authActions } from '../../store/authSlice'; // Redux 액션 임포트
 import { settingActions } from '../../store/settingSlice'; // Redux 액션 임포트
-import BgmPlayer from '../bgm/BgmPlayer'; // BGM 플레이어 컴포넌트 임포트
 import { useSelector } from 'react-redux';
 
 function Header() {
