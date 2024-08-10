@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import CharacterInMap from './CharacterInMap';
-import mapImages from '../utils/mapImages';
+import { useSelector } from 'react-redux';
 import { Stage, Sprite, Container } from '@pixi/react';
 import { OutlineFilter } from '@pixi/filter-outline';
+import CharacterInMap from './CharacterInMap';
+import mapImages from '../utils/mapImages';
 import PhotoModal from '../components/groupSpace/photo/PhotoModal';
 import PhotoHeatMap from '../components/groupSpace/photoHeatmap/PhotoHeatMap';
 import CommentModal from '../components/groupSpace/comment/CommentModal';
@@ -12,6 +13,9 @@ const outlineStyle = new OutlineFilter(4, 0xbcff89);
 const Map = () => {
   const width = window.screen.width;
   const height = window.screen.height;
+  const userInfo = useSelector((state) => state.auth.userInfo);
+  const [nickname, setNickname] = useState(userInfo.nickname);
+  const [costume, setCostume] = useState(userInfo.costume);
   const [backgroundX, setBackgroundX] = useState(-300);
   const [backgroundY, setBackgroundY] = useState(-300);
 
@@ -153,6 +157,8 @@ const Map = () => {
           <CharacterInMap
             width={width}
             height={height}
+            nickname={nickname}
+            costume={costume}
             setBackgroundX={setBackgroundX}
             setBackgroundY={setBackgroundY}
             backgroundX={backgroundX}

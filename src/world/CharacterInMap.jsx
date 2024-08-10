@@ -29,6 +29,8 @@ const STEP_COUNT = 6;
 const Character = ({
   width,
   height,
+  costume,
+  nickname,
   setBackgroundX,
   setBackgroundY,
   backgroundX,
@@ -53,16 +55,15 @@ const Character = ({
 
   const animationFrameRef = useRef(null);
   const lastFrameTimeRef = useRef(0);
-  const characterNumber = 1;
 
   const BoundaryWidth = 32;
   const BoundaryHeight = 32;
 
   useEffect(() => {
     const allImages = loadCharacterImages();
-    const images = allImages[characterNumber];
+    const images = allImages[costume];
     setDirectionImages(images);
-  }, [characterNumber]);
+  }, [costume]);
 
   useEffect(() => {
     const collisionMap = initializeCollisionMap(collisions, 64);
@@ -273,7 +274,7 @@ const Character = ({
           height={CHAR_HEIGHT}
         />
       )}
-      <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text='브로콜리맨' />
+      <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text={nickname} />
     </Container>
   );
 };
