@@ -13,7 +13,10 @@ const outlineStyle = new OutlineFilter(4, 0xbcff89);
 const Map = () => {
   const width = window.screen.width;
   const height = window.screen.height;
+
   const userInfo = useSelector((state) => state.auth.userInfo);
+  const groupInfo = useSelector((state) => state.group.groupInfo);
+
   const [nickname, setNickname] = useState(userInfo.nickname);
   const [costume, setCostume] = useState(userInfo.costume);
   const [backgroundX, setBackgroundX] = useState(-300);
@@ -31,6 +34,8 @@ const Map = () => {
   const [isOpenPhoto, setIsOpenPhoto] = useState(false);
   const [isOpenPhotomap, setIsOpenPhotomap] = useState(false);
   const [isOpenGuestbook, setIsOpenGuestbook] = useState(false);
+
+  const [woomsTitle, setWoomsTitle] = useState(groupInfo.woomsTitle);
 
   const photoX = 1417;
   const photoY = 227;
@@ -120,6 +125,12 @@ const Map = () => {
   }, [characterX, characterY, backgroundX, backgroundY]);
   return (
     <div className='w-full h-full overflow-hidden'>
+      <div className='fixed top-4 left-1/2 transform -translate-x-1/2 inline-flex items-center justify-center bg-no-repeat bg-opacity-0 bg-center bg-gr-title p-4'>
+        {woomsTitle && (
+          <div className='text-2xl text-point-color'>{woomsTitle}</div>
+        )}
+      </div>
+
       <Stage width={width} height={height}>
         {/* 배경을 관리하는 Container */}
         <Container>

@@ -71,7 +71,7 @@ function Header() {
 
   return (
     <header className={`${isMapPage ? 'header-hidden' : void 0}`}>
-      <div className='w-full absolute top-4 right-6 flex gap-4 justify-end'>
+      <div className='fixed w-full top-4 right-6 flex gap-4 justify-end'>
         <button
           aria-label='BGM 음소거 토글'
           className={`bg-cover w-12 h-12 ${isPlaying ? 'bg-bgm-x' : 'bg-bgm-o'}`}
