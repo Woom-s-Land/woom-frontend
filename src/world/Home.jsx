@@ -6,6 +6,7 @@ import homeImages from '../utils/homeImages';
 import Character from './CharacterInHome';
 import ReadLetterMain from '../components/groupSpace/letter/ReadLetterMain';
 import MainLetter from '../components/groupSpace/letter/MainLetter';
+import Group from '../components/group/Group';
 // import { useDispatch, useSelector } from 'react-redux';
 
 const MAP_X = 488;
@@ -18,14 +19,32 @@ const Home = () => {
   // const [nickname, setNickname] = useState(userInfo.nickname);
   // const [costume, setCostume] = useState(userInfo.costume);
 
-  const [background, setBackground] = useState(homeImages.home);
   const [isActiveBed, setIsActiveBed] = useState(false);
   const [isActiveDesk, setIsActiveDesk] = useState(false);
   const [isActiveToilet, setIsActiveToilet] = useState(false);
-  const [isInBathroom, setIsInBathroom] = useState(true);
+  const [isActiveRug, setIsActiveRug] = useState(false);
+  const [isInBathroom, setIsInBathroom] = useState(false);
 
   const [isOpenWriteLetter, setIsOpenWriteLetter] = useState(false);
   const [isOpenReadLetter, setIsOpenReadLetter] = useState(false);
+  const [isOpenGroup, setIsOpenGroup] = useState(false);
+
+  const bedX = 376;
+  const bedY = 20;
+  const bedWidth = 103;
+  const bedHeight = 112;
+  const deskX = 0;
+  const deskY = 160;
+  const deskWidth = 62;
+  const deskHeight = 138;
+  const toiletX = 6;
+  const toiletY = 25;
+  const toiletWidth = 37;
+  const toiletHeight = 60;
+  const rugX = 217;
+  const rugY = 354;
+  const rugWidth = 60;
+  const rugHeight = 30;
 
   const handleWriteLetterClose = () => {
     setIsOpenWriteLetter(false);
@@ -34,20 +53,11 @@ const Home = () => {
   const handleReadLetterClose = () => {
     setIsOpenReadLetter(false);
   };
-  const handleCharacterMove = useCallback((charX, charY) => {
-    const bedX = 376;
-    const bedY = 20;
-    const bedWidth = 103;
-    const bedHeight = 112;
-    const deskX = 0;
-    const deskY = 160;
-    const deskWidth = 62;
-    const deskHeight = 138;
-    const toiletX = 6;
-    const toiletY = 25;
-    const toiletWidth = 37;
-    const toiletHeight = 60;
 
+  const handleGroupClose = () => {
+    setIsOpenGroup(false);
+  };
+  const handleCharacterMove = useCallback((charX, charY) => {
     setIsActiveBed(charX + 40 >= bedX - 20 && charY <= bedY + bedHeight + 20);
     setIsActiveDesk(
       charX <= deskX + deskWidth + 30 &&
@@ -58,30 +68,40 @@ const Home = () => {
       charX <= toiletX + toiletWidth + 20 &&
         charY <= toiletY + toiletHeight + 20
     );
+    // console.log(charX, rugX, charY, rugY);
+    setIsActiveRug(
+      charX >= rugX - 20 && charX <= rugX + rugWidth + 20 && charY >= rugY - 60
+    );
     setIsInBathroom(charX <= 137 && charX >= 102 && charY <= 173);
   }, []);
 
   return (
     <div className='flex justify-center mt-24'>
       <Stage width={MAP_X} height={MAP_Y}>
-        <Sprite image={background} x={0} y={0} />
+        <Sprite image={homeImages.home} x={0} y={0} />
         <Sprite
           image={homeImages.bed}
-          x={376}
-          y={20}
+          x={bedX}
+          y={bedY}
           filters={isActiveBed ? [new OutlineFilter(2, 0xbcff89)] : []}
         />
         <Sprite
           image={homeImages.desk}
-          x={0}
-          y={160}
+          x={deskX}
+          y={deskY}
           filters={isActiveDesk ? [new OutlineFilter(2, 0xbcff89)] : []}
         />
         <Sprite
           image={homeImages.toilet}
-          x={6}
-          y={25}
+          x={toiletX}
+          y={toiletY}
           filters={isActiveToilet ? [new OutlineFilter(2, 0xbcff89)] : []}
+        />
+        <Sprite
+          image={homeImages.rug}
+          x={rugX}
+          y={rugY}
+          filters={isActiveRug ? [new OutlineFilter(2, 0xbcff89)] : []}
         />
 
         <Character
@@ -89,8 +109,10 @@ const Home = () => {
           isActiveBed={isActiveBed}
           isActiveDesk={isActiveDesk}
           isActiveToilet={isActiveToilet}
+          isActiveRug={isActiveRug}
           setIsOpenWriteLetter={setIsOpenWriteLetter}
           setIsOpenReadLetter={setIsOpenReadLetter}
+          setIsOpenGroup={setIsOpenGroup}
         />
         {isInBathroom && <Sprite image={homeImages.forward} x={0} y={144} />}
       </Stage>
@@ -105,6 +127,9 @@ const Home = () => {
           isOpen={isOpenReadLetter}
           onClose={handleReadLetterClose}
         />
+      )}
+      {isOpenGroup && (
+        <Group isOpen={isOpenGroup} handleCloseGroup={handleGroupClose} />
       )}
     </div>
   );

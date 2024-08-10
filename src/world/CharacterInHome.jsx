@@ -33,14 +33,16 @@ const Character = ({
   isActiveBed,
   isActiveDesk,
   isActiveToilet,
+  isActiveRug,
   setIsOpenReadLetter,
   setIsOpenWriteLetter,
+  setIsOpenGroup,
 }) => {
   const [boundaries, setBoundaries] = useState([]);
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState(Direction.DOWN);
-  const [charX, setCharX] = useState(270);
-  const [charY, setCharY] = useState(40);
+  const [charX, setCharX] = useState(230);
+  const [charY, setCharY] = useState(300);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isInteractionBed, setIsInteractionBed] = useState(false);
   const [isInteractionToilet, setIsInteractionToilet] = useState(false);
@@ -95,7 +97,7 @@ const Character = ({
       const InteractiveKeys = {
         Space: {
           dir: direction,
-          isActive: () => isActiveBed || isActiveToilet,
+          isActive: () => isActiveBed || isActiveToilet || isActiveRug,
         },
         KeyE: { dir: direction, isActive: () => isActiveDesk },
         KeyR: { dir: direction, isActive: () => isActiveDesk },
@@ -119,12 +121,14 @@ const Character = ({
             setTimeout(() => {
               setIsInteractionBed(false);
             }, 1500);
-          } else {
+          } else if (isActiveToilet) {
             setIsInteractionToilet(true);
 
             setTimeout(() => {
               setIsInteractionToilet(false);
             }, 1500);
+          } else if (isActiveRug) {
+            setIsOpenGroup(true);
           }
         }
       }
