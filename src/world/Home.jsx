@@ -5,7 +5,7 @@ import { OutlineFilter } from '@pixi/filter-outline';
 import homeImages from '../utils/homeImages';
 import Character from './CharacterInHome';
 import ReadLetterMain from '../components/groupSpace/letter/ReadLetterMain';
-import MainLetter from '../components/groupSpace/letter/MainLetter';
+import WriteLetterMain from '../components/groupSpace/letter/WriteLetterMain';
 import Group from '../components/group/Group';
 // import { useDispatch, useSelector } from 'react-redux';
 
@@ -117,7 +117,7 @@ const Home = () => {
         {isInBathroom && <Sprite image={homeImages.forward} x={0} y={144} />}
       </Stage>
       {isOpenWriteLetter && (
-        <MainLetter
+        <WriteLetterMain
           isOpen={isOpenWriteLetter}
           onClose={handleWriteLetterClose}
         />

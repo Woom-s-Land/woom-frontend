@@ -23,7 +23,7 @@ import LetterList from './components/groupSpace/letter/LetterList.jsx';
 import Loading from './components/common/Loading.jsx';
 import ChooseUser from './components/groupSpace/letter/ChooseUser';
 import WriteLetter from './components/groupSpace/letter/WriteLetter';
-import MainLetter from './components/groupSpace/letter/MainLetter';
+import WriteLetterMain from './components/groupSpace/letter/WriteLetterMain.jsx';
 import DropDown from './components/common/DropDown.jsx';
 import PlayBgm from './components/bgm/PlayBgm.jsx';
 
@@ -43,6 +43,7 @@ function App() {
 
   return (
     <div className='App'>
+      {/* <WriteLetterMain /> */}
       <PlayBgm playOnPage={playOnPage} />
       <Header />
       <Routes>
@@ -61,7 +62,6 @@ function App() {
         <Route path='/story-read' element={<StoryRead />} />
         <Route path='/loading' element={<Loading />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
-        <Route path='/letter' element={<MainLetter />} />
       </Routes>
     </div>
   );

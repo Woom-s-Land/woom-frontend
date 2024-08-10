@@ -29,7 +29,7 @@ const WriteLetter = ({
         <img src={letter} alt='letter' className='w-full' />
         <div className='absolute top-0 w-full h-full flex flex-col items-center'>
           <div className='absolute top-6 left-[34px]'>
-            <span className='text-xl'>{userNickname}녕안녕안녕안녕</span>
+            <span className='text-xl'>{userNickname}</span>
             <span className='text-xl'>에게</span>
           </div>
           <textarea
@@ -43,10 +43,7 @@ const WriteLetter = ({
             <p className='text-lg'>
               {new Date(sendDateTime).toLocaleDateString()}
             </p>
-            {/* todo: 유저 닉네임으로 수정 예정 */}
-            <p className='text-lg'>
-              {userInfo ? userInfo.nickname : '안녕안녕안녕안'} 올림
-            </p>
+            <p className='text-lg'>{userInfo.nickname} 올림</p>
           </div>
           <button
             onClick={onNext}
