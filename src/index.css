@@ -16,3 +16,12 @@ body {
   width: 10px;
   display: none;
 }
+
+.header-hidden {
+  opacity: 0;
+  transition: opacity 0.7s;
+}
+
+.header-hidden:hover {
+  opacity: 1;
+}
