@@ -2,7 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import { Stage, Sprite, useApp } from '@pixi/react';
 import { OutlineFilter } from '@pixi/filter-outline';
-import homeImages from './homeImages';
+import homeImages from '../utils/homeImages';
 import Character from './CharacterInHome';
 import ReadLetterMain from '../components/groupSpace/letter/ReadLetterMain';
 import MainLetter from '../components/groupSpace/letter/MainLetter';

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import CharacterImages from './characterImages';
+import loadCharacterImages from '../utils/loadCharacterImages';
 import collisions from '../assets/home/home-collisions';
 import { Sprite, Container } from '@pixi/react';
 import {
@@ -18,48 +18,14 @@ const Direction = {
 
 const MAP_X = 488;
 const MAP_Y = 384;
-const CHAR_WIDTH = 40; // 캐릭터 사이즈
-const CHAR_HEIGHT = 60;
+const CHAR_WIDTH = 35; // 캐릭터 사이즈
+const CHAR_HEIGHT = 55;
 const BoundaryWidth = 8; // 충돌박스의 너비
 const BoundaryHeight = 8;
 const MOVE_DISTANCE = 11; // 한 프레임별 움직일 거리
 const FRAME_INTERVAL = 60; // 프레임이 전환될 간격
 
 // #todo: 추후 캐릭터 코스튬, 닉네임 사용자 정보에 맞게 수정
-const directionImages = {
-  [Direction.UP]: [
-    CharacterImages.char_1u1,
-    CharacterImages.char_1u2,
-    CharacterImages.char_1u4,
-    CharacterImages.char_1u5,
-    CharacterImages.char_1u6,
-    CharacterImages.char_1u8,
-  ],
-  [Direction.DOWN]: [
-    CharacterImages.char_1d1,
-    CharacterImages.char_1d2,
-    CharacterImages.char_1d4,
-    CharacterImages.char_1d5,
-    CharacterImages.char_1d6,
-    CharacterImages.char_1d8,
-  ],
-  [Direction.RIGHT]: [
-    CharacterImages.char_1r1,
-    CharacterImages.char_1r2,
-    CharacterImages.char_1r4,
-    CharacterImages.char_1r5,
-    CharacterImages.char_1r6,
-    CharacterImages.char_1r8,
-  ],
-  [Direction.LEFT]: [
-    CharacterImages.char_1l1,
-    CharacterImages.char_1l2,
-    CharacterImages.char_1l4,
-    CharacterImages.char_1l5,
-    CharacterImages.char_1l6,
-    CharacterImages.char_1l8,
-  ],
-};
 
 // todo: 하드 코딩 된 것들 수정
 const Character = ({
@@ -78,10 +44,11 @@ const Character = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const [isInteractionBed, setIsInteractionBed] = useState(false);
   const [isInteractionToilet, setIsInteractionToilet] = useState(false);
+  const [directionImages, setDirectionImages] = useState({});
 
   const animationFrameRef = useRef(null);
   const lastFrameTimeRef = useRef(0);
-
+  const characterNumber = 1;
   // 경계 맵 생성
   useEffect(() => {
     const collisionMap = initializeCollisionMap(collisions, 61);
@@ -89,6 +56,12 @@ const Character = ({
       initializeBoundaries(collisionMap, BoundaryWidth, BoundaryHeight, 15)
     );
   }, []);
+
+  useEffect(() => {
+    const allImages = loadCharacterImages();
+    const images = allImages[characterNumber];
+    setDirectionImages(images);
+  }, [characterNumber]);
 
   // 충돌 or 상호작용 여부 판정 함수
   const boundaryCollision = useCallback((boundary, x, y) => {
@@ -253,13 +226,15 @@ const Character = ({
 
   return (
     <Container x={charX} y={charY}>
-      <Sprite
-        image={directionImages[direction][stepIndex]}
-        x={0}
-        y={0}
-        width={CHAR_WIDTH}
-        height={CHAR_HEIGHT}
-      />
+      {directionImages[direction] && directionImages[direction][stepIndex] && (
+        <Sprite
+          image={directionImages[direction][stepIndex]}
+          x={0}
+          y={0}
+          width={CHAR_WIDTH}
+          height={CHAR_HEIGHT}
+        />
+      )}
       <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text='브로콜리맨' />
       {isInteractionBed && (
         <InteractionSpeechBubble
