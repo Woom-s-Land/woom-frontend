@@ -19,7 +19,7 @@ const Group = ({ isOpen, handleCloseGroup }) => {
         const data = await GroupApi.getMyGroup(page);
         setGroupData(data);
         setTotalPage(data.totalPages - 1);
-        console.log(data);
+        console.log(data.totalElements);
         setError(null);
       } catch (err) {
         console.error('Failed to fetch group data:', err);
@@ -74,14 +74,18 @@ const Group = ({ isOpen, handleCloseGroup }) => {
                 />
               </div>
               <div>
-                {groupData.totalElements > 0 ? (
-                  <GroupList
-                    list={groupData.content}
-                    onClose={handleClose}
-                    handleDetail={handleOpenDetailGroupModal}
-                  />
-                ) : (
-                  <p className='text-base-color text-3xl'>없음</p>
+                {groupData && (
+                  <>
+                    {groupData.totalElements > 0 ? (
+                      <GroupList
+                        list={groupData.content}
+                        onClose={handleClose}
+                        handleDetail={handleOpenDetailGroupModal}
+                      />
+                    ) : (
+                      <p className='text-base-color text-3xl'>없음</p>
+                    )}
+                  </>
                 )}
               </div>
               <div className='absolute bottom-3 left-1/2 transform -translate-x-1/2 flex justify-center w-full max-w-md'>
