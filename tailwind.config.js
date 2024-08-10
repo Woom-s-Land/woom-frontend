@@ -27,6 +27,7 @@ export default {
         'gr-check-fill': 'url(./assets/group/check_fill.png)',
         'gr-copy': 'url(./assets/group/copy.png)',
         'gr-external': 'url(./assets/group/external.png)',
+        'gr-title': 'url(./assets/group/group-title.png)',
         'inputbox-story': 'url(./assets/story/input-box-story.png)',
         'bgm-o': 'url(./assets/menu/bgm-o.png)',
         'bgm-x': 'url(./assets/menu/bgm-x.png)',
