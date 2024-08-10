@@ -125,9 +125,11 @@ const Map = () => {
   }, [characterX, characterY, backgroundX, backgroundY]);
   return (
     <div className='w-full h-full overflow-hidden'>
-      <div className='fixed top-4 left-1/2 transform -translate-x-1/2 inline-flex items-center justify-center bg-no-repeat bg-opacity-0 bg-center bg-gr-title p-4'>
+      <div className='fixed left-1/2 transform -translate-x-1/2 inline-flex items-center justify-center bg-no-repeat bg-opacity-0 bg-center bg-gr-title p-16'>
         {woomsTitle && (
-          <div className='text-2xl text-point-color'>{woomsTitle}</div>
+          <div className='whitespace-nowrap mx-3 text-2xl text-point-color'>
+            {woomsTitle}
+          </div>
         )}
       </div>
 
