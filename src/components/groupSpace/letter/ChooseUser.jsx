@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import ModalClose from '../../common/ModalClose';
+import baseUrl from '../../../libs/axios/basicAxios';
+import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import DropDown from '../../common/DropDown';
-
-const baseUrl = 'https://i11e206.p.ssafy.io';
 
 const ChooseUser = ({ onClose, onChange, onNext }) => {
   const [groups, setGroups] = useState([]);
@@ -17,20 +15,21 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
     const getGroups = async () => {
       let allGroups = [];
       try {
-        const response = await axios.get(`${baseUrl}/api/wooms?page=0`, {
+        const response = await baseUrl.get('/wooms?page=0', {
           withCredentials: true,
         });
         console.log(response.data);
 
         for (let i = 0; i < response.data.totalPages; i++) {
-          const response = await axios.get(`${baseUrl}/api/wooms?page=${i}`, {
+          const response = await baseUrl.get(`/wooms?page=${i}`, {
             withCredentials: true,
           });
           allGroups = [...allGroups, ...response.data.content];
         }
         setGroups(allGroups);
+        console.log(allGroups);
       } catch (error) {
-        console.error('Failed to fetch groups:', error);
+        console.error('그룹 정보 불러오기 실패', error);
       }
     };
 
@@ -46,16 +45,13 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
 
     if (groupId) {
       try {
-        const response = await axios.get(
-          `${baseUrl}/api/wooms/${groupId}/info`,
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await baseUrl.get(`/wooms/${groupId}/info`, {
+          withCredentials: true,
+        });
         console.log(response.data.userInfoDtoList);
         setUsers(response.data.userInfoDtoList);
       } catch (error) {
-        console.error('Failed to fetch users:', error);
+        console.error('그룹 속한 유저 정보 불러오기 실패', error);
       }
     } else {
       setUsers([]);
@@ -81,7 +77,7 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
   }));
 
   return (
-    <ModalClose onClose={onClose}>
+    <Modal onClose={onClose}>
       <section className='flex flex-col h-5/6 justify-between text-center'>
         <h1 className='text-4xl text-center mt-4'>누구에게 편지를 쓸까요?</h1>
         <div className='flex items-center justify-center space-x-4 mt-4 '>
@@ -100,18 +96,25 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
             />
           </div>
         </div>
+        <div className='relative w-full flex justify-center'>
+          {!groups.length && (
+            <p className='absolute text-center text-2xl'>
+              가입된 그룹이 없어요!
+            </p>
+          )}
+        </div>
         <div className='flex justify-center mt-8'>
           <Button
             label={'편지 쓰기'}
             onClick={onNext}
-            // disabled={
-            //   selectedGroupLabel === '그룹 선택' ||
-            //   selectedUserLabel === '유저 선택'
-            // }
+            disabled={
+              selectedGroupLabel === '그룹 선택' ||
+              selectedUserLabel === '유저 선택'
+            }
           />
         </div>
       </section>
-    </ModalClose>
+    </Modal>
   );
 };
 

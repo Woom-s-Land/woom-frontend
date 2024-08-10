@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
+import baseUrl from '../../../libs/axios/basicAxios';
 
 import ChooseUser from './ChooseUser';
 import WriteLetter from './WriteLetter';
 import ChooseDate from './ChooseDate';
 
-const baseUrl = 'https://i11e206.p.ssafy.io';
-
-const MainLetter = ({ isOpen, onClose }) => {
+const WriteLetterMain = ({ isOpen, onClose }) => {
   const [selectedUser, setSelectedUser] = useState({});
   const [selectedDate, setSelectedDate] = useState('');
   const [content, setContent] = useState('');
@@ -29,11 +28,6 @@ const MainLetter = ({ isOpen, onClose }) => {
     setSelectedUser(userInfo);
   };
 
-  // const handleCloseBtn = () => {
-  //   handleClose();
-  //   setUserModalOpen(true);
-  //   setLetterModalOpen(false);
-  // };
   const handleSelectedDate = (date) => {
     setSelectedDate(date);
   };
@@ -49,22 +43,22 @@ const MainLetter = ({ isOpen, onClose }) => {
   };
 
   const sendLetter = async () => {
-    // try {
-    //   const response = await axios.post(
-    //     `${baseUrl}/api/letters`,
-    //     {
-    //       targetUserUuid: selectedUser.uuid,
-    //       content: content,
-    //       receiveDateTime: selectedDate,
-    //     },
-    //     {
-    //       withCredentials: true,
-    //     }
-    //   );
-    //   console.log(response);
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    try {
+      const response = await baseUrl.post(
+        '/letters',
+        {
+          targetUserUuid: selectedUser.uuid,
+          content: content,
+          receiveDateTime: selectedDate,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -101,4 +95,4 @@ const MainLetter = ({ isOpen, onClose }) => {
   );
 };
 
-export default MainLetter;
+export default WriteLetterMain;
