@@ -19,7 +19,6 @@ const loadCharacterImages = () => {
   Object.keys(context).forEach((key) => {
     // 파일 경로에서 상대 경로와 확장자를 제거하여 필요한 부분만 추출합니다.
     const path = key.replace('../assets/', '').replace('.png', '');
-    console.log(path);
 
     // 경로를 '/'로 분리하여 캐릭터 번호와 나머지 정보를 추출합니다.
     const [characterNumber, ...rest] = path.split('/');
@@ -33,7 +32,6 @@ const loadCharacterImages = () => {
     // 방향을 숫자로 변환합니다.
     const directionIndex = directionMap[direction];
     if (directionIndex === undefined) {
-      console.error(`Unknown direction: ${direction}`);
       return;
     }
 
@@ -48,8 +46,6 @@ const loadCharacterImages = () => {
 
     if (index !== undefined) {
       allImages[characterNumber][directionIndex][index] = context[key].default;
-    } else {
-      console.error(`Unknown frame number: ${frameNumber}`);
     }
   });
 
