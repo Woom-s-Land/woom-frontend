@@ -37,6 +37,8 @@ const Character = ({
   setIsOpenReadLetter,
   setIsOpenWriteLetter,
   setIsOpenGroup,
+  costume,
+  nickname,
 }) => {
   const [boundaries, setBoundaries] = useState([]);
   const [stepIndex, setStepIndex] = useState(0);
@@ -50,7 +52,7 @@ const Character = ({
 
   const animationFrameRef = useRef(null);
   const lastFrameTimeRef = useRef(0);
-  const characterNumber = 1;
+
   // 경계 맵 생성
   useEffect(() => {
     const collisionMap = initializeCollisionMap(collisions, 61);
@@ -61,9 +63,9 @@ const Character = ({
 
   useEffect(() => {
     const allImages = loadCharacterImages();
-    const images = allImages[characterNumber];
+    const images = allImages[costume];
     setDirectionImages(images);
-  }, [characterNumber]);
+  }, [costume]);
 
   // 충돌 or 상호작용 여부 판정 함수
   const boundaryCollision = useCallback((boundary, x, y) => {
@@ -239,7 +241,9 @@ const Character = ({
           height={CHAR_HEIGHT}
         />
       )}
-      <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text='브로콜리맨' />
+      {nickname && (
+        <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text={nickname} />
+      )}
       {isInteractionBed && (
         <InteractionSpeechBubble
           width={CHAR_HEIGHT}
