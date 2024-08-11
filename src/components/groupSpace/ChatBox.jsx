@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Client } from '@stomp/stompjs';
 
-import inputEmoji from '../assets/common/inputEmoji.png';
+import inputEmoji from '../../assets/common/inputEmoji.png';
 
 function App() {
   // 유저 정보 받아와서 채팅에 사용할 예정 (현재는 임시로 사용)
