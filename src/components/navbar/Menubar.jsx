@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { groupActions } from '../../store/groupSlice';
 import { useNavigate, useLocation } from 'react-router-dom';
 import MenuButton from './MenuButton';
 import MyInfo from './MyInfo';
@@ -7,18 +8,24 @@ import Group from '../group/Group';
 import { logout } from '../../apis/LogoutApi';
 import { authActions } from '../../store/authSlice'; // Redux 액션 임포트
 import { settingActions } from '../../store/settingSlice'; // Redux 액션 임포트
-import { useSelector } from 'react-redux';
 
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const groupInfo = useSelector((state) => state.group.groupInfo);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMyInfoOpen, setIsMyInfoOpen] = useState(false);
   const [isGroupOpen, setIsGroupOpen] = useState(false);
+  const [woomsTitle, setWoomsTitle] = useState('마이 홈');
+
   const isPlaying = useSelector((state) => state.setting.audioIsPlaying);
   const location = useLocation(); // 현재 어떤 url 에 접속해있는지 확인
   const isMapPage = location.pathname.startsWith('/map/'); // 그룹공간에 있다면 true
+
+  useEffect(() => {
+    if (groupInfo && groupInfo.woomsTitle) setWoomsTitle(groupInfo.woomsTitle);
+  }, [groupInfo, isMapPage]);
 
   const handleCloseMyInfo = () => {
     setIsMyInfoOpen(false);
@@ -71,6 +78,14 @@ function Header() {
 
   return (
     <header className={`${isMapPage ? 'header-hidden' : void 0}`}>
+      <div className='fixed left-1/2 transform -translate-x-1/2 inline-flex items-center justify-center bg-no-repeat bg-opacity-0 bg-center bg-gr-title p-16'>
+        {woomsTitle && (
+          <div className='whitespace-nowrap mx-3 text-2xl text-point-color'>
+            {woomsTitle}
+          </div>
+        )}
+      </div>
+
       <div className='fixed w-full top-4 right-6 flex gap-4 justify-end'>
         <button
           aria-label='BGM 음소거 토글'
