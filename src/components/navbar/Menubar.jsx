@@ -21,8 +21,9 @@ function Header() {
 
   const isPlaying = useSelector((state) => state.setting.audioIsPlaying);
   const location = useLocation(); // 현재 어떤 url 에 접속해있는지 확인
-  const isMapPage = location.pathname.startsWith('/map/'); // 그룹공간에 있다면 true
-  const isHomePage = location.pathname.startsWith('/home'); // 그룹공간에 있다면 true
+  const isMapPage = location.pathname.startsWith('/map/');
+  const isHomePage = location.pathname.startsWith('/home');
+  const isNoneMapOrHome = !isMapPage && !isHomePage;
 
   useEffect(() => {
     if (isHomePage) {
@@ -83,12 +84,15 @@ function Header() {
     }
   };
 
-  const groupMap =
-    'fixed left-1/2 transform -translate-x-1/2 bg-opacity-0  bg-gr-title p-16';
-  const home = 'bg-home-title w-32 h-24 mt-24';
+  const groupMap = isMapPage
+    ? 'fixed left-1/2 transform -translate-x-1/2 bg-opacity-0  bg-gr-title p-16'
+    : '';
+  const home = isHomePage ? 'bg-home-title w-32 h-24 mt-24' : '';
 
   return (
-    <header className={`${isMapPage ? 'header-hidden' : void 0}`}>
+    <header
+      className={`${isNoneMapOrHome || isMapPage ? 'header-hidden' : ''}`}
+    >
       <div
         className={`inline-flex bg-no-repeat bg-center ${
           isMapPage ? groupMap : home
