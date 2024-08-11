@@ -6,6 +6,8 @@ export default {
       backgroundImage: {
         'modal-bg': 'url(./assets/common/modal.png)',
         'close-bt': 'url(./assets/common/x-bt.png)',
+        'down-bt': 'url(./assets/common/square-bt-down.png)',
+        'up-bt': 'url(./assets/common/square-bt-up.png)',
         'right-bt': 'url(./assets/button/right-bt-up.png)',
         'left-bt': 'url(./assets/button/left-bt-up.png)',
         'plus-bt': 'url(./assets/button//plus-bt-up.png)',
@@ -27,6 +29,7 @@ export default {
         'gr-check-fill': 'url(./assets/group/check_fill.png)',
         'gr-copy': 'url(./assets/group/copy.png)',
         'gr-external': 'url(./assets/group/external.png)',
+        'gr-title': 'url(./assets/group/group-title.png)',
         'inputbox-story': 'url(./assets/story/input-box-story.png)',
         'bgm-o': 'url(./assets/menu/bgm-o.png)',
         'bgm-x': 'url(./assets/menu/bgm-x.png)',

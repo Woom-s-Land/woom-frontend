@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import baseUrl from '../../../libs/axios/basicAxios';
-
 import LetterDetail from './LetterDetail';
-
 import Modal from '../../common/Modal';
 import miniSquareBtn from '../../../assets/common/miniSquareBtn.png';
 import leftBtn from '../../../assets/button/left-bt-up.png';
@@ -21,92 +19,50 @@ const formatDate = (dateString) => {
   return `${year}.${month}.${day}`;
 };
 
-const LetterList = ({ onClose }) => {
+const LetterList = ({ onClose, onLetterClick }) => {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0); // 편지 목록의 총 페이지 수 / page 최댓값: totalPages - 1
-  const [letters, setLetters] = useState([
-    {
-      id: 0,
-      content: '안녕하세요 도언이 user1입니다.',
-      receiveDate: '2024-08-02T00:22:19.633482',
-      senderName: 'User Four',
-      receiverName: 'User One',
-      status: 'UNREAD',
-    },
-    {
-      id: 1,
-      content: '안녕하세요 도언이 user2입니다.',
-      receiveDate: '2024-08-12T00:22:19.633478',
-      senderName: 'UserThreeAAAAA',
-      receiverName: 'User One',
-      status: 'UNREAD',
-    },
-    {
-      id: 2,
-      content: '안녕하세요 도언이 user3입니다.',
-      receiveDate: '2024-08-02T00:22:19.633467',
-      senderName: '안녕안녕안녕안',
-      receiverName: 'User One',
-      status: 'READ',
-    },
-    {
-      id: 3,
-      content: '안녕하세요 도언이 user4입니다.',
-      receiveDate: '2024-08-02T00:22:19.633467',
-      senderName: '안녕안녕안녕안',
-      receiverName: 'User One',
-      status: 'READ',
-    },
-    {
-      id: 4,
-      content: '안녕하세요 도언이 user5입니다.',
-      receiveDate: '2024-08-02T00:22:19.633467',
-      senderName: 'User Two',
-      receiverName: 'User One',
-      status: 'READ',
-    },
-  ]);
-  const [comingLetters, setComingLetters] = useState(1);
-  const [selectedLetterId, setSelectedLetterId] = useState(null);
+  const [letters, setLetters] = useState([]);
+  const [comingLetters, setComingLetters] = useState(0);
   const [unreadCount, setUnreadCount] = useState(0);
 
-  // useEffect(() => {
-  //   const getLetters = async () => {
-  //     try {
-  //       const response = await baseUrl.get('/letters', {
-  //         params: {
-  //           page,
-  //         },
-  //       });
-  //       console.log('편지 목록 저장 성공', response.data);
-  //       setTotalPages(response.data.totalPages);
-  //       setLetters(response.data.content);
-  //     } catch (error) {
-  //       console.log('편지 목록 저장 실패');
-  //       console.error(error);
-  //     }
-  //   };
+  useEffect(() => {
+    const getLetters = async () => {
+      try {
+        const response = await baseUrl.get('/letters', {
+          params: {
+            page,
+          },
+        });
+        console.log('편지 목록 저장 성공', response.data);
+        setTotalPages(response.data.totalPages);
+        setLetters(response.data.content);
+      } catch (error) {
+        console.log('편지 목록 저장 실패');
+        console.error(error);
+      }
+    };
 
-  //   const getComingLetters = async () => {
-  //     try {
-  //       const response = await baseUrl.get('/letters/amount');
+    const getComingLetters = async () => {
+      try {
+        const response = await baseUrl.get('/letters/amount');
 
-  //       console.log('오고 있는 편지 저장 성공', response.data);
-  //       setComingLetters(response.data);
-  //     } catch (error) {
-  //       console.log('오고 있는 편지 저장 실패');
-  //       console.error(error);
-  //     }
-  //   };
+        console.log('오고 있는 편지 저장 성공', response.data);
+        setComingLetters(response.data);
+      } catch (error) {
+        console.log('오고 있는 편지 저장 실패');
+        console.error(error);
+      }
+    };
 
-  //   getLetters();
-  //   getComingLetters();
+    getLetters();
+    getComingLetters();
 
-  //   return () => {
-  //     setLetters([]);
-  //     setComingLetters(null);
-  //   };
-  // }, [page]);
+    return () => {
+      setLetters([]);
+      setComingLetters(null);
+    };
+  }, [page]);
 
   useEffect(() => {
     const countUnreadLetters = () => {
@@ -143,15 +99,11 @@ const LetterList = ({ onClose }) => {
   };
 
   const openLetterDetail = (letterId) => {
-    setSelectedLetterId(letterId);
+    onLetterClick(letterId);
     console.log(letterId);
   };
 
-  const closeLetterDetail = () => {
-    setSelectedLetterId(null);
-  };
-
-  return selectedLetterId === null ? (
+  return (
     <Modal onClose={onClose}>
       <div className='flex justify-center items-center mb-16'>
         <h1 className='absolute text-3xl top-9'>받은 편지함</h1>
@@ -223,8 +175,6 @@ const LetterList = ({ onClose }) => {
         ))}
       </div>
     </Modal>
-  ) : (
-    <LetterDetail letterId={selectedLetterId} onClose={closeLetterDetail} />
   );
 };
 

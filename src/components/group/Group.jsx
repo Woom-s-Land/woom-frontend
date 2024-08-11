@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
-import GroupButton from './GroupButton';
+import ButtonGroup from './ButtonGroup';
 import GroupList from './GroupList';
 import CreateGroup from './CreateGroup';
 import JoinGroup from './JoinGroup';
@@ -11,6 +11,7 @@ const Group = ({ isOpen, handleCloseGroup }) => {
   const [activeModal, setActiveModal] = useState('list');
   const [groupData, setGroupData] = useState(null);
   const [error, setError] = useState(null);
+  const [woomsId, setWoomsId] = useState();
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
   useEffect(() => {
@@ -19,7 +20,6 @@ const Group = ({ isOpen, handleCloseGroup }) => {
         const data = await GroupApi.getMyGroup(page);
         setGroupData(data);
         setTotalPage(data.totalPages - 1);
-        console.log(data);
         setError(null);
       } catch (err) {
         console.error('Failed to fetch group data:', err);
@@ -49,7 +49,8 @@ const Group = ({ isOpen, handleCloseGroup }) => {
     setActiveModal('join'); // 그룹 참가 모달 활성화
   };
 
-  const handleOpenDetailGroupModal = () => {
+  const handleOpenDetailGroupModal = (woomsId) => {
+    setWoomsId(woomsId);
     setActiveModal('detail'); // 그룹 상세 모달 활성화
   };
 
@@ -74,22 +75,26 @@ const Group = ({ isOpen, handleCloseGroup }) => {
                 />
               </div>
               <div>
-                {groupData.totalElements > 0 ? (
-                  <GroupList
-                    list={groupData.content}
-                    onClose={handleClose}
-                    handleDetail={handleOpenDetailGroupModal}
-                  />
+                {groupData ? (
+                  groupData.totalElements > 0 ? (
+                    <GroupList
+                      list={groupData.content}
+                      onClose={handleClose}
+                      handleDetail={handleOpenDetailGroupModal}
+                    />
+                  ) : (
+                    <p className='text-base-color text-3xl'>없음</p>
+                  )
                 ) : (
-                  <p className='text-base-color text-3xl'>없음</p>
+                  <p>로딩 중...</p>
                 )}
               </div>
               <div className='absolute bottom-3 left-1/2 transform -translate-x-1/2 flex justify-center w-full max-w-md'>
-                <GroupButton
+                <ButtonGroup
                   buttonText='그룹 생성'
                   onClickEventHandler={handleOpenCreateGroupModal}
                 />
-                <GroupButton
+                <ButtonGroup
                   buttonText='그룹 참가'
                   onClickEventHandler={handleOpenJoinGroupModal}
                 />
@@ -103,7 +108,9 @@ const Group = ({ isOpen, handleCloseGroup }) => {
               onSuccess={handleOpenGroupListModal}
             />
           )}
-          {activeModal === 'detail' && <GroupDetail onClose={handleClose} />}
+          {activeModal === 'detail' && (
+            <GroupDetail onClose={handleClose} woomsId={woomsId} />
+          )}
         </Modal>
       )}
     </div>

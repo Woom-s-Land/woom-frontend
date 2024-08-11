@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import CharacterImages from './characterImages';
+import loadCharacterImages from '../utils/loadCharacterImages';
 import collisions from '../assets/map/map_collisions';
 
 import {
@@ -26,44 +26,11 @@ const FRAME_INTERVAL = 60; // 프레임이 전환될 간격
 const STEP_COUNT = 6;
 
 // #todo: 추후 캐릭터 코스튬, 닉네임 사용자 정보에 맞게 수정
-const directionImages = {
-  [Direction.UP]: [
-    CharacterImages.char_1u1,
-    CharacterImages.char_1u2,
-    CharacterImages.char_1u4,
-    CharacterImages.char_1u5,
-    CharacterImages.char_1u6,
-    CharacterImages.char_1u8,
-  ],
-  [Direction.DOWN]: [
-    CharacterImages.char_1d1,
-    CharacterImages.char_1d2,
-    CharacterImages.char_1d4,
-    CharacterImages.char_1d5,
-    CharacterImages.char_1d6,
-    CharacterImages.char_1d8,
-  ],
-  [Direction.RIGHT]: [
-    CharacterImages.char_1r1,
-    CharacterImages.char_1r2,
-    CharacterImages.char_1r4,
-    CharacterImages.char_1r5,
-    CharacterImages.char_1r6,
-    CharacterImages.char_1r8,
-  ],
-  [Direction.LEFT]: [
-    CharacterImages.char_1l1,
-    CharacterImages.char_1l2,
-    CharacterImages.char_1l4,
-    CharacterImages.char_1l5,
-    CharacterImages.char_1l6,
-    CharacterImages.char_1l8,
-  ],
-};
-
 const Character = ({
   width,
   height,
+  costume,
+  nickname,
   setBackgroundX,
   setBackgroundY,
   backgroundX,
@@ -77,6 +44,7 @@ const Character = ({
 }) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState(Direction.DOWN);
+  const [directionImages, setDirectionImages] = useState({});
   const [charX, setCharX] = useState(width / 2);
   const [charY, setCharY] = useState(height / 2);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -90,6 +58,12 @@ const Character = ({
 
   const BoundaryWidth = 32;
   const BoundaryHeight = 32;
+
+  useEffect(() => {
+    const allImages = loadCharacterImages();
+    const images = allImages[costume];
+    setDirectionImages(images);
+  }, [costume]);
 
   useEffect(() => {
     const collisionMap = initializeCollisionMap(collisions, 64);
@@ -291,14 +265,16 @@ const Character = ({
 
   return (
     <Container x={charX} y={charY}>
-      <Sprite
-        image={directionImages[direction][stepIndex]}
-        x={0}
-        y={0}
-        width={CHAR_WIDTH}
-        height={CHAR_HEIGHT}
-      />
-      <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text='브로콜리맨' />
+      {directionImages[direction] && directionImages[direction][stepIndex] && (
+        <Sprite
+          image={directionImages[direction][stepIndex]}
+          x={0}
+          y={0}
+          width={CHAR_WIDTH}
+          height={CHAR_HEIGHT}
+        />
+      )}
+      <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text={nickname} />
     </Container>
   );
 };

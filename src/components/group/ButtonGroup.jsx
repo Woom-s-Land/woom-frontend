@@ -1,4 +1,4 @@
-const GroupButton = ({ buttonText, onClickEventHandler }) => {
+const ButtonGroup = ({ buttonText, onClickEventHandler }) => {
   return (
     <button
       onClick={onClickEventHandler}
@@ -9,4 +9,4 @@ const GroupButton = ({ buttonText, onClickEventHandler }) => {
   );
 };
 
-export default GroupButton;
+export default ButtonGroup;
