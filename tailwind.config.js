@@ -6,6 +6,8 @@ export default {
       backgroundImage: {
         'modal-bg': 'url(./assets/common/modal.png)',
         'close-bt': 'url(./assets/common/x-bt.png)',
+        'down-bt': 'url(./assets/common/square-bt-down.png)',
+        'up-bt': 'url(./assets/common/square-bt-up.png)',
         'right-bt': 'url(./assets/button/right-bt-up.png)',
         'left-bt': 'url(./assets/button/left-bt-up.png)',
         'plus-bt': 'url(./assets/button//plus-bt-up.png)',
