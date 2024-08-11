@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Client } from '@stomp/stompjs';
+import inputEmoji from '../assets/common/inputEmoji.png';
 
 function App() {
   // 유저 정보 받아와서 채팅에 사용할 예정 (현재는 임시로 사용)
@@ -79,11 +80,11 @@ function App() {
   };
 
   return (
-    <div className='flex flex-col justify-center items-center'>
+    <div className='flex flex-col justify-center items-center w-[439px] h-[280px] border border-black'>
       <div
         ref={chatContainerRef}
         style={{ display: connected ? 'block' : 'none' }}
-        className='w-1/3 h-72 overflow-scroll scrollbar bg-transparent'
+        className='w-full h-full overflow-scroll scrollbar bg-transparent border border-black'
       >
         <table>
           <tbody>
@@ -96,16 +97,19 @@ function App() {
           </tbody>
         </table>
       </div>
-      <div>
+      <div className='mt-auto w-full'>
         <input
           placeholder='채팅 내용을 입력하세요'
           value={content}
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyPress}
+          className='w-11/12'
         />
-        <button onClick={sendChat} disabled={!connected}>
-          채팅 전송
-        </button>
+        <button
+          onClick={sendChat}
+          disabled={!connected}
+          className='w-1/12'
+        ></button>
       </div>
     </div>
   );
