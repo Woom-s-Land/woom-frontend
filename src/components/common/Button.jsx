@@ -14,37 +14,28 @@ function Button({ label, onClick, disabled = false }) {
 
   const handleMouseDown = () => setIsActive(true);
   const handleMouseUp = () => setIsActive(false);
+  const handleMouseLeave = () => setIsActive(false); // 버튼에서 마우스가 떠날 때도 비활성화 상태로 변경
 
   return (
     <button
       className='relative flex items-center justify-center rounded cursor-pointer overflow-hidden'
-      style={{ width: `${buttonWidth}px`, height: '80px' }} // 버튼의 너비와 높이를 설정합니다.
+      style={{ width: `${buttonWidth}px`, height: '60px' }} // 버튼의 너비와 높이를 설정합니다.
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
       onClick={onClick}
       disabled={disabled}
     >
-      <img
-        src={
-          isActive
-            ? 'src/assets/common/square-bt-down.png'
-            : 'src/assets/common/square-bt-up.png'
-        }
-        alt={label}
-        style={{
-          width: '100%', // 버튼의 가로 길이에 맞게 늘림
-          height: '50px', // 버튼의 높이에 맞게 조정 (고정된 높이)
-          objectFit: 'fill', // 이미지의 비율을 무시하고 버튼 영역에 맞게 늘림
-          objectPosition: 'center',
-        }}
+      <div
+        className={`w-full h-full bg-cover bg-center ${isActive ? 'bg-down-bt' : 'bg-up-bt'}`}
+        style={{ backgroundSize: '100% 100%' }} // 이미지가 버튼에 맞게 조정되도록 설정
       />
       <span
         className='absolute text-sm font-bold text-white'
         style={{
           top: '50%', // 버튼의 중앙으로 위치 조정
           left: '50%',
-          transform: 'translate(-50%, -60%)', // 정확히 중앙에 위치시키기 위한 변환
+          transform: 'translate(-50%, -50%)', // 정확히 중앙에 위치시키기 위한 변환
           whiteSpace: 'nowrap', // 문구가 잘리지 않도록 설정
         }}
       >
