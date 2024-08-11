@@ -5,6 +5,7 @@ export default {
     extend: {
       backgroundImage: {
         'modal-bg': 'url(./assets/common/modal.png)',
+        'home-title': 'url(./assets/home/home-title.png)',
         'close-bt': 'url(./assets/common/x-bt.png)',
         'down-bt': 'url(./assets/common/square-bt-down.png)',
         'up-bt': 'url(./assets/common/square-bt-up.png)',

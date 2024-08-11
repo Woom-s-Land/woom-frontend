@@ -17,15 +17,22 @@ function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMyInfoOpen, setIsMyInfoOpen] = useState(false);
   const [isGroupOpen, setIsGroupOpen] = useState(false);
-  const [woomsTitle, setWoomsTitle] = useState('마이 홈');
+  const [woomsTitle, setWoomsTitle] = useState('');
 
   const isPlaying = useSelector((state) => state.setting.audioIsPlaying);
   const location = useLocation(); // 현재 어떤 url 에 접속해있는지 확인
   const isMapPage = location.pathname.startsWith('/map/'); // 그룹공간에 있다면 true
+  const isHomePage = location.pathname.startsWith('/home'); // 그룹공간에 있다면 true
+
+  useEffect(() => {
+    if (isHomePage) {
+      dispatch(groupActions.exit());
+    }
+  }, [isMapPage]);
 
   useEffect(() => {
     if (groupInfo && groupInfo.woomsTitle) setWoomsTitle(groupInfo.woomsTitle);
-  }, [groupInfo, isMapPage]);
+  }, [groupInfo]);
 
   const handleCloseMyInfo = () => {
     setIsMyInfoOpen(false);
@@ -76,9 +83,17 @@ function Header() {
     }
   };
 
+  const groupMap =
+    'fixed left-1/2 transform -translate-x-1/2 bg-opacity-0  bg-gr-title p-16';
+  const home = 'bg-home-title w-32 h-24 mt-24';
+
   return (
     <header className={`${isMapPage ? 'header-hidden' : void 0}`}>
-      <div className='fixed left-1/2 transform -translate-x-1/2 inline-flex items-center justify-center bg-no-repeat bg-opacity-0 bg-center bg-gr-title p-16'>
+      <div
+        className={`inline-flex bg-no-repeat bg-center ${
+          isMapPage ? groupMap : home
+        }`}
+      >
         {woomsTitle && (
           <div className='whitespace-nowrap mx-3 text-2xl text-point-color'>
             {woomsTitle}
