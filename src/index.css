@@ -25,3 +25,7 @@ body {
 .header-hidden:hover {
   opacity: 1;
 }
+
+.cursor-custom:active {
+  cursor: url('./assets/cursor/MouseHold.png'), auto;
+}

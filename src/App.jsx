@@ -42,9 +42,11 @@ function App() {
   });
 
   return (
-    <div className='App'>
+    <div className='App cursor-custom'>
       <PlayBgm playOnPage={playOnPage} />
-      <Header />
+      <div className='cursor-pointer'>
+        <Header />
+      </div>
       <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/home' element={<Home />} />
