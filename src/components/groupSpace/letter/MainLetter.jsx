@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
 
 import ChooseUser from './ChooseUser';
 import WriteLetter from './WriteLetter';
@@ -6,7 +7,7 @@ import ChooseDate from './ChooseDate';
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
 
-const MainLetter = ({ isOpen, onClose }) => {
+const MainLetter = ({ isOpen = true, onClose }) => {
   const [selectedUser, setSelectedUser] = useState({});
   const [selectedDate, setSelectedDate] = useState('');
   const [content, setContent] = useState('');
@@ -70,32 +71,37 @@ const MainLetter = ({ isOpen, onClose }) => {
   return (
     <div>
       {isOpen && (
-        <>
-          {isUserModalOpen && (
-            <ChooseUser
-              onClose={onClose}
-              onChange={handleSelectedUser}
-              onNext={openWriteLetter}
-            />
-          )}
-          {isLetterModalOpen && (
-            <WriteLetter
-              onClose={onClose}
-              onChange={handleContentChange}
-              userNickname={selectedUser.nickname}
-              sendDateTime={sendDateTime}
-              onNext={openDate}
-            />
-          )}
-          {isDateModalOpen && (
-            <ChooseDate
-              onClose={onClose}
-              sendDateTime={sendDateTime}
-              onChange={handleSelectedDate}
-              onSubmit={sendLetter}
-            />
-          )}
-        </>
+        <AnimatePresence>
+          <>
+            {isUserModalOpen && (
+              <ChooseUser
+                key='choose-user'
+                onClose={onClose}
+                onChange={handleSelectedUser}
+                onNext={openWriteLetter}
+              />
+            )}
+            {isLetterModalOpen && (
+              <WriteLetter
+                key='write-letter'
+                onClose={onClose}
+                onChange={handleContentChange}
+                userNickname={selectedUser.nickname}
+                sendDateTime={sendDateTime}
+                onNext={openDate}
+              />
+            )}
+            {isDateModalOpen && (
+              <ChooseDate
+                key='choose-date'
+                onClose={onClose}
+                sendDateTime={sendDateTime}
+                onChange={handleSelectedDate}
+                onSubmit={sendLetter}
+              />
+            )}
+          </>
+        </AnimatePresence>
       )}
     </div>
   );

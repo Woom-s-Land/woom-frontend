@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-
+import { motion } from 'framer-motion';
 import letter from '../../../assets/letter/letter.png';
+
+const letterVariants = {
+  hidden: { scale: 0.8, opacity: 0 },
+  visible: { scale: 1, opacity: 1 },
+  exit: { scale: 0.8, opacity: 0 },
+};
 
 const WriteLetter = ({
   onClose,
@@ -25,7 +31,14 @@ const WriteLetter = ({
 
   return (
     <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
-      <div className='relative w-2/6 flex flex-col items-center'>
+      <motion.div
+        initial='hidden'
+        animate='visible'
+        exit='exit'
+        variants={letterVariants}
+        transition={{ duration: 0.5, ease: 'easeInOut' }}
+        className='relative w-2/6 flex flex-col items-center'
+      >
         <img src={letter} alt='letter' className='w-full' />
         <div className='absolute top-0 w-full h-full flex flex-col items-center'>
           <div className='absolute top-6 left-[34px]'>
@@ -62,7 +75,7 @@ const WriteLetter = ({
             편지 다음에 쓰기
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
