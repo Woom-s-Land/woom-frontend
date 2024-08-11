@@ -27,7 +27,7 @@ import WriteLetterMain from './components/groupSpace/letter/WriteLetterMain.jsx'
 import DropDown from './components/common/DropDown.jsx';
 import PlayBgm from './components/bgm/PlayBgm.jsx';
 import ReadLetterMain from './components/groupSpace/letter/ReadLetterMain.jsx';
-import ChatBox from './components/ChatBox.jsx';
+import ChatBox from './components/groupSpace/ChatBox.jsx';
 
 function App() {
   const location = useLocation();
@@ -45,8 +45,7 @@ function App() {
 
   return (
     <div className='App'>
-      <ChatBox />
-      {/* <PlayBgm playOnPage={playOnPage} />
+      <PlayBgm playOnPage={playOnPage} />
       <Header />
       <Routes>
         <Route path='/' element={<Main />} />
@@ -64,7 +63,7 @@ function App() {
         <Route path='/story-read' element={<StoryRead />} />
         <Route path='/loading' element={<Loading />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
-      </Routes> */}
+      </Routes>
     </div>
   );
 }

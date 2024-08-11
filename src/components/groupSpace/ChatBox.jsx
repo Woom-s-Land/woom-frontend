@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Client } from '@stomp/stompjs';
+
 import inputEmoji from '../assets/common/inputEmoji.png';
 
 function App() {
@@ -80,36 +81,36 @@ function App() {
   };
 
   return (
-    <div className='flex flex-col justify-center items-center w-[439px] h-[280px] border border-black'>
+    <div className='flex flex-col justify-center items-center w-[439px] h-[280px] p-2'>
       <div
         ref={chatContainerRef}
         style={{ display: connected ? 'block' : 'none' }}
-        className='w-full h-full overflow-scroll scrollbar bg-transparent border border-black'
+        className='w-full h-[calc(100%-48px)] overflow-auto bg-black bg-opacity-20  rounded-lg p-2 scrollbar'
       >
-        <table>
-          <tbody>
-            {chattings.map((chtting, index) => (
-              <tr key={index}>
-                <td>{chtting.nickname}</td>
-                <td>{chtting.content}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className='flex flex-col items-start'>
+          {chattings.map((chatting, index) => (
+            <div key={index} className='w-full bg-transparent'>
+              <p className='whitespace-pre-wrap text-left text-white'>
+                {chatting.nickname}: {chatting.content}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className='mt-auto w-full'>
+      <div className='mt-1 w-full flex items-center justify-between bg-black bg-opacity-20 rounded-lg p-1'>
         <input
-          placeholder='채팅 내용을 입력하세요'
           value={content}
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyPress}
-          className='w-11/12'
+          className='flex-grow py-1 px-2 text-white rounded-lg bg-black bg-opacity-0 focus:outline-none'
         />
         <button
           onClick={sendChat}
           disabled={!connected}
-          className='w-1/12'
-        ></button>
+          className='ml-2 p-1 rounded-lg'
+        >
+          <img src={inputEmoji} alt='inputEmoji' className='w-6 h-6' />
+        </button>
       </div>
     </div>
   );
