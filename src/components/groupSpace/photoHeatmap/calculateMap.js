@@ -77,6 +77,6 @@ koreaMap.push({
   height: 0.00956860960823,
 });
 
-console.log(JSON.stringify(koreaMap));
+// console.log(JSON.stringify(koreaMap));
 
 export default koreaMap;

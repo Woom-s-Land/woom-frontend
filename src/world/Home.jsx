@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Stage, Sprite, useApp } from '@pixi/react';
 import { OutlineFilter } from '@pixi/filter-outline';
 import homeImages from '../utils/homeImages';
@@ -16,7 +16,7 @@ const Home = () => {
   const [nickname, setNickname] = useState(userInfo.nickname);
   const [costume, setCostume] = useState(userInfo.costume);
 
-  console.log(userInfo);
+  // console.log(userInfo);
   const [isActiveBed, setIsActiveBed] = useState(false);
   const [isActiveDesk, setIsActiveDesk] = useState(false);
   const [isActiveToilet, setIsActiveToilet] = useState(false);
@@ -43,6 +43,10 @@ const Home = () => {
   const rugY = 354;
   const rugWidth = 60;
   const rugHeight = 30;
+
+  useEffect(() => {
+    console.log(isOpenReadLetter, isOpenWriteLetter);
+  }, [isOpenReadLetter, isOpenWriteLetter]);
 
   const handleWriteLetterClose = () => {
     setIsOpenWriteLetter(false);
@@ -108,6 +112,8 @@ const Home = () => {
           isActiveDesk={isActiveDesk}
           isActiveToilet={isActiveToilet}
           isActiveRug={isActiveRug}
+          isOpenReadLetter={isOpenReadLetter}
+          isOpenWriteLetter={isOpenWriteLetter}
           setIsOpenWriteLetter={setIsOpenWriteLetter}
           setIsOpenReadLetter={setIsOpenReadLetter}
           setIsOpenGroup={setIsOpenGroup}

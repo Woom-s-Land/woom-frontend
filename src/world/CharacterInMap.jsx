@@ -38,9 +38,13 @@ const Character = ({
   isOpenPhoto,
   isOpenPhotomap,
   isOpenGuestbook,
+  isOpenRadioRead,
+  isOpenRadioWrite,
   setCharacterX,
   setCharacterY,
   setIsInteractive,
+  setRadioWriteInteractive,
+  setRadioReadInteractive,
 }) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState(Direction.DOWN);
@@ -102,17 +106,31 @@ const Character = ({
   const handleArrowKeyDown = useCallback(
     (e) => {
       setIsInteractive(false);
+      setRadioReadInteractive(false);
+      setRadioWriteInteractive(false);
       const ArrowKeys = {
-        KeyW: { dir: Direction.UP },
-        KeyS: { dir: Direction.DOWN },
-        KeyD: { dir: Direction.RIGHT },
-        KeyA: { dir: Direction.LEFT },
+        ArrowUp: { dir: Direction.UP },
+        ArrowDown: { dir: Direction.DOWN },
+        ArrowRight: { dir: Direction.RIGHT },
+        ArrowLeft: { dir: Direction.LEFT },
       };
       if (e.code === 'Space') {
         setIsInteractive(true);
+      } else if (e.code === 'KeyE') {
+        if (!isOpenRadioRead) setRadioWriteInteractive(true);
+      } else if (e.code === 'KeyR') {
+        if (!isOpenRadioWrite) setRadioReadInteractive(true);
       }
       const key = ArrowKeys[e.code];
-      if (key && !isOpenPhoto && !isOpenPhotomap && !isOpenGuestbook) {
+
+      if (
+        key &&
+        !isOpenPhoto &&
+        !isOpenPhotomap &&
+        !isOpenGuestbook &&
+        !isOpenRadioRead &&
+        !isOpenRadioWrite
+      ) {
         setIsAnimating(true);
         if (direction !== key.dir) {
           setDirection(key.dir);
@@ -133,6 +151,8 @@ const Character = ({
       isOpenPhoto,
       isOpenPhotomap,
       isOpenGuestbook,
+      isOpenRadioRead,
+      isOpenRadioWrite,
     ]
   );
 
