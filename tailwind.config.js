@@ -34,6 +34,7 @@ export default {
         'inputbox-story': 'url(./assets/story/input-box-story.png)',
         'bgm-o': 'url(./assets/menu/bgm-o.png)',
         'bgm-x': 'url(./assets/menu/bgm-x.png)',
+        'hm-refresh': 'url(./assets/heatmap/refresh.png)',
         menu: 'url(./assets/menu/menu.png)',
         'inputbox-comment': 'url(./assets/comment/input-box.png)',
         'dialoguebox-comment': 'url(./assets/comment/dialoge-box.png)',

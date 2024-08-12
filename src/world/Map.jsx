@@ -14,7 +14,8 @@ const outlineStyle = new OutlineFilter(4, 0xbcff89);
 const Map = () => {
   const width = window.screen.width;
   const height = window.screen.height;
-
+  const pathname = window.location.pathname;
+  const woomsId = pathname.split('/')[2];
   const userInfo = useSelector((state) => state.auth.userInfo);
   const dispatch = useDispatch();
 
@@ -182,9 +183,15 @@ const Map = () => {
           />
         </Container>
       </Stage>
-      {isOpenPhoto && <PhotoModal onClose={handleClosePhoto} />}
-      {isOpenPhotomap && <PhotoHeatMap onClose={handleClosePhotomap} />}
-      {isOpenGuestbook && <CommentModal onClose={handleCloseGuestbook} />}
+      {isOpenPhoto && (
+        <PhotoModal onClose={handleClosePhoto} woomsId={woomsId} />
+      )}
+      {isOpenPhotomap && (
+        <PhotoHeatMap onClose={handleClosePhotomap} woomsId={woomsId} />
+      )}
+      {isOpenGuestbook && (
+        <CommentModal onClose={handleCloseGuestbook} woomsId={woomsId} />
+      )}
     </div>
   );
 };
