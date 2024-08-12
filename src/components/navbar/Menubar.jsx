@@ -123,7 +123,7 @@ function Header() {
             className='fixed inset-0 opacity-50 z-10'
             onClick={toggleMenu}
           ></div>
-          <nav className='absolute top-16 right-1 m-0 p-0 z-20 rounded flex flex-col space-y-1'>
+          <nav className='fixed top-16 right-1 m-0 p-0 z-20 rounded flex flex-col space-y-1'>
             <MenuButton
               buttonText='내 정보 수정'
               onClickEventHandler={handleMyInfoClick}
