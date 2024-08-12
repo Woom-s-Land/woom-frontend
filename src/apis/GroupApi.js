@@ -139,6 +139,18 @@ const withdraw = async (woomsId) => {
   }
 };
 
+const editToken = async (channelUuid) => {
+  try {
+    const res = await basicAxios({
+      method: 'get',
+      url: `/wooms/channel?channelUuid=${channelUuid}`,
+    });
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
 const GroupApi = {
   getMyGroup,
   getGroupTitle,
@@ -151,5 +163,6 @@ const GroupApi = {
   delegateAdmin,
   withdraw,
   isAdmin,
+  editToken,
 };
 export default GroupApi;
