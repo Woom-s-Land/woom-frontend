@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { groupActions } from '../store/groupSlice';
 import { Stage, Sprite, Container } from '@pixi/react';
 import { OutlineFilter } from '@pixi/filter-outline';
 import CharacterInMap from './CharacterInMap';
@@ -15,7 +16,7 @@ const Map = () => {
   const height = window.screen.height;
 
   const userInfo = useSelector((state) => state.auth.userInfo);
-  const groupInfo = useSelector((state) => state.group.groupInfo);
+  const dispatch = useDispatch();
 
   const [nickname, setNickname] = useState(userInfo.nickname);
   const [costume, setCostume] = useState(userInfo.costume);
@@ -34,8 +35,6 @@ const Map = () => {
   const [isOpenPhoto, setIsOpenPhoto] = useState(false);
   const [isOpenPhotomap, setIsOpenPhotomap] = useState(false);
   const [isOpenGuestbook, setIsOpenGuestbook] = useState(false);
-
-  const [woomsTitle, setWoomsTitle] = useState(groupInfo.woomsTitle);
 
   const photoX = 1417;
   const photoY = 227;
@@ -75,6 +74,12 @@ const Map = () => {
       else if (isNearGuestbook) setIsOpenGuestbook(true);
     }
   }, [isInteractive]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(groupActions.exit());
+    };
+  }, [dispatch]);
 
   const handleClosePhoto = () => {
     setIsOpenPhoto(false);
@@ -125,14 +130,6 @@ const Map = () => {
   }, [characterX, characterY, backgroundX, backgroundY]);
   return (
     <div className='w-full h-full overflow-hidden'>
-      <div className='fixed left-1/2 transform -translate-x-1/2 inline-flex items-center justify-center bg-no-repeat bg-opacity-0 bg-center bg-gr-title p-16'>
-        {woomsTitle && (
-          <div className='whitespace-nowrap mx-3 text-2xl text-point-color'>
-            {woomsTitle}
-          </div>
-        )}
-      </div>
-
       <Stage width={width} height={height}>
         {/* 배경을 관리하는 Container */}
         <Container>

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { groupActions } from '../../store/groupSlice';
 import { useNavigate, useLocation } from 'react-router-dom';
 import MenuButton from './MenuButton';
 import MyInfo from './MyInfo';
@@ -7,18 +8,32 @@ import Group from '../group/Group';
 import { logout } from '../../apis/LogoutApi';
 import { authActions } from '../../store/authSlice'; // Redux 액션 임포트
 import { settingActions } from '../../store/settingSlice'; // Redux 액션 임포트
-import { useSelector } from 'react-redux';
 
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const groupInfo = useSelector((state) => state.group.groupInfo);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMyInfoOpen, setIsMyInfoOpen] = useState(false);
   const [isGroupOpen, setIsGroupOpen] = useState(false);
+  const [woomsTitle, setWoomsTitle] = useState('');
+
   const isPlaying = useSelector((state) => state.setting.audioIsPlaying);
   const location = useLocation(); // 현재 어떤 url 에 접속해있는지 확인
-  const isMapPage = location.pathname.startsWith('/map/'); // 그룹공간에 있다면 true
+  const isMapPage = location.pathname.startsWith('/map/');
+  const isHomePage = location.pathname.startsWith('/home');
+  const isNoneMapOrHome = !isMapPage && !isHomePage;
+
+  useEffect(() => {
+    if (isHomePage) {
+      dispatch(groupActions.exit());
+    }
+  }, [isMapPage]);
+
+  useEffect(() => {
+    if (groupInfo && groupInfo.woomsTitle) setWoomsTitle(groupInfo.woomsTitle);
+  }, [groupInfo]);
 
   const handleCloseMyInfo = () => {
     setIsMyInfoOpen(false);
@@ -69,8 +84,27 @@ function Header() {
     }
   };
 
+  const groupMap = isMapPage
+    ? 'fixed left-1/2 transform -translate-x-1/2 bg-opacity-0  bg-gr-title p-16'
+    : '';
+  const home = isHomePage ? 'bg-home-title w-32 h-24 mt-24' : '';
+
   return (
-    <header className={`${isMapPage ? 'header-hidden' : void 0}`}>
+    <header
+      className={`${isNoneMapOrHome || isMapPage ? 'header-hidden' : ''}`}
+    >
+      <div
+        className={`inline-flex bg-no-repeat bg-center ${
+          isMapPage ? groupMap : home
+        }`}
+      >
+        {woomsTitle && (
+          <div className='whitespace-nowrap mx-3 text-2xl text-point-color'>
+            {woomsTitle}
+          </div>
+        )}
+      </div>
+
       <div className='fixed w-full top-4 right-6 flex gap-4 justify-end'>
         <button
           aria-label='BGM 음소거 토글'
