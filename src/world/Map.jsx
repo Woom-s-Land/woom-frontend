@@ -8,12 +8,13 @@ import mapImages from '../utils/mapImages';
 import PhotoModal from '../components/groupSpace/photo/PhotoModal';
 import PhotoHeatMap from '../components/groupSpace/photoHeatmap/PhotoHeatMap';
 import CommentModal from '../components/groupSpace/comment/CommentModal';
+import ChatBox from '../components/groupSpace/ChatBox';
 
 const outlineStyle = new OutlineFilter(4, 0xbcff89);
 
 const Map = () => {
   const width = window.screen.width;
-  const height = window.screen.height;
+  const height = window.innerHeight;
   const pathname = window.location.pathname;
   const woomsId = pathname.split('/')[2];
   const userInfo = useSelector((state) => state.auth.userInfo);
@@ -192,6 +193,7 @@ const Map = () => {
       {isOpenGuestbook && (
         <CommentModal onClose={handleCloseGuestbook} woomsId={woomsId} />
       )}
+      <ChatBox />
     </div>
   );
 };

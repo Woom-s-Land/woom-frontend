@@ -81,7 +81,7 @@ function App() {
   };
 
   return (
-    <div className='flex flex-col justify-center items-center w-[439px] h-[280px] p-2'>
+    <div className='absolute bottom-0 flex flex-col justify-center items-center w-[439px] h-[280px] p-2'>
       <div
         ref={chatContainerRef}
         style={{ display: connected ? 'block' : 'none' }}
