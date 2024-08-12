@@ -15,8 +15,6 @@ import rightBtn from '../../assets/button/right-bt-up.png';
 import leftBtn from '../../assets/button/left-bt-up.png';
 import dialogImg from '../../assets/dialog/dialog box big.png';
 
-// const baseUrl = 'https://i11e206.p.ssafy.io';
-
 const costumeList = BasicImages;
 
 const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
