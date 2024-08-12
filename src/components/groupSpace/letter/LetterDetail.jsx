@@ -1,11 +1,23 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 import baseUrl from '../../../libs/axios/basicAxios';
 
 import letter from '../../../assets/letter/letter.png';
 import happyEmoji from '../../../assets/common/happyEmoji.png';
 
-const LetterDetail = ({ letterId, onClose, onBack }) => {
+const letterVariants = {
+  hidden: { scale: 0.8, opacity: 0 },
+  visible: { scale: 1, opacity: 1 },
+  exit: { scale: 0.8, opacity: 0 },
+};
+
+const buttonVariants = {
+  hover: { scale: 1.1 },
+  tap: { scale: 0.9 },
+};
+
+const LetterDetail = ({ letterId, onBack }) => {
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [detailInfo, setDetailInfo] = useState(null);
 
@@ -56,26 +68,17 @@ const LetterDetail = ({ letterId, onClose, onBack }) => {
             </p>
             <p className='text-lg font-bold'>{detailInfo.senderName} 올림</p>
           </div>
-          <div className='flex text-lg py-2 px-4 bg-transparent rounded mb-0 absolute bottom-14 right-2 font-bold hover:underline decoration-wavy text-yellow-600'>
-            <img src={happyEmoji} alt='happyEmoji' className='mr-1 w-6' />
-            <button onClick={onBack}>편지 목록 보기</button>
-          </div>
-          <motion.button
-            initial={{ scale: 0.01 }}
-            animate={{ scale: [1.0, 0.8, 1.0] }}
-            exit={{ scale: 0.01 }}
-            transition={{
-              duration: 0.3,
-              ease: 'easeOut',
-              type: 'spring',
-              stiffness: 300,
-            }}
-            whileHover={{ scale: 1.05 }}
-            onClick={onClose}
-            className='py-2 px-4 bg-transparent rounded mb-0 absolute bottom-3 right-2'
+          <motion.div
+            className='flex text-lg py-2 px-4 bg-transparent rounded mb-0 absolute bottom-14 right-2 font-bold hover:underline decoration-wavy text-yellow-600'
+            variants={buttonVariants}
+            whileHover='hover'
+            whileTap='tap'
           >
-            편지 목록 보기
-          </motion.button>
+            <img src={happyEmoji} alt='happyEmoji' className='mr-1 w-6' />
+            <button whileHover={{ scale: 1.05 }} onClick={onBack}>
+              편지 목록 보기
+            </button>
+          </motion.div>
         </div>
       </motion.div>
     </div>

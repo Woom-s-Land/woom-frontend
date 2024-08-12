@@ -1,13 +1,20 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
+
 import letter from '../../../assets/letter/letter.png';
 import smileEmoji from '../../../assets/common/smileEmoji.png';
 import sadEmoji from '../../../assets/common/sadEmoji.png';
+
 const letterVariants = {
   hidden: { scale: 0.8, opacity: 0 },
   visible: { scale: 1, opacity: 1 },
   exit: { scale: 0.8, opacity: 0 },
+};
+
+const buttonVariants = {
+  hover: { scale: 1.1 },
+  tap: { scale: 0.9 },
 };
 
 const WriteLetter = ({
@@ -59,39 +66,26 @@ const WriteLetter = ({
             </p>
             <p className='text-lg font-bold'>{userInfo.nickname} 올림</p>
           </div>
-          <motion.button
-            initial={{ scale: 0.01 }}
-            animate={{ scale: [1.0, 0.8, 1.0] }}
-            exit={{ scale: 0.01 }}
-            transition={{
-              duration: 0.3,
-              ease: 'easeOut',
-              type: 'spring',
-              stiffness: 300,
-            }}
-            whileHover={{ scale: 1.05 }}
-            onClick={onNext}
-            className='py-2 px-4 bg-transparent rounded mb-0 absolute bottom-12 right-2'
-            disabled={content.trim() === ''}
+          <motion.div
+            className='flex text-lg py-2 px-4 bg-transparent rounded mb-0 absolute bottom-14 right-2 font-bold hover:underline decoration-wavy text-yellow-600'
+            variants={buttonVariants}
+            whileHover='hover'
+            whileTap='tap'
           >
-            편지 도착 날짜 선택
-          </motion.button>
-          <motion.button
-            initial={{ scale: 0.01 }}
-            animate={{ scale: [1.0, 0.8, 1.0] }}
-            exit={{ scale: 0.01 }}
-            transition={{
-              duration: 0.3,
-              ease: 'easeOut',
-              type: 'spring',
-              stiffness: 300,
-            }}
-            whileHover={{ scale: 1.05 }}
-            onClick={onClose}
-            className='py-2 px-4 bg-transparent rounded mb-0 absolute bottom-3 right-2'
+            <img src={smileEmoji} alt='smileEmoji' className='w-6 mr-1' />
+            <button onClick={onNext} disabled={content.trim() === ''}>
+              편지 도착 날짜 선택
+            </button>
+          </motion.div>
+          <motion.div
+            className='flex text-lg py-2 px-4 bg-transparent rounded mb-0 absolute bottom-4 right-2 font-bold hover:underline decoration-wavy text-red-600'
+            variants={buttonVariants}
+            whileHover='hover'
+            whileTap='tap'
           >
-            편지 다음에 쓰기
-          </motion.button>
+            <img src={sadEmoji} alt='sadEmoji' className='w-6 mr-1' />
+            <button onClick={onClose}>편지 다음에 쓰기</button>
+          </motion.div>
         </div>
       </motion.div>
     </div>
