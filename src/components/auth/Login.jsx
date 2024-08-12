@@ -128,7 +128,9 @@ const Login = () => {
           </button>
           <section className='flex justify-evenly'>
             <span className='text-xs'>
-              <Link to='/signup'>회원가입</Link>
+              <Link to='/signup' className='cursor-pointer'>
+                회원가입
+              </Link>
             </span>
             <span onClick={handleModal} className='text-xs cursor-pointer'>
               비밀번호 찾기

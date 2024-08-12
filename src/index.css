@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  label,
+  input,
+  button,
+  textarea {
+    @apply cursor-pointer;
+  }
+}
+
 @font-face {
   font-family: 'Dunggeunmo';
   font-weight: normal;
@@ -31,6 +40,9 @@ body {
 
 .header-hidden:hover {
   opacity: 1;
+}
+.cursor-custom:active {
+  cursor: url('./assets/cursor/MouseHold.png'), auto;
 }
 
 .letter {
