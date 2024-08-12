@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { motion } from 'framer-motion';
 import ModalClose from '../../common/ModalClose';
 import Button from '../../common/Button';
 import DropDown from '../../common/DropDown';

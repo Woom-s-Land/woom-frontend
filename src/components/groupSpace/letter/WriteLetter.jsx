@@ -61,19 +61,39 @@ const WriteLetter = ({
               {userInfo ? userInfo.nickname : '안녕안녕안녕안'} 올림
             </p>
           </div>
-          <button
+          <motion.button
+            initial={{ scale: 0.01 }}
+            animate={{ scale: [1.0, 0.8, 1.0] }}
+            exit={{ scale: 0.01 }}
+            transition={{
+              duration: 0.3,
+              ease: 'easeOut',
+              type: 'spring',
+              stiffness: 300,
+            }}
+            whileHover={{ scale: 1.05 }}
             onClick={onNext}
             className='py-2 px-4 bg-transparent rounded mb-0 absolute bottom-12 right-2'
             disabled={content.trim() === ''}
           >
             편지 도착 날짜 선택
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            initial={{ scale: 0.01 }}
+            animate={{ scale: [1.0, 0.8, 1.0] }}
+            exit={{ scale: 0.01 }}
+            transition={{
+              duration: 0.3,
+              ease: 'easeOut',
+              type: 'spring',
+              stiffness: 300,
+            }}
+            whileHover={{ scale: 1.05 }}
             onClick={onClose}
             className='py-2 px-4 bg-transparent rounded mb-0 absolute bottom-3 right-2'
           >
             편지 다음에 쓰기
-          </button>
+          </motion.button>
         </div>
       </motion.div>
     </div>
