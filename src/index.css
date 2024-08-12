@@ -8,6 +8,13 @@
   src: url('./fonts/NeoDunggeunmoPro-Regular.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'SangSangShinb7';
+  src: url('./fonts/SSShinb7Regular.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   font-family: 'Dunggeunmo';
 }
@@ -24,4 +31,8 @@ body {
 
 .header-hidden:hover {
   opacity: 1;
+}
+
+.letter {
+  font-family: 'SangSangShinb7';
 }

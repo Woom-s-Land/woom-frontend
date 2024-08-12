@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import normal_box from '../../assets/common/normal_box.png';
-import drop_down from '../../assets/common/drop_down_btn.png';
 
 const DropDown = ({ options = [], placeholder, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);

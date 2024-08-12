@@ -13,8 +13,8 @@ import Signup from './components/auth/Signup';
 import PhotoHeatMap from './components/groupSpace/photoHeatmap/PhotoHeatMap.jsx';
 import Group from './components/group/Group.jsx';
 import CreateGroup from './components/group/CreateGroup.jsx';
-import StoryWrite from './components/groupSpace/story/StoryWriteModal';
-import StoryRead from './components/groupSpace/story/StoryReadModal';
+import StoryWrite from './components/groupSpace/radio/StoryWriteModal';
+import StoryRead from './components/groupSpace/radio/StoryReadModal';
 import Header from './components/navbar/Menubar.jsx';
 import PasswordReset from './components/auth/PasswordReset';
 import GroupDetail from './components/group/GroupDetail.jsx';
@@ -23,9 +23,11 @@ import LetterList from './components/groupSpace/letter/LetterList.jsx';
 import Loading from './components/common/Loading.jsx';
 import ChooseUser from './components/groupSpace/letter/ChooseUser';
 import WriteLetter from './components/groupSpace/letter/WriteLetter';
-import MainLetter from './components/groupSpace/letter/MainLetter';
+import WriteLetterMain from './components/groupSpace/letter/WriteLetterMain.jsx';
 import DropDown from './components/common/DropDown.jsx';
 import PlayBgm from './components/bgm/PlayBgm.jsx';
+import ReadLetterMain from './components/groupSpace/letter/ReadLetterMain.jsx';
+import ChatBox from './components/groupSpace/ChatBox.jsx';
 
 function App() {
   const location = useLocation();
@@ -61,7 +63,6 @@ function App() {
         <Route path='/story-read' element={<StoryRead />} />
         <Route path='/loading' element={<Loading />} />
         <Route path='/auth/oauth-response' element={<OauthHandler />} />
-        <Route path='/letter' element={<MainLetter />} />
       </Routes>
     </div>
   );

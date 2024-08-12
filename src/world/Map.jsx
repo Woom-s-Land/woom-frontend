@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { groupActions } from '../store/groupSlice';
 import { Stage, Sprite, Container } from '@pixi/react';
 import { OutlineFilter } from '@pixi/filter-outline';
 import CharacterInMap from './CharacterInMap';
@@ -16,6 +17,8 @@ const Map = () => {
   const pathname = window.location.pathname;
   const woomsId = pathname.split('/')[2];
   const userInfo = useSelector((state) => state.auth.userInfo);
+  const dispatch = useDispatch();
+
   const [nickname, setNickname] = useState(userInfo.nickname);
   const [costume, setCostume] = useState(userInfo.costume);
   const [backgroundX, setBackgroundX] = useState(-300);
@@ -72,6 +75,12 @@ const Map = () => {
       else if (isNearGuestbook) setIsOpenGuestbook(true);
     }
   }, [isInteractive]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(groupActions.exit());
+    };
+  }, [dispatch]);
 
   const handleClosePhoto = () => {
     setIsOpenPhoto(false);
