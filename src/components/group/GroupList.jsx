@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import ButtonDetail from './ButtonDetail';
 import { useDispatch } from 'react-redux';
 import { groupActions } from '../../store/groupSlice';
-import instance from '../../libs/axios/basicAxios';
+import GroupApi from '../../apis/GroupApi';
 
 const GroupList = ({ list, onClose, handleDetail }) => {
   const navigate = useNavigate();
@@ -10,12 +10,7 @@ const GroupList = ({ list, onClose, handleDetail }) => {
 
   const moveToGroup = (group) => () => {
     dispatch(groupActions.setGroupInfo(group));
-
-    try {
-      instance.get(`/wooms/channel?${group.woomsInviteCode}`);
-    } catch (error) {
-      console.error('API 요청 실패:', error);
-    }
+    GroupApi.editToken(group.woomsInviteCode);
     navigate(`/map/${group.woomsId}`);
     onClose();
   };
