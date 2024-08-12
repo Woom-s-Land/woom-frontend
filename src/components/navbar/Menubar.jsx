@@ -29,7 +29,7 @@ function Header() {
     if (isHomePage) {
       dispatch(groupActions.exit());
     }
-  }, [isMapPage]);
+  }, [isHomePage]);
 
   useEffect(() => {
     if (groupInfo && groupInfo.woomsTitle) setWoomsTitle(groupInfo.woomsTitle);
@@ -85,13 +85,13 @@ function Header() {
   };
 
   const groupMap = isMapPage
-    ? 'fixed left-1/2 transform -translate-x-1/2 bg-opacity-0  bg-gr-title p-16'
+    ? 'fixed w-full h-24 left-1/2 transform -translate-x-1/2 inline-flex items-center justify-center bg-no-repeat bg-opacity-0 bg-center bg-gr-title'
     : '';
-  const home = isHomePage ? 'bg-home-title w-32 h-24 mt-24' : '';
+  const home = isHomePage ? 'bg-home-title w-32 h-24' : '';
 
   return (
     <header
-      className={`${isNoneMapOrHome || isMapPage ? 'header-hidden' : ''}`}
+      className={`${isNoneMapOrHome ? 'hidden' : isMapPage ? 'header-hidden' : ''}`}
     >
       <div
         className={`inline-flex bg-no-repeat bg-center ${
@@ -123,7 +123,7 @@ function Header() {
             className='fixed inset-0 opacity-50 z-10'
             onClick={toggleMenu}
           ></div>
-          <nav className='absolute top-16 right-1 m-0 p-0 z-20 rounded flex flex-col space-y-1'>
+          <nav className='fixed top-16 right-1 m-0 p-0 z-20 rounded flex flex-col space-y-1'>
             <MenuButton
               buttonText='내 정보 수정'
               onClickEventHandler={handleMyInfoClick}

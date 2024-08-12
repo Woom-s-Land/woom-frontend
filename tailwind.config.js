@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
@@ -49,6 +50,11 @@ export default {
       fontSize: {
         xxs: '0.6rem',
         xxxs: '0.4rem',
+      },
+      cursor: {
+        custom: 'url(./assets/cursor/MouseBasic.png), auto',
+        pointer: 'url(./assets/cursor/MousePoint.png), auto',
+        'custom-active': 'url(./assets/cursor/MouseHold.png), auto',
       },
     },
   },

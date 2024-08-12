@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
 function Button({ label, onClick, disabled = false }) {
   const [isActive, setIsActive] = useState(false);
@@ -17,7 +18,17 @@ function Button({ label, onClick, disabled = false }) {
   const handleMouseLeave = () => setIsActive(false); // 버튼에서 마우스가 떠날 때도 비활성화 상태로 변경
 
   return (
-    <button
+    <motion.button
+      initial={{ scale: 0.01 }}
+      animate={{ scale: [1.0, 0.8, 1.0] }}
+      exit={{ scale: 0.01 }}
+      transition={{
+        duration: 0.3,
+        ease: 'easeOut',
+        type: 'spring',
+        stiffness: 300,
+      }}
+      whileHover={{ scale: 1.05 }}
       className='relative flex items-center justify-center rounded cursor-pointer overflow-hidden'
       style={{ width: `${buttonWidth}px`, height: '60px' }} // 버튼의 너비와 높이를 설정합니다.
       onMouseDown={handleMouseDown}
@@ -41,7 +52,7 @@ function Button({ label, onClick, disabled = false }) {
       >
         {label}
       </span>
-    </button>
+    </motion.button>
   );
 }
 
