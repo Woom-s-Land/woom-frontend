@@ -156,7 +156,7 @@ const getPhotoDetail = async (woomsId, photoId) => {
 
 const patchPhoto = async (woomsId, photoId) => {
   const data = await basicAxios({
-    method: 'get',
+    method: 'patch',
     url: `wooms/${woomsId}/photos/${photoId}`,
   })
     .then((res) => {

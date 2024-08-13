@@ -5,19 +5,19 @@ import { GroupStoryApi } from '../../../apis/GroupSpaceApi';
 
 const StoryReadModal = ({ onClose, woomsId }) => {
   const [stories, setStories] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0); // 초기값을 0으로 설정
-  const [fetchedTotalPages, setFetchedTotalPages] = useState(0); // API에서 받아온 totalPages를 저장하는 상태
+  const [currentPage, setCurrentPage] = useState(0);
+  const [fetchedTotalPages, setFetchedTotalPages] = useState(0);
   const [currentAudio, setCurrentAudio] = useState(null); // 현재 재생 중인 오디오를 관리
+  const [playingStoryId, setPlayingStoryId] = useState(null); // 현재 재생 중인 스토리 ID
 
   useEffect(() => {
     const getStories = async () => {
       try {
         const response = await GroupStoryApi.getStory(woomsId, currentPage);
-        console.log('API Response:', response);
         const { stories, totalPage } = response;
-        console.log(totalPage);
         setStories(stories);
-        setFetchedTotalPages(totalPage); // 상태로 관리
+        setFetchedTotalPages(totalPage);
+        console.log(stories);
       } catch (error) {
         console.error('API Error:', error);
       }
@@ -38,23 +38,50 @@ const StoryReadModal = ({ onClose, woomsId }) => {
     }
   };
 
-  const handlePlay = (url) => {
-    // 현재 재생 중인 오디오가 있으면 중지
+  const handlePlay = (url, storyId) => {
     if (currentAudio) {
       currentAudio.pause();
       setCurrentAudio(null);
+      setPlayingStoryId(null);
     }
 
-    // 새로운 오디오를 생성하고 재생
     const newAudio = new Audio(url);
     newAudio.play();
-
-    // 현재 재생 중인 오디오로 설정
     setCurrentAudio(newAudio);
+    setPlayingStoryId(storyId);
   };
 
+  const handlePause = () => {
+    if (currentAudio) {
+      currentAudio.pause();
+      setCurrentAudio(null);
+      setPlayingStoryId(null);
+    }
+  };
+
+  // 모달이 닫힐 때 현재 재생 중인 오디오를 중지
+  useEffect(() => {
+    return () => {
+      if (currentAudio) {
+        currentAudio.pause();
+        setCurrentAudio(null);
+        setPlayingStoryId(null);
+      }
+    };
+  }, [currentAudio]);
+
   return (
-    <Modal onClose={onClose}>
+    <Modal
+      onClose={() => {
+        onClose();
+        // 모달 닫기 시 오디오 중지
+        if (currentAudio) {
+          currentAudio.pause();
+          setCurrentAudio(null);
+          setPlayingStoryId(null);
+        }
+      }}
+    >
       <div className='absolute inset-x-0 top-7 text-3xl mt-1 text-base-color'>
         사연 읽기
       </div>
@@ -66,14 +93,27 @@ const StoryReadModal = ({ onClose, woomsId }) => {
                 key={story.id}
                 className='bg-white bg-opacity-20 rounded-lg w-[350px] h-[70px] flex items-center p-4'
               >
-                <div className='flex justify-between items-center w-full'>
-                  <div className='pl-5 text-lg text-white'>
-                    {story.userNickname}
-                  </div>
-                  <Button
-                    label='재생'
-                    onClick={() => handlePlay(story.fileName)}
+                <div className='flex items-center space-x-4 w-full'>
+                  <img
+                    src={`/src/assets/${story.costume}/h1.png`}
+                    alt='Costume'
+                    className='w-12 h-12 rounded-full'
                   />
+                  <div className='flex justify-between items-center w-full'>
+                    <div className='pl-5 text-lg text-white'>
+                      {story.userNickname}
+                    </div>
+                    <Button
+                      label={playingStoryId === story.id ? '일시정지' : '재생'}
+                      onClick={() => {
+                        if (playingStoryId === story.id) {
+                          handlePause();
+                        } else {
+                          handlePlay(story.fileName, story.id);
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
             ))
