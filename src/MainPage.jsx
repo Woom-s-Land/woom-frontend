@@ -1,5 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 
+import introImg1 from './assets/mainPage/introImg1.png';
+import introImg2 from './assets/mainPage/introImg2.png';
+
 const MainPage = () => {
   const navigate = useNavigate();
 
@@ -111,8 +114,8 @@ const MainPage = () => {
 
             <div className='grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4'>
               {[
-                'https://cdn.usegalileo.ai/sdxl10/1de62192-826e-42e9-96f0-90cde09cd511.png',
-                'https://cdn.usegalileo.ai/sdxl10/6c218706-fad7-490e-8121-47a0d334cc05.png',
+                introImg1,
+                introImg2,
                 'https://cdn.usegalileo.ai/sdxl10/516ba82c-89e1-4a94-b0c3-265bd1a9c0d7.png',
               ].map((image, idx) => (
                 <div key={idx} className='flex flex-col gap-3'>
