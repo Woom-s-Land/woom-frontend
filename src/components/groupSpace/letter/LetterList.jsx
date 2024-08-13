@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import baseUrl from '../../../libs/axios/basicAxios';
-import LetterDetail from './LetterDetail';
 import Modal from '../../common/Modal';
 import miniSquareBtn from '../../../assets/common/miniSquareBtn.png';
 import leftBtn from '../../../assets/button/left-bt-up.png';
@@ -55,25 +54,27 @@ const LetterList = ({ onClose, onLetterClick }) => {
       }
     };
 
+    const getUnreadCount = async () => {
+      try {
+        const response = await baseUrl.get('/letters/total');
+        console.log('읽지 않은 편지 개수 저장 성공', response.data);
+        setUnreadCount(response.data.totalUnreadCount);
+      } catch (error) {
+        console.log('읽지 않은 편지 개수 저장 실패');
+        console.error(error);
+      }
+    };
+
     getLetters();
     getComingLetters();
+    getUnreadCount();
 
     return () => {
       setLetters([]);
       setComingLetters(null);
+      setUnreadCount(0);
     };
   }, [page]);
-
-  useEffect(() => {
-    const countUnreadLetters = () => {
-      const unread = letters.filter(
-        (letter) => letter.status === 'UNREAD'
-      ).length;
-      setUnreadCount(unread);
-    };
-
-    countUnreadLetters();
-  }, [letters]);
 
   const handleLeft = () => {
     if (page > 0) {
@@ -107,7 +108,7 @@ const LetterList = ({ onClose, onLetterClick }) => {
     <Modal onClose={onClose}>
       <div className='flex justify-center items-center mb-16'>
         <h1 className='absolute text-3xl top-9'>받은 편지함</h1>
-        <span className='absolute top-[37px] right-60 text-3xl'>
+        <span className='absolute top-[37px] right-40 text-3xl'>
           {unreadCount}
         </span>
         {!comingLetters ? (
@@ -143,7 +144,7 @@ const LetterList = ({ onClose, onLetterClick }) => {
       </button>
       <button
         onClick={handleRight}
-        className='absolute right-3 top-1/2 transform -translate-y-1/2'
+        className='absolute right-3 top-1/2 transform -translate-y-1/2 '
         disabled={page === totalPages - 1}
       >
         <img src={rightBtn} alt='rightBtn' className='w-6' />
@@ -152,13 +153,13 @@ const LetterList = ({ onClose, onLetterClick }) => {
         {letters.map((letter) => (
           <div key={letter.id} className='flex mb-6 items-center'>
             <div
-              className={`cursor-pointer text-3xl basis-2/5 ${letter.status === 'READ' ? 'text-gray-500' : ''}`}
+              className={`cursor-pointer text-3xl basis-2/5 ${letter.status === 'READ' ? 'text-stone-500' : ''}`}
               onClick={() => openLetterDetail(letter.id)}
             >
               {letter.senderName}
             </div>
             <div
-              className={`text-3xl basis-2/5 ${letter.status === 'READ' ? 'text-gray-500' : ''}`}
+              className={`text-3xl basis-2/5 ${letter.status === 'READ' ? 'text-stone-500' : ''}`}
             >
               {formatDate(letter.receiveDate)}
             </div>

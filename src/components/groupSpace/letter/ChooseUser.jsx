@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import baseUrl from '../../../libs/axios/basicAxios';
 import Modal from '../../common/Modal';
@@ -6,6 +7,7 @@ import Button from '../../common/Button';
 import DropDown from '../../common/DropDown';
 
 const ChooseUser = ({ onClose, onChange, onNext }) => {
+  const userInfo = useSelector((state) => state.auth.userInfo);
   const [groups, setGroups] = useState([]);
   const [users, setUsers] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
@@ -50,7 +52,11 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
           withCredentials: true,
         });
         console.log(response.data.userInfoDtoList);
-        setUsers(response.data.userInfoDtoList);
+        setUsers(
+          response.data.userInfoDtoList.filter(
+            (user) => user.uuid !== userInfo.userUuid
+          )
+        );
       } catch (error) {
         console.error('그룹 속한 유저 정보 불러오기 실패', error);
       }

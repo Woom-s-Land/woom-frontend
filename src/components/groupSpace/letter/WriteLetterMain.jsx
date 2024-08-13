@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { alertActions } from '../../../store/alertSlice';
 import { AnimatePresence } from 'framer-motion';
 import baseUrl from '../../../libs/axios/basicAxios';
 
@@ -7,6 +9,8 @@ import WriteLetter from './WriteLetter';
 import ChooseDate from './ChooseDate';
 
 const WriteLetterMain = ({ isOpen, onClose }) => {
+  const dispatch = useDispatch();
+
   const [selectedUser, setSelectedUser] = useState({});
   const [selectedDate, setSelectedDate] = useState('');
   const [content, setContent] = useState('');
@@ -56,9 +60,21 @@ const WriteLetterMain = ({ isOpen, onClose }) => {
           withCredentials: true,
         }
       );
-      console.log(response);
+      console.log(response.data);
+      dispatch(
+        alertActions.showAlert({
+          message: '편지가 성공적으로 전달되었습니다!',
+          type: 'SUCCESS',
+        })
+      );
     } catch (error) {
       console.error(error);
+      dispatch(
+        alertActions.showAlert({
+          message: '편지가 전달되지 않았습니다. 다시 시도해주세요.',
+          type: 'ERROR',
+        })
+      );
     }
   };
 
