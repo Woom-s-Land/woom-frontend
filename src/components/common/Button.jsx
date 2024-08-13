@@ -19,9 +19,6 @@ function Button({ label, onClick, disabled = false }) {
 
   return (
     <motion.button
-      initial={{ scale: 0.01 }}
-      animate={{ scale: [1.0, 0.8, 1.0] }}
-      exit={{ scale: 0.01 }}
       transition={{
         duration: 0.3,
         ease: 'easeOut',

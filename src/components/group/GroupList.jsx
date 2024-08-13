@@ -20,7 +20,7 @@ const GroupList = ({ list, onClose, handleDetail }) => {
       {list.map((group, index) => (
         <div className='flex items-center justify-center' key={group.woomsId}>
           <div
-            onClick={() => handleDetail(group)}
+            onClick={() => handleDetail(group.woomsId)}
             className='text-2xl cursor-pointer z-20 text-base-color min-w-[150px]'
           >
             {group.woomsTitle}
