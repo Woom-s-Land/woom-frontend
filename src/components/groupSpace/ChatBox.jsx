@@ -1,13 +1,29 @@
 // ChatBox.jsx
-import React, { useState, useRef, useLayoutEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 // import EmojiPicker from 'emoji-picker-react';
 import inputEmoji from '../../assets/common/inputEmoji.png';
 import emojiIcon from '../../assets/common/emoji.png';
 
-const ChatBox = ({ stompClient, connected, nickname, token }) => {
+const ChatBox = ({
+  stompClient,
+  connected,
+  nickname,
+  token,
+  setIsChatting,
+  isChatting,
+}) => {
   const [chattings, setChattings] = useState([]);
   const [content, setContent] = useState('');
   const chatContainerRef = useRef(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (isChatting && inputRef.current) {
+      inputRef.current.focus();
+    } else if (!isChatting && inputRef.current) {
+      inputRef.current.blur();
+    }
+  }, [isChatting]);
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -15,7 +31,7 @@ const ChatBox = ({ stompClient, connected, nickname, token }) => {
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!stompClient || !connected) return;
 
     // 채팅 메시지 구독 설정
@@ -38,7 +54,7 @@ const ChatBox = ({ stompClient, connected, nickname, token }) => {
     };
   }, [stompClient, connected, token]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     // 새로운 채팅이 추가될 때마다 스크롤을 맨 아래로 이동
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -80,8 +96,11 @@ const ChatBox = ({ stompClient, connected, nickname, token }) => {
       <div className='mt-1 w-full flex items-center justify-between bg-black bg-opacity-20 rounded-lg p-1'>
         <input
           value={content}
+          ref={inputRef}
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyPress}
+          onFocus={() => setIsChatting(true)}
+          onBlur={() => setIsChatting(false)}
           className='flex-grow py-1 px-2 text-white rounded-lg bg-black bg-opacity-0 focus:outline-none'
         />
         <button onClick={togglePicker}>

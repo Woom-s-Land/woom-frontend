@@ -48,6 +48,7 @@ const Character = ({
   setIsInteractive,
   setRadioWriteInteractive,
   setRadioReadInteractive,
+  isChatting,
 }) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState(Direction.DOWN);
@@ -168,6 +169,7 @@ const Character = ({
   // 키 눌렀을 때 실행될 함수
   const handleArrowKeyDown = useCallback(
     (e) => {
+      if (isChatting) return;
       setIsInteractive(false);
       setRadioReadInteractive(false);
       setRadioWriteInteractive(false);
@@ -178,7 +180,7 @@ const Character = ({
         ArrowLeft: { dir: Direction.LEFT },
       };
       if (e.code === 'Space') {
-        setIsInteractive(true);
+        if (!isOpenRadioRead && !isOpenRadioWrite) setIsInteractive(true);
       } else if (e.code === 'KeyE') {
         if (!isOpenRadioRead) setRadioWriteInteractive(true);
       } else if (e.code === 'KeyR') {
@@ -216,6 +218,7 @@ const Character = ({
       isOpenGuestbook,
       isOpenRadioRead,
       isOpenRadioWrite,
+      isChatting,
     ]
   );
 
