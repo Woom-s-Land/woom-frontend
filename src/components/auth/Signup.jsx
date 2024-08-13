@@ -120,7 +120,7 @@ const Signup = () => {
 
   return (
     <div className='flex flex-col items-center justify-center min-h-scren'>
-      <div className='mb-20 mt-12'>
+      <div className='mb-20 mt-20'>
         <Link to='/'>
           <img
             src={imgLogo}
