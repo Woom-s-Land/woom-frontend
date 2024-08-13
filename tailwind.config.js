@@ -5,6 +5,7 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
+        'file-bt': 'url(./assets/button/file-bt.png',
         'modal-bg': 'url(./assets/common/modal.png)',
         'home-title': 'url(./assets/home/home-title.png)',
         'close-bt': 'url(./assets/common/x-bt.png)',

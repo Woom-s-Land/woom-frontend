@@ -2,12 +2,27 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import pixelit from '../../../libs/pixelit';
 import html2canvas from 'html2canvas';
 import Cropper from 'react-easy-crop';
-import getCroppedImg from './cropImage'; // cropImage 유틸리티 함수
+import getCroppedImg from './cropImage';
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import ColorPaletteEditor from './custom/ColorPaletteEditor';
+import { GroupPhotoApi } from '../../../apis/GroupSpaceApi';
+import exifr from 'exifr'; // exifr import
+
+// Dummy implementation of checkPixelNumber
+// You should replace this with your actual API call or function implementation
+const checkPixelNumber = async (latitude, longitude) => {
+  // Dummy mapId for demonstration
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(1); // Replace with actual logic
+    }, 1000);
+  });
+};
 
 const UploadModal = ({ onClose }) => {
+  const pathname = window.location.pathname;
+  const woomsId = pathname.split('/')[2];
   const [files, setFiles] = useState([]);
   const [pixelCanvas, setPixelCanvas] = useState(null);
   const [pixelScale, setPixelScale] = useState(13);
@@ -29,6 +44,7 @@ const UploadModal = ({ onClose }) => {
   const [showPaletteEditor, setShowPaletteEditor] = useState(false);
   const [showPixelCanvas, setShowPixelCanvas] = useState(true);
   const [showButtons, setShowButtons] = useState(true);
+  const [mapId, setMapId] = useState(null); // State to store the mapId
 
   const canvasRef = useRef(null);
   const polaroidRef = useRef(null);
@@ -38,35 +54,100 @@ const UploadModal = ({ onClose }) => {
     e.dataTransfer.dropEffect = 'copy';
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = async (e) => {
     e.preventDefault();
     const droppedFiles = Array.from(e.dataTransfer.files);
     setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
+
+    const file = droppedFiles[0];
     const reader = new FileReader();
-    reader.onload = () => {
+
+    reader.onload = async () => {
       setImageSrc(reader.result);
+
+      // Extract metadata using exifr
+      const metadata = await exifr.parse(file);
+      console.log('메타데이터:', metadata);
+
+      // Extract latitude and longitude from metadata
+      const latitude = metadata?.GPSLatitude;
+      const longitude = metadata?.GPSLongitude;
+
+      if (latitude && longitude) {
+        // Get mapId using latitude and longitude
+        const id = await checkPixelNumber(latitude, longitude);
+        setMapId(id); // Store mapId
+      }
     };
-    reader.readAsDataURL(droppedFiles[0]);
+
+    reader.readAsDataURL(file);
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const selectedFiles = Array.from(e.target.files);
     setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+
+    const file = selectedFiles[0];
     const reader = new FileReader();
-    reader.onload = () => {
+
+    reader.onload = async () => {
       setImageSrc(reader.result);
+
+      // Extract metadata using exifr
+      const metadata = await exifr.parse(file);
+      console.log('메타데이터:', metadata);
+
+      // Extract latitude and longitude from metadata
+      const latitude = metadata?.GPSLatitude;
+      const longitude = metadata?.GPSLongitude;
+
+      if (latitude && longitude) {
+        // Get mapId using latitude and longitude
+        const id = await checkPixelNumber(latitude, longitude);
+        setMapId(id); // Store mapId
+      }
     };
-    reader.readAsDataURL(selectedFiles[0]);
+
+    reader.readAsDataURL(file);
   };
 
-  const handleUpload = () => {
-    if (files.length > 0) {
-      alert(`${files.length}개의 사진이 업로드되었습니다!`);
-      setFiles([]);
-    } else {
+  const handleUpload = async () => {
+    if (files.length === 0) {
       alert('업로드할 파일이 없습니다.');
+      return;
     }
-    onClose();
+
+    if (mapId === null) {
+      alert('위도와 경도 정보를 기반으로 mapId를 찾을 수 없습니다.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const canvas = await html2canvas(polaroidRef.current);
+      const dataURL = canvas.toDataURL('image/png');
+
+      // Data URL을 Blob으로 변환
+      const blob = await fetch(dataURL).then((res) => res.blob());
+      const file = new File([blob], 'captured_image.png', {
+        type: 'image/png',
+      });
+
+      // 서버로 업로드
+      const response = await GroupPhotoApi.postPhoto(woomsId, mapId, file);
+      console.log('업로드 성공:', response);
+
+      alert('업로드가 성공적으로 완료되었습니다!');
+      setFiles([]);
+      setCaption('');
+    } catch (error) {
+      console.error('업로드 실패:', error);
+      alert('업로드 중 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
+      onClose();
+    }
   };
 
   const handleCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
@@ -150,7 +231,7 @@ const UploadModal = ({ onClose }) => {
       )}
       {!pixelCanvas && !loading ? (
         imageSrc ? (
-          <div className='relative w-full h-64'>
+          <div>
             <Cropper
               image={imageSrc}
               crop={crop}
@@ -160,12 +241,12 @@ const UploadModal = ({ onClose }) => {
               onCropComplete={handleCropComplete}
               onZoomChange={setZoom}
             />
-            <button
-              className='absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded'
-              onClick={handleCrop}
-            >
-              자르기
-            </button>
+            <div className='absolute bottom-3 left-1/2 transform -translate-x-1/2'>
+              <Button
+                label='자르기'
+                onClick={handleCrop} // Corrected here
+              />
+            </div>
           </div>
         ) : (
           <div
@@ -175,20 +256,20 @@ const UploadModal = ({ onClose }) => {
             style={{ borderColor: '#aa7959' }}
           >
             <p style={{ color: '#aa7959' }}>
-              여기에 파일을 드래그 앤 드롭하세요!
+              여기 파일을 드래그 앤 드롭하세요!
             </p>
-            <label className='cursor-pointer'>
-              <img
-                src='src/assets/button/file-bt.png'
-                alt='파일 선택 아이콘'
-                className='w-20 h-20 mx-auto'
-              />
+            <label className='cursor-pointer flex flex-col items-center justify-center'>
               <input
                 type='file'
                 accept='image/*'
                 onChange={handleFileChange}
                 multiple
                 className='hidden'
+              />
+              <img
+                src='../src/assets/button/file-bt.png'
+                alt='asd'
+                className='h-[150px]'
               />
             </label>
           </div>
