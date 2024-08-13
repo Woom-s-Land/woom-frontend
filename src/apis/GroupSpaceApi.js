@@ -24,12 +24,10 @@ const postComment = async (woomsId, content) => {
     },
   })
     .then((res) => {
-      console.log(res.data);
       return res.data;
     })
     .catch((err) => {
-      console.error('Error posting comment:', err);
-      return err;
+      throw err;
     });
   return data;
 };

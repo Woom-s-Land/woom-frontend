@@ -2,8 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Modal from '../../common/Modal';
 import ButtonDetail from '../../group/ButtonDetail';
 import { GroupCommentApi } from '../../../apis/GroupSpaceApi';
+import { useDispatch } from 'react-redux';
+import { alertActions } from '../../../store/alertSlice';
 
 const Comment = ({ onClose }) => {
+  const dispatch = useDispatch();
+
   const pathname = window.location.pathname;
   const woomsId = pathname.split('/')[2];
   const [comments, setComments] = useState([]);
@@ -27,13 +31,24 @@ const Comment = ({ onClose }) => {
 
   // 댓글 작성 함수
   const handleSubmit = async (event) => {
-    event.preventDefault(); // 폼 제출 시 페이지 새로고침 방지
+    event.preventDefault();
     try {
-      await GroupCommentApi.postComment(woomsId, inputValue);
+      const response = await GroupCommentApi.postComment(woomsId, inputValue);
       setInputValue('');
       getComments();
+      dispatch(
+        alertActions.showAlert({
+          message: response.result,
+          type: 'SUCCESS',
+        })
+      );
     } catch (error) {
-      console.error('Error posting comment:', error);
+      dispatch(
+        alertActions.showAlert({
+          message: error.response.data.message,
+          type: 'ERROR',
+        })
+      );
     }
   };
 
