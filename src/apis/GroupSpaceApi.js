@@ -24,12 +24,10 @@ const postComment = async (woomsId, content) => {
     },
   })
     .then((res) => {
-      console.log(res.data);
       return res.data;
     })
     .catch((err) => {
-      console.error('Error posting comment:', err);
-      return err;
+      throw err;
     });
   return data;
 };
@@ -158,7 +156,7 @@ const getPhotoDetail = async (woomsId, photoId) => {
 
 const patchPhoto = async (woomsId, photoId) => {
   const data = await basicAxios({
-    method: 'get',
+    method: 'patch',
     url: `wooms/${woomsId}/photos/${photoId}`,
   })
     .then((res) => {
