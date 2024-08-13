@@ -44,10 +44,6 @@ const Home = () => {
   const rugWidth = 60;
   const rugHeight = 30;
 
-  useEffect(() => {
-    console.log(isOpenReadLetter, isOpenWriteLetter);
-  }, [isOpenReadLetter, isOpenWriteLetter]);
-
   const handleWriteLetterClose = () => {
     setIsOpenWriteLetter(false);
   };
