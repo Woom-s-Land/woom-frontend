@@ -7,16 +7,18 @@ import mapImages from '../utils/mapImages';
 import PhotoModal from '../components/groupSpace/photo/PhotoModal';
 import PhotoHeatMap from '../components/groupSpace/photoHeatmap/PhotoHeatMap';
 import CommentModal from '../components/groupSpace/comment/CommentModal';
+import StoryReadModal from '../components/groupSpace/radio/StoryReadModal';
+import StoryWriteModal from '../components/groupSpace/radio/StoryWriteModal';
+import ChatBox from '../components/groupSpace/ChatBox';
 
 const outlineStyle = new OutlineFilter(4, 0xbcff89);
 
 const Map = () => {
   const width = window.screen.width;
-  const height = window.screen.height;
-
+  const height = window.innerHeight;
+  const pathname = window.location.pathname;
+  const woomsId = pathname.split('/')[2];
   const userInfo = useSelector((state) => state.auth.userInfo);
-  const groupInfo = useSelector((state) => state.group.groupInfo);
-
   const [nickname, setNickname] = useState(userInfo.nickname);
   const [costume, setCostume] = useState(userInfo.costume);
   const [backgroundX, setBackgroundX] = useState(-300);
@@ -28,14 +30,16 @@ const Map = () => {
   const [isNearPhoto, setIsNearPhoto] = useState(false);
   const [isNearPhotomap, setIsNearPhotomap] = useState(false);
   const [isNearGuestbook, setIsNearGuestbook] = useState(false);
+  const [isNearRadio, setIsNearRadio] = useState(false);
 
   const [isInteractive, setIsInteractive] = useState(false);
-
+  const [radioReadInteractive, setRadioReadInteractive] = useState(false);
+  const [radioWriteInteractive, setRadioWriteInteractive] = useState(false);
   const [isOpenPhoto, setIsOpenPhoto] = useState(false);
   const [isOpenPhotomap, setIsOpenPhotomap] = useState(false);
   const [isOpenGuestbook, setIsOpenGuestbook] = useState(false);
-
-  const [woomsTitle, setWoomsTitle] = useState(groupInfo.woomsTitle);
+  const [isOpenRadioRead, setIsOpenRadioRead] = useState(false);
+  const [isOpenRadioWrite, setIsOpenRadioWrite] = useState(false);
 
   const photoX = 1417;
   const photoY = 227;
@@ -52,6 +56,10 @@ const Map = () => {
   const guestbookWidth = 116;
   const guestbookHeight = 126;
 
+  const radioX = 490;
+  const radioY = 450;
+  const radioWidth = 80;
+  const radioHeight = 63;
   // 캐릭터의 위치 변경에 따른 정적인 요소의 위치 조정
   const calculateStaticElementPosition = useCallback(() => {
     return {
@@ -61,6 +69,8 @@ const Map = () => {
       pmy: photomapY + backgroundY,
       gx: guestbookX + backgroundX,
       gy: guestbookY + backgroundY,
+      rx: radioX + backgroundX,
+      ry: radioY + backgroundY,
     };
   }, [characterX, characterY, backgroundX, backgroundY, width, height]);
 
@@ -69,12 +79,17 @@ const Map = () => {
       setIsOpenPhoto(false);
       setIsOpenPhotomap(false);
       setIsOpenGuestbook(false);
-
+      setIsOpenRadioRead(false);
+      setIsOpenRadioWrite(false);
       if (isNearPhoto) setIsOpenPhoto(true);
       else if (isNearPhotomap) setIsOpenPhotomap(true);
       else if (isNearGuestbook) setIsOpenGuestbook(true);
+    } else if (radioReadInteractive) {
+      if (isNearRadio) setIsOpenRadioRead(true);
+    } else if (radioWriteInteractive) {
+      if (isNearRadio) setIsOpenRadioWrite(true);
     }
-  }, [isInteractive]);
+  }, [isInteractive, radioReadInteractive, radioWriteInteractive]);
 
   const handleClosePhoto = () => {
     setIsOpenPhoto(false);
@@ -85,6 +100,14 @@ const Map = () => {
   const handleCloseGuestbook = () => {
     console.log('click');
     setIsOpenGuestbook(false);
+  };
+  const handleCloseRadioRead = () => {
+    console.log('click');
+    setIsOpenRadioRead(false);
+  };
+  const handleCloseRadioWrite = () => {
+    console.log('click');
+    setIsOpenRadioWrite(false);
   };
   const isNear = (
     charX,
@@ -122,17 +145,10 @@ const Map = () => {
     setIsNearGuestbook(
       isNear(cx, cy, guestbookX, guestbookY, guestbookWidth, guestbookHeight)
     );
+    setIsNearRadio(isNear(cx, cy, radioX, radioY, radioWidth, radioHeight));
   }, [characterX, characterY, backgroundX, backgroundY]);
   return (
     <div className='w-full h-full overflow-hidden'>
-      <div className='fixed left-1/2 transform -translate-x-1/2 inline-flex items-center justify-center bg-no-repeat bg-opacity-0 bg-center bg-gr-title p-16'>
-        {woomsTitle && (
-          <div className='whitespace-nowrap mx-3 text-2xl text-point-color'>
-            {woomsTitle}
-          </div>
-        )}
-      </div>
-
       <Stage width={width} height={height}>
         {/* 배경을 관리하는 Container */}
         <Container>
@@ -164,6 +180,14 @@ const Map = () => {
             y={calculateStaticElementPosition().gy}
             filters={isNearGuestbook ? [outlineStyle] : []}
           />
+          <Sprite
+            image={mapImages.radio}
+            width={radioWidth}
+            height={radioHeight}
+            x={calculateStaticElementPosition().rx}
+            y={calculateStaticElementPosition().ry}
+            filters={isNearRadio ? [outlineStyle] : []}
+          />
         </Container>
         {/* 캐릭터를 관리하는 Container */}
         <Container>
@@ -179,15 +203,32 @@ const Map = () => {
             isOpenPhoto={isOpenPhoto}
             isOpenPhotomap={isOpenPhotomap}
             isOpenGuestbook={isOpenGuestbook}
+            isOpenRadioRead={isOpenRadioRead}
+            isOpenRadioWrite={isOpenRadioWrite}
             setIsInteractive={setIsInteractive}
+            setRadioReadInteractive={setRadioReadInteractive}
+            setRadioWriteInteractive={setRadioWriteInteractive}
             setCharacterX={setCharacterX} // 캐릭터의 X 위치를 상위 컴포넌트로 전달
             setCharacterY={setCharacterY} // 캐릭터의 Y 위치를 상위 컴포넌트로 전달
           />
         </Container>
       </Stage>
-      {isOpenPhoto && <PhotoModal onClose={handleClosePhoto} />}
-      {isOpenPhotomap && <PhotoHeatMap onClose={handleClosePhotomap} />}
-      {isOpenGuestbook && <CommentModal onClose={handleCloseGuestbook} />}
+      {isOpenPhoto && (
+        <PhotoModal onClose={handleClosePhoto} woomsId={woomsId} />
+      )}
+      {isOpenPhotomap && (
+        <PhotoHeatMap onClose={handleClosePhotomap} woomsId={woomsId} />
+      )}
+      {isOpenGuestbook && (
+        <CommentModal onClose={handleCloseGuestbook} woomsId={woomsId} />
+      )}
+      {isOpenRadioRead && (
+        <StoryReadModal onClose={handleCloseRadioRead} woomsId={woomsId} />
+      )}
+      {isOpenRadioWrite && (
+        <StoryWriteModal onClose={handleCloseRadioWrite} woomsId={woomsId} />
+      )}
+      <ChatBox />
     </div>
   );
 };
