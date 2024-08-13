@@ -41,6 +41,8 @@ const Map = () => {
   const [isOpenRadioRead, setIsOpenRadioRead] = useState(false);
   const [isOpenRadioWrite, setIsOpenRadioWrite] = useState(false);
 
+  const [isChatting, setIsChatting] = useState(false);
+
   const photoX = 1417;
   const photoY = 227;
   const photoWidth = 266;
@@ -180,6 +182,22 @@ const Map = () => {
     );
     setIsNearRadio(isNear(cx, cy, radioX, radioY, radioWidth, radioHeight));
   }, [characterX, characterY, backgroundX, backgroundY]);
+
+  const handleArrowKeyDown = (e) => {
+    if (e.key === 'Enter' && !isChatting) {
+      setIsChatting(true);
+    }
+    if ((e.key === 'Escape') & isChatting) {
+      setIsChatting(false);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener('keydown', handleArrowKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleArrowKeyDown);
+    };
+  }, [handleArrowKeyDown]);
+
   return (
     <div className='w-full h-full overflow-hidden'>
       <Stage width={width} height={height}>
@@ -246,6 +264,7 @@ const Map = () => {
             setRadioWriteInteractive={setRadioWriteInteractive}
             setCharacterX={setCharacterX} // 캐릭터의 X 위치를 상위 컴포넌트로 전달
             setCharacterY={setCharacterY} // 캐릭터의 Y 위치를 상위 컴포넌트로 전달
+            isChatting={isChatting}
           />
         </Container>
       </Stage>
@@ -270,6 +289,8 @@ const Map = () => {
         connected={connected}
         nickname={nickname}
         token={groupInfo.woomsInviteCode}
+        setIsChatting={setIsChatting}
+        isChatting={isChatting}
       />
     </div>
   );
