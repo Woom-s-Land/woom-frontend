@@ -71,12 +71,20 @@ const UploadModal = ({ onClose }) => {
     setLoading(true);
 
     try {
-      const imageFile = files[0]; // Assuming you want to upload the first file
-      const mapId = 1; // Replace with actual mapId if available
-      console.log(imageFile);
-      // Assuming `GroupPhotoApi.postPhoto` is the correct function for uploading
-      const response = await GroupPhotoApi.postPhoto(woomsId, mapId, imageFile);
-      console.log('Upload successful:', response);
+      const canvas = await html2canvas(polaroidRef.current);
+      const dataURL = canvas.toDataURL('image/png');
+
+      // Data URL을 Blob으로 변환
+      const blob = await fetch(dataURL).then((res) => res.blob());
+      const file = new File([blob], 'captured_image.png', {
+        type: 'image/png',
+      });
+
+      // 서버로 업로드
+      const mapId = 1; // 실제 mapId로 변경하세요
+      const response = await GroupPhotoApi.postPhoto(woomsId, mapId, file);
+      console.log('업로드 성공:', response);
+
       alert('업로드가 성공적으로 완료되었습니다!');
       setFiles([]);
       setCaption('');
