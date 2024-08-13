@@ -84,6 +84,7 @@ const UploadModal = ({ onClose }) => {
       const mapId = 1; // 실제 mapId로 변경하세요
       const response = await GroupPhotoApi.postPhoto(woomsId, mapId, file);
       console.log('업로드 성공:', response);
+
       alert('업로드가 성공적으로 완료되었습니다!');
       setFiles([]);
       setCaption('');

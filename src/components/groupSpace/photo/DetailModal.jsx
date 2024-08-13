@@ -21,6 +21,7 @@ const DetailModal = ({ imageId, onClose }) => {
         console.log(userNickname);
         console.log('이미지', image);
         // console.log('디테일 페이지 데이터', data);
+
       } catch (error) {
         console.error('디테일 페이지 에러', error);
       }
@@ -36,10 +37,12 @@ const DetailModal = ({ imageId, onClose }) => {
   // 이미지 로딩 완료 후 userNickname과 image.nickName 비교
   const canFlip = image && image.nickname === userNickname;
 
+
   return (
     <Modal onClose={onClose}>
       <div className='flex justify-center items-center h-screen'>
         <div className='relative w-[300px] h-[350px] perspective-1000'>
+
           <div
             className={`relative w-full h-full transition-transform duration-600 transform-style-preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`}
           >
