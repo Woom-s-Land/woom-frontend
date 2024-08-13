@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import map from './assets/map/map.png';
 import imgLogo from './assets/logo/imgLogo.png';
 import letterLogo from './assets/logo/letterLogo.png';
-import introImg1 from './assets/mainPage/introImg1.png';
-import introImg2 from './assets/mainPage/introImg2.png';
-import introImg3 from './assets/mainPage/introImg3.png';
+import firstImg from './assets/mainPage/firstImg.png';
+import secondImg from './assets/mainPage/secondImg.png';
+import thirdImg from './assets/mainPage/thirdImg.png';
 
 import letterImg from './assets/mainPage/letterImg.png';
 import photoMapImg from './assets/mainPage/photoMapImg.png';
@@ -71,8 +71,7 @@ const MainPage = () => {
                   {
                     title: '사진 픽셀 변환',
                     description: '사진을 픽셀 아트로 변환해보세요',
-                    image:
-                      'https://cdn.usegalileo.ai/sdxl10/4be7f934-a1be-467c-980a-b7fff7c05ca4.png',
+                    image: photoMapImg,
                   },
                   {
                     title: '사진 지도',
@@ -87,8 +86,7 @@ const MainPage = () => {
                   {
                     title: '라디오',
                     description: '내 이야기를 사연으로 남겨보세요',
-                    image:
-                      'https://cdn.usegalileo.ai/sdxl10/e45856cc-bf86-4cf2-806c-768769c31dd8.png',
+                    image: photoMapImg,
                   },
                 ].map((feature, idx) => (
                   <div key={idx} className='flex flex-col gap-3 pb-3'>
@@ -110,7 +108,7 @@ const MainPage = () => {
             </div>
 
             <div className='grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4'>
-              {[introImg1, introImg2, introImg3].map((image, idx) => (
+              {[firstImg, secondImg, thirdImg].map((image, idx) => (
                 <div key={idx} className='flex flex-col gap-3'>
                   <div
                     className='w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl'
