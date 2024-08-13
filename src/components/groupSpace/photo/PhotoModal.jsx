@@ -40,8 +40,8 @@ function PhotoModal({ onClose }) {
     setSelectedGroup(null);
   };
 
-  const handleImageClick = (src) => {
-    setSelectedImage(src);
+  const handleImageClick = (imageId) => {
+    setSelectedImage(imageId);
   };
 
   const handleImageClose = () => {
@@ -76,7 +76,7 @@ function PhotoModal({ onClose }) {
     <>
       <Modal onClose={onClose}>
         {selectedImage ? (
-          <DetailModal src={selectedImage} onClose={handleImageClose} />
+          <DetailModal imageId={selectedImage} onClose={handleImageClose} />
         ) : selectedGroup ? (
           <ItemModal
             group={selectedGroup} // photo와 woomsId를 포함한 객체 전달
