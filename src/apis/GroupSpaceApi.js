@@ -86,18 +86,26 @@ const postStory = async (woomsId, userNickname, content) => {
   return data;
 };
 
-const postPhoto = async (woomsId) => {
-  const data = await basicAxios({
-    method: 'post',
-    url: `wooms/${woomsId}`,
-  })
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      return err;
+const postPhoto = async (woomsId, mapId, imageFile) => {
+  const formData = new FormData();
+  formData.append('mapId', mapId);
+  formData.append('summary', '');
+  formData.append('image', imageFile);
+
+  try {
+    const response = await basicAxios({
+      method: 'post',
+      url: `wooms/${woomsId}`,
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
-  return data;
+    return response.data;
+  } catch (error) {
+    console.error('Upload failed:', error);
+    throw error;
+  }
 };
 
 const getPhotoMonth = async (woomsId, page) => {
@@ -123,7 +131,7 @@ const getPhoto = async (woomsId, page, date) => {
     },
   })
     .then((res) => {
-      console.log(123123);
+      console.log('사진 아이템 모달', res.data);
       return res.data;
     })
     .catch((err) => {
@@ -142,6 +150,7 @@ const getPhotoDetail = async (woomsId, photoId) => {
       return res.data;
     })
     .catch((err) => {
+      console.log('디테일페이지 실패');
       return err;
     });
   return data;

@@ -6,8 +6,11 @@ import getCroppedImg from './cropImage'; // cropImage 유틸리티 함수
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import ColorPaletteEditor from './custom/ColorPaletteEditor';
+import { GroupPhotoApi } from '../../../apis/GroupSpaceApi';
 
 const UploadModal = ({ onClose }) => {
+  const pathname = window.location.pathname;
+  const woomsId = pathname.split('/')[2];
   const [files, setFiles] = useState([]);
   const [pixelCanvas, setPixelCanvas] = useState(null);
   const [pixelScale, setPixelScale] = useState(13);
@@ -59,14 +62,31 @@ const UploadModal = ({ onClose }) => {
     reader.readAsDataURL(selectedFiles[0]);
   };
 
-  const handleUpload = () => {
-    if (files.length > 0) {
-      alert(`${files.length}개의 사진이 업로드되었습니다!`);
-      setFiles([]);
-    } else {
+  const handleUpload = async () => {
+    if (files.length === 0) {
       alert('업로드할 파일이 없습니다.');
+      return;
     }
-    onClose();
+
+    setLoading(true);
+
+    try {
+      const imageFile = files[0]; // Assuming you want to upload the first file
+      const mapId = 1; // Replace with actual mapId if available
+      console.log(imageFile);
+      // Assuming `GroupPhotoApi.postPhoto` is the correct function for uploading
+      const response = await GroupPhotoApi.postPhoto(woomsId, mapId, imageFile);
+      console.log('Upload successful:', response);
+      alert('업로드가 성공적으로 완료되었습니다!');
+      setFiles([]);
+      setCaption('');
+    } catch (error) {
+      console.error('업로드 실패:', error);
+      alert('업로드 중 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
+      onClose();
+    }
   };
 
   const handleCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
@@ -150,7 +170,7 @@ const UploadModal = ({ onClose }) => {
       )}
       {!pixelCanvas && !loading ? (
         imageSrc ? (
-          <div className='relative w-full h-64'>
+          <div>
             <Cropper
               image={imageSrc}
               crop={crop}
@@ -160,12 +180,12 @@ const UploadModal = ({ onClose }) => {
               onCropComplete={handleCropComplete}
               onZoomChange={setZoom}
             />
-            <button
-              className='absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded'
-              onClick={handleCrop}
-            >
-              자르기
-            </button>
+            <div className='absolute bottom-3 left-1/2 transform -translate-x-1/2'>
+              <Button
+                label='자르기'
+                onClick={handleCrop} // Corrected here
+              />
+            </div>
           </div>
         ) : (
           <div
@@ -175,20 +195,20 @@ const UploadModal = ({ onClose }) => {
             style={{ borderColor: '#aa7959' }}
           >
             <p style={{ color: '#aa7959' }}>
-              여기에 파일을 드래그 앤 드롭하세요!
+              여기 파일을 드래그 앤 드롭하세요!
             </p>
-            <label className='cursor-pointer'>
-              <img
-                src='src/assets/button/file-bt.png'
-                alt='파일 선택 아이콘'
-                className='w-20 h-20 mx-auto'
-              />
+            <label className='cursor-pointer flex flex-col items-center justify-center'>
               <input
                 type='file'
                 accept='image/*'
                 onChange={handleFileChange}
                 multiple
                 className='hidden'
+              />
+              <img
+                src='../src/assets/button/file-bt.png'
+                alt='asd'
+                className='h-[150px]'
               />
             </label>
           </div>
