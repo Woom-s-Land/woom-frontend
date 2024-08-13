@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
+import baseUrl from '../../libs/axios/basicAxios';
+
 import { authActions } from '../../store/authSlice';
 
 import Modal from '../common/Modal';
@@ -12,8 +14,6 @@ import BasicImages from './characterBasicImages';
 import rightBtn from '../../assets/button/right-bt-up.png';
 import leftBtn from '../../assets/button/left-bt-up.png';
 import dialogImg from '../../assets/dialog/dialog box big.png';
-
-const baseUrl = 'https://i11e206.p.ssafy.io';
 
 const costumeList = BasicImages;
 
@@ -54,8 +54,8 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
 
   const changeInfo = async () => {
     try {
-      const response = await axios.patch(
-        `${baseUrl}/api/users/character`,
+      const response = await baseUrl.patch(
+        '/users/character',
         {
           nickname: nickname,
           costume: costume,
@@ -68,6 +68,7 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
           nickname: nickname,
           costume: costume,
           email: userInfo.email,
+          userUuid: userInfo.userUuid,
         })
       );
     } catch (err) {
@@ -78,7 +79,7 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
   return (
     <div>
       {isOpen && (
-        <Modal onCloseHandler={handleCloseMyInfo}>
+        <Modal onClose={handleCloseMyInfo}>
           <div className='relative flex justify-between items-center mb-6'>
             <section className='flex flex-col items-center w-1/2'>
               <div className='flex w-full items-center justify-center'>
@@ -88,7 +89,6 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
                   className='w-1/12 cursor-pointer'
                   onClick={handleLeft}
                 />
-                {/* 캐릭터 assets 정리 후 이미지 경로 수정 예정(동적으로 변경 예정) */}
                 <img
                   src={costumeList[costume]}
                   alt='char_1'
@@ -135,9 +135,9 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
               <Button label={'저장'} onClick={changeInfo}></Button>
             </div>
           </div>
-          {isModalOpen && <PasswordChange onClose={handleModal} />}
         </Modal>
       )}
+      {isModalOpen && <PasswordChange onClose={handleModal} />}
     </div>
   );
 };

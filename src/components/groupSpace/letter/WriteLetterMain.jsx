@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import baseUrl from '../../../libs/axios/basicAxios';
 
 import ChooseUser from './ChooseUser';
@@ -64,32 +65,37 @@ const WriteLetterMain = ({ isOpen, onClose }) => {
   return (
     <div>
       {isOpen && (
-        <>
-          {isUserModalOpen && (
-            <ChooseUser
-              onClose={onClose}
-              onChange={handleSelectedUser}
-              onNext={openWriteLetter}
-            />
-          )}
-          {isLetterModalOpen && (
-            <WriteLetter
-              onClose={onClose}
-              onChange={handleContentChange}
-              userNickname={selectedUser.nickname}
-              sendDateTime={sendDateTime}
-              onNext={openDate}
-            />
-          )}
-          {isDateModalOpen && (
-            <ChooseDate
-              onClose={onClose}
-              sendDateTime={sendDateTime}
-              onChange={handleSelectedDate}
-              onSubmit={sendLetter}
-            />
-          )}
-        </>
+        <AnimatePresence>
+          <>
+            {isUserModalOpen && (
+              <ChooseUser
+                key='choose-user'
+                onClose={onClose}
+                onChange={handleSelectedUser}
+                onNext={openWriteLetter}
+              />
+            )}
+            {isLetterModalOpen && (
+              <WriteLetter
+                key='write-letter'
+                onClose={onClose}
+                onChange={handleContentChange}
+                userNickname={selectedUser.nickname}
+                sendDateTime={sendDateTime}
+                onNext={openDate}
+              />
+            )}
+            {isDateModalOpen && (
+              <ChooseDate
+                key='choose-date'
+                onClose={onClose}
+                sendDateTime={sendDateTime}
+                onChange={handleSelectedDate}
+                onSubmit={sendLetter}
+              />
+            )}
+          </>
+        </AnimatePresence>
       )}
     </div>
   );

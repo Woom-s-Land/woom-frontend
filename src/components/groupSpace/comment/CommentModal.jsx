@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '../../common/Modal';
-import Button from '../../common/Button';
+import ButtonDetail from '../../group/ButtonDetail';
 import { GroupCommentApi } from '../../../apis/GroupSpaceApi';
 
 const Comment = ({ onClose }) => {
@@ -9,7 +9,6 @@ const Comment = ({ onClose }) => {
   const [comments, setComments] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [page, setPage] = useState(0);
-  const [today, setToday] = useState('');
 
   // 댓글을 가져오는 함수
   const getComments = async () => {
@@ -21,30 +20,10 @@ const Comment = ({ onClose }) => {
     }
   };
 
-  // 오늘의 댓글을 가져오는 함수
-  const getCommentsToday = async () => {
-    try {
-      const data = await GroupCommentApi.getCommentToday(woomsId);
-      // 데이터가 { 'result': 'okay' } 형태일 때 'result' 값을 추출하여 설정
-      if (data && data.result) {
-        setToday(data.result);
-      } else {
-        setToday('No result found');
-      }
-    } catch (error) {
-      console.error('Error fetching comments:', error);
-      setToday('Error fetching data');
-    }
-  };
-
   // 컴포넌트가 처음 로드될 때 및 페이지 변경 시 댓글을 가져옴
   useEffect(() => {
     getComments();
   }, [woomsId, page]);
-
-  useEffect(() => {
-    getCommentsToday();
-  }, [woomsId]);
 
   // 댓글 작성 함수
   const handleSubmit = async (event) => {
@@ -58,58 +37,70 @@ const Comment = ({ onClose }) => {
     }
   };
 
+  // 다음 페이지로 넘어갈 수 있는지 확인
+  const hasMoreComments = comments.length === 4; // 다음 페이지가 있는지 확인
+
   return (
     <Modal onClose={onClose}>
       <div className='px-4'>
-        <h2 className='text-2xl mt-4 mb-4 text-base-color'>방명록</h2>
-        <form onSubmit={handleSubmit} className='items-center'>
-          <div className='relative ml-32 mb-5 bg-inputbox-comment bg-center bg-no-repeat bg-contain h-[50px] w-[470px] flex items-center justify-between'>
-            <input
-              type='text'
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder='댓글을 입력하세요'
-              className='w-[350px] h-[30px] ml-9 text-sm placeholder-white outline-none'
-              style={{
-                fontSize: '12px',
-                border: 'none',
-                background: 'transparent',
-              }}
-            />
-            <Button label='작성' type='submit' className='h-[30px] text-sm' />
-          </div>
-        </form>
-
-        <ul className='list-none'>
-          {comments.map((comment, index) => (
-            <li
-              key={index}
-              className='flex items-center mb-1'
-              style={{ height: '70px' }}
-            >
-              <div className='flex justify-center items-center basis-1/5'>
-                <div className='flex flex-col items-center'>
-                  <img
-                    src={`/src/assets/profile/profile-${comment.costume}.png`}
-                    alt='프로필 이미지'
-                    className='w-9 h-9 rounded-full'
-                  />
-                  <span className='text-xs mt-1'>{comment.nickname}</span>
-                </div>
-              </div>
-              <div className='absolute ml-32 bg-dialoguebox-comment bg-center bg-no-repeat bg-contain rounded overflow-hidden mr-10 w-[470px] h-[50px]'>
-                <div className='relative flex flex-col ml-1 pl-3'>
-                  <div className='text-xs text-left ml-5 mt-4'>
-                    {comment.content}
+        <h2 className='absolute top-5 left-1/2 transform -translate-x-1/2 text-2xl mt-4 mb-4 text-base-color'>
+          방명록
+        </h2>
+        <div className='pr-8'>
+          <form
+            onSubmit={handleSubmit}
+            className='absolute left-1/2 pl-10 ml-4 transform -translate-x-1/2 top-20 flex items-center justify-center'
+            style={{ width: '600px', height: '60px' }}
+          >
+            <div className='relative bg-inputbox-comment bg-center bg-no-repeat bg-contain h-[52px] w-[520px] flex items-center justify-center ml-3'>
+              <input
+                type='text'
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder='댓글을 입력하세요'
+                className='pl-8 w-[440px] h-[44px] text-sm placeholder-white outline-none text-white'
+                style={{
+                  fontSize: '12px',
+                  border: 'none',
+                  background: 'transparent',
+                }}
+              />
+              <ButtonDetail buttonText='작성' onClick={handleSubmit} />
+            </div>
+          </form>
+          <div className='mt-32'>
+            <ul className='list-none'>
+              {comments.map((comment, index) => (
+                <li
+                  key={index}
+                  className='flex items-center mb-2'
+                  style={{ height: '60px' }}
+                >
+                  <div className='flex justify-center items-center basis-1/5'>
+                    <div className='flex flex-col items-center'>
+                      <img
+                        src={`/src/assets/${comment.costume}/h1.png`}
+                        alt='프로필 이미지'
+                        className='w-9 h-9 rounded-full'
+                      />
+                      <span className='text-xs mt-1'>{comment.nickname}</span>
+                    </div>
                   </div>
-                  <span className='text-xs text-right mr-3'>
-                    {new Date(comment.createdDate).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+                  <div className='bg-dialoguebox-comment bg-center bg-no-repeat bg-contain w-[600px] h-[60px] rounded overflow-hidden'>
+                    <div className='flex flex-col ml-1 pl-3'>
+                      <div className='text-[14px] text-left ml-5 mt-5'>
+                        {comment.content}
+                      </div>
+                      <span className='text-xs text-right mr-3'>
+                        {new Date(comment.createdDate).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
         <div className='absolute left-2 right-2 flex justify-between items-center transform -translate-y-1/2 top-1/2'>
           <button
             className={`w-8 h-8 bg-left-bt bg-cover ${page === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -117,9 +108,9 @@ const Comment = ({ onClose }) => {
             disabled={page === 0}
           />
           <button
-            className={`w-8 h-8 bg-right-bt bg-cover ${comments.length < 4 ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`w-8 h-8 bg-right-bt bg-cover ${!hasMoreComments ? 'opacity-50 cursor-not-allowed' : ''}`}
             onClick={() => setPage(page + 1)}
-            disabled={comments.length < 4}
+            disabled={!hasMoreComments}
           />
         </div>
       </div>

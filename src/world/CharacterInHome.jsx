@@ -34,6 +34,8 @@ const Character = ({
   isActiveDesk,
   isActiveToilet,
   isActiveRug,
+  isOpenReadLetter,
+  isOpenWriteLetter,
   setIsOpenReadLetter,
   setIsOpenWriteLetter,
   setIsOpenGroup,
@@ -82,18 +84,19 @@ const Character = ({
   // 키 눌렀을 때 실행될 함수
   const handleArrowKeyDown = useCallback(
     (e) => {
+      console.log(e.code);
       handleCharacterMove(charX, charY);
       const ArrowKeys = {
-        KeyW: { dir: Direction.UP, isMoveable: () => charY - 16 > 0 },
-        KeyS: {
+        ArrowUp: { dir: Direction.UP, isMoveable: () => charY - 16 > 0 },
+        ArrowDown: {
           dir: Direction.DOWN,
           isMoveable: () => charY + 24 < MAP_Y - CHAR_HEIGHT,
         },
-        KeyD: {
+        ArrowRight: {
           dir: Direction.RIGHT,
           isMoveable: () => charX + 16 < MAP_X - CHAR_WIDTH,
         },
-        KeyA: { dir: Direction.LEFT, isMoveable: () => charX + 16 > 0 },
+        ArrowLeft: { dir: Direction.LEFT, isMoveable: () => charX + 16 > 0 },
       };
 
       const InteractiveKeys = {
@@ -109,14 +112,11 @@ const Character = ({
       const ikey = InteractiveKeys[e.code];
       if (ikey) {
         if (e.code === 'KeyE' && ikey.isActive()) {
-          // # todo: 편지 모달 만들어지면 timeout 안 하기
-          console.log(e.code);
-          setIsOpenReadLetter(false);
-          setIsOpenWriteLetter(true);
+          console.log(e.code, isOpenReadLetter, isOpenWriteLetter);
+          if (!isOpenReadLetter) setIsOpenWriteLetter(true);
         } else if (e.code === 'KeyR' && ikey.isActive()) {
-          console.log(e.code);
-          setIsOpenReadLetter(true);
-          setIsOpenWriteLetter(false);
+          console.log(e.code, isOpenReadLetter, isOpenWriteLetter);
+          if (!isOpenWriteLetter) setIsOpenReadLetter(true);
         } else if (e.code === 'Space' && ikey.isActive()) {
           if (isActiveBed) {
             setIsInteractionBed(true);
@@ -134,7 +134,7 @@ const Character = ({
           }
         }
       }
-      if (key) {
+      if (key && !isOpenReadLetter && !isOpenWriteLetter) {
         setIsAnimating(true);
         if (direction !== key.dir) {
           setDirection(key.dir);
@@ -148,7 +148,7 @@ const Character = ({
         }
       }
     },
-    [charX, charY, direction, isAnimating]
+    [charX, charY, direction, isAnimating, isOpenReadLetter, isOpenWriteLetter]
   );
 
   // 키를 누르다 뗐을 때 실행할 함수

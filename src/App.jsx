@@ -27,6 +27,7 @@ import WriteLetterMain from './components/groupSpace/letter/WriteLetterMain.jsx'
 import DropDown from './components/common/DropDown.jsx';
 import PlayBgm from './components/bgm/PlayBgm.jsx';
 import ReadLetterMain from './components/groupSpace/letter/ReadLetterMain.jsx';
+import ChatBox from './components/groupSpace/ChatBox.jsx';
 
 function App() {
   const location = useLocation();
@@ -43,7 +44,7 @@ function App() {
   });
 
   return (
-    <div className='App'>
+    <div className='App cursor-custom'>
       <PlayBgm playOnPage={playOnPage} />
       <Header />
       <Routes>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import baseUrl from '../../../libs/axios/basicAxios';
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';

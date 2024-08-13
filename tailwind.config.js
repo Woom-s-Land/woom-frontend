@@ -1,10 +1,12 @@
 /** @type {import('tailwindcss').Config} */
+
 export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       backgroundImage: {
         'modal-bg': 'url(./assets/common/modal.png)',
+        'home-title': 'url(./assets/home/home-title.png)',
         'close-bt': 'url(./assets/common/x-bt.png)',
         'down-bt': 'url(./assets/common/square-bt-down.png)',
         'up-bt': 'url(./assets/common/square-bt-up.png)',
@@ -33,6 +35,7 @@ export default {
         'inputbox-story': 'url(./assets/story/input-box-story.png)',
         'bgm-o': 'url(./assets/menu/bgm-o.png)',
         'bgm-x': 'url(./assets/menu/bgm-x.png)',
+        'hm-refresh': 'url(./assets/heatmap/refresh.png)',
         menu: 'url(./assets/menu/menu.png)',
         'inputbox-comment': 'url(./assets/comment/input-box.png)',
         'dialoguebox-comment': 'url(./assets/comment/dialoge-box.png)',
@@ -47,6 +50,11 @@ export default {
       fontSize: {
         xxs: '0.6rem',
         xxxs: '0.4rem',
+      },
+      cursor: {
+        custom: 'url(./assets/cursor/MouseBasic.png), auto',
+        pointer: 'url(./assets/cursor/MousePoint.png), auto',
+        'custom-active': 'url(./assets/cursor/MouseHold.png), auto',
       },
     },
   },
