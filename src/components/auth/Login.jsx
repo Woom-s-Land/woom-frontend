@@ -7,6 +7,8 @@ import PasswordReset from './PasswordReset';
 import GitHubLogo from '../../assets/logo/github.svg';
 import GoogleLogo from '../../assets/logo/google.svg';
 
+import imgLogo from '../../assets/logo/imgLogo.png';
+
 const baseUrl = 'https://i11e206.p.ssafy.io';
 
 const Login = () => {
@@ -79,7 +81,15 @@ const Login = () => {
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen'>
-      <h1>대충 로고 들어갈 자리</h1>
+      <div className='mb-20 mt-2'>
+        <Link to='/'>
+          <img
+            src={imgLogo}
+            alt='imgLogo'
+            className='mx-auto cursor-pointer w-56'
+          />
+        </Link>
+      </div>
       <section className='bg-white p-8 rounded shadow-md w-full max-w-md'>
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div>
@@ -122,7 +132,7 @@ const Login = () => {
           <button
             type='submit'
             disabled={!isValidEmail || !values.password}
-            className='w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+            className='w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-bold text-white bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
           >
             로그인
           </button>
