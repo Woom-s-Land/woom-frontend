@@ -7,6 +7,8 @@ import { GroupStoryApi } from '../../../apis/GroupSpaceApi';
 const StoryWriteModal = ({ onClose, woomsId }) => {
   const [story, setStory] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [alertTimeout, setAlertTimeout] = useState(null);
 
   // Redux에서 사용자 정보를 가져옵니다.
   const userInfo = useSelector((state) => state.auth.userInfo);
@@ -21,7 +23,13 @@ const StoryWriteModal = ({ onClose, woomsId }) => {
   };
 
   const handleSubmit = async () => {
+    if (story.length < minLength) {
+      alert(`사연은 최소 ${minLength}자 이상이어야 합니다.`);
+      return; // 길이가 부족하면 함수 종료
+    }
+
     setIsLoading(true);
+    setIsAlertVisible(true); // 알림 표시 시작
     try {
       const data = await GroupStoryApi.postStory(
         woomsId,
@@ -30,18 +38,26 @@ const StoryWriteModal = ({ onClose, woomsId }) => {
       );
       console.log(data);
       // 성공 처리 로직 추가
+      // 알림 메시지를 15초 후에 닫기
+      const timeoutId = setTimeout(() => {
+        setIsAlertVisible(false);
+        setIsLoading(false);
+        alert('사연 변환이 완료되었습니다.'); // 변환 완료 알림
+        onClose(); // 모달 닫기
+      }, 15000);
+      setAlertTimeout(timeoutId);
     } catch (error) {
       console.error('사연 작성 실패:', error);
       // 실패 처리 로직 추가
-    } finally {
       setIsLoading(false);
+      setIsAlertVisible(false); // 오류 발생 시 알림 닫기
     }
   };
 
   const isStoryValid = story.length >= minLength;
 
   return (
-    <Modal onClose={isLoading ? null : onClose}>
+    <Modal onClose={isLoading ? null : onClose} closeButtonDisabled={isLoading}>
       <div className='absolute inset-x-0 top-7 text-3xl mt-1 text-base-color'>
         사연 작성
       </div>
@@ -60,18 +76,23 @@ const StoryWriteModal = ({ onClose, woomsId }) => {
           </div>
         </div>
       </div>
-      {!isStoryValid && (
-        <div className='text-red-500 text-sm text-center mt-2'>
-          최소 {minLength}자 이상 입력하세요.
-        </div>
-      )}
+      <div className='text-red-500 text-sm text-center mt-2'>
+        {story.length < minLength && `최소 ${minLength}자 이상 입력하세요.`}
+      </div>
       <div className='absolute inset-x-0 bottom-4 flex justify-center items-center space-x-2'>
         <Button
           label={isLoading ? '제출 중...' : '사연 보내기'}
           onClick={handleSubmit}
-          disabled={isLoading || !woomsId || !userNickname || !isStoryValid}
+          disabled={isLoading || !woomsId || !userNickname}
         />
       </div>
+      {isAlertVisible && (
+        <div className='absolute inset-x-0 bottom-1/4 flex justify-center items-center'>
+          <div className='bg-gray-800 text-white p-4 rounded-md'>
+            사연을 변환하는 중입니다. 잠시만 기다려 주세요.
+          </div>
+        </div>
+      )}
     </Modal>
   );
 };
