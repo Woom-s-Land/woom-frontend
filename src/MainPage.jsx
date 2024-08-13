@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import map from './assets/map/map.png';
 import imgLogo from './assets/logo/imgLogo.png';
 import letterLogo from './assets/logo/letterLogo.png';
-import introImg1 from './assets/mainPage/introImg1.png';
-import introImg2 from './assets/mainPage/introImg2.png';
-import introImg3 from './assets/mainPage/introImg3.png';
+import firstImg from './assets/mainPage/firstImg.png';
+import secondImg from './assets/mainPage/secondImg.png';
+import thirdImg from './assets/mainPage/thirdImg.png';
 
 import letterImg from './assets/mainPage/letterImg.png';
 import photoMapImg from './assets/mainPage/photoMapImg.png';
