@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import loadCharacterImages from '../utils/loadCharacterImages';
+import allImages from '../characterImages';
 import collisions from '../assets/map/map_collisions';
-
+import OtherCharacter from './Characters';
+import Nickname from './Nickname';
 import {
   initializeCollisionMap,
   initializeBoundaries,
 } from '../utils/boundaryUtils';
 import { flushSync } from 'react-dom';
 import { Sprite, Container } from '@pixi/react';
-import Nickname from './Nickname';
 
 const Direction = {
   DOWN: 0,
@@ -31,6 +31,9 @@ const Character = ({
   height,
   costume,
   nickname,
+  stompClient,
+  connected,
+  token,
   setBackgroundX,
   setBackgroundY,
   backgroundX,
@@ -53,9 +56,7 @@ const Character = ({
   const [charY, setCharY] = useState(height / 2);
   const [isAnimating, setIsAnimating] = useState(false);
   const [collision, setCollision] = useState([]);
-  const [photoInteraction, setPhotoInteraction] = useState([]);
-  const [photomapInteraction, setPhotomapInteraction] = useState([]);
-  const [guestbookInteraction, setGuestbookInteraction] = useState([]);
+  const [characters, setCharacters] = useState([]); // 캐릭터 목록 상태
 
   const animationFrameRef = useRef(null);
   const lastFrameTimeRef = useRef(0);
@@ -63,8 +64,70 @@ const Character = ({
   const BoundaryWidth = 32;
   const BoundaryHeight = 32;
 
+  // #stomp
+  const updateCharacterPosition = (newData) => {
+    setCharacters((prevCharacters) => {
+      if (nickname === newData.nickname) return prevCharacters;
+      if (!prevCharacters) return [newData];
+      const existingCharacterIndex = prevCharacters.findIndex(
+        (character) => character.nickname === newData.nickname
+      );
+
+      if (existingCharacterIndex !== -1) {
+        const updatedCharacters = [...prevCharacters];
+        updatedCharacters[existingCharacterIndex] = newData;
+        return updatedCharacters;
+      } else {
+        return [...prevCharacters, newData];
+      }
+    });
+  };
+
   useEffect(() => {
-    const allImages = loadCharacterImages();
+    if (!stompClient || !connected) return;
+
+    // 움직임 구독 설정
+    const moveSubscription = stompClient.subscribe(
+      '/ws/wooms/move/' + token,
+      (message) => {
+        try {
+          const parseMessage = JSON.parse(message.body);
+          console.log(parseMessage);
+          // 움직임 처리
+          const { nickname, x, y, direction, stepId, costume } = parseMessage;
+
+          // 캐릭터 위치 업데이트
+          updateCharacterPosition({
+            nickname,
+            x,
+            y,
+            direction,
+            stepId,
+            costume,
+          });
+        } catch (err) {
+          console.log('Failed to parse move message:', err);
+        }
+      }
+    );
+
+    // 컴포넌트 언마운트 시 구독 해제
+    return () => {
+      moveSubscription.unsubscribe();
+    };
+  }, [stompClient, connected, token]);
+
+  const sendMove = (characterInfo) => {
+    // console.log('send', characterInfo, backgroundX, backgroundY);
+    if (stompClient && connected) {
+      stompClient.publish({
+        destination: '/ws/send/move/' + token,
+        body: JSON.stringify(characterInfo),
+      });
+    }
+  };
+
+  useEffect(() => {
     const images = allImages[costume];
     setDirectionImages(images);
   }, [costume]);
@@ -87,7 +150,7 @@ const Character = ({
     setCollision(coll);
   }, []);
 
-  // 충돌 or 상호작용 여부 판정 함수
+  // 충돌 여부 판정 함수
   const boundaryCollision = useCallback(
     (collisions, cx, cy, bx, by) => {
       return collisions.some((col) => {
@@ -99,7 +162,7 @@ const Character = ({
         );
       });
     },
-    [collision, photoInteraction, photomapInteraction, guestbookInteraction]
+    [collision]
   );
 
   // 키 눌렀을 때 실행될 함수
@@ -157,7 +220,6 @@ const Character = ({
   );
 
   // 키를 누르다 뗐을 때 실행할 함수
-  // => 애니메이션을 중단하고 해당 방향 첫 프레임을 띄움
   const handleArrowKeyUp = useCallback(() => {
     setIsAnimating(false);
     setStepIndex(0);
@@ -190,10 +252,11 @@ const Character = ({
     };
   }, [isAnimating, stepIndex, direction]);
 
-  // 실제로 캐릭터가 맵의 어느 위치에 있는지 계산해주는 함수
-  const getCharPos = (charX, charY, mapX, mapY) => {
-    return [charX - mapX, charY - mapY];
-  };
+  // // 실제로 캐릭터가 맵의 어느 위치에 있는지 계산해주는 함수
+  // const getCharPos = (charX, charY, mapX, mapY) => {
+  //   console.log(charX, charY, mapX, mapY);
+  //   return [charX - mapX, charY - mapY];
+  // };
 
   const animate = (timestamp) => {
     if (!lastFrameTimeRef.current) {
@@ -273,6 +336,15 @@ const Character = ({
           setCharacterY(newY);
           setBackgroundX(newBackgroundX);
           setBackgroundY(newBackgroundY);
+          // const pos = getCharPos(newX, newY, newBackgroundX, newBackgroundY);
+          sendMove({
+            x: newX - newBackgroundX,
+            y: newY - newBackgroundY,
+            direction: direction,
+            stepId: stepIndex,
+            nickname: nickname,
+            costume: costume,
+          });
         });
       } else {
         setIsAnimating(false);
@@ -282,20 +354,55 @@ const Character = ({
     }
     animationFrameRef.current = requestAnimationFrame(animate);
   };
+  const cha = [
+    {
+      nickname: '야',
+      x: 1020,
+      y: 660,
+      direction: 0,
+      stepId: 0,
+      costume: 0,
+    },
+    {
+      nickname: '하이',
+      x: 950,
+      y: 660,
+      direction: 0,
+      stepId: 0,
+      costume: 1,
+    },
+  ];
 
   return (
-    <Container x={charX} y={charY}>
-      {directionImages[direction] && directionImages[direction][stepIndex] && (
-        <Sprite
-          image={directionImages[direction][stepIndex]}
-          x={0}
-          y={0}
-          width={CHAR_WIDTH}
-          height={CHAR_HEIGHT}
-        />
-      )}
-      <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text={nickname} />
-    </Container>
+    <>
+      <Container x={charX} y={charY}>
+        {directionImages[direction] &&
+          directionImages[direction][stepIndex] && (
+            <Sprite
+              image={directionImages[direction][stepIndex]}
+              x={0}
+              y={0}
+              width={CHAR_WIDTH}
+              height={CHAR_HEIGHT}
+            />
+          )}
+        <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text={nickname} />
+      </Container>
+      {characters &&
+        characters.map((character) => (
+          <OtherCharacter
+            key={`${character.nickname}-${character.stepId}`}
+            x={character.x}
+            y={character.y}
+            direction={character.direction}
+            stepIndex={character.stepId}
+            costume={character.costume}
+            nickname={character.nickname}
+            backgroundX={backgroundX}
+            backgroundY={backgroundY}
+          />
+        ))}
+    </>
   );
 };
 
