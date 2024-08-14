@@ -18,14 +18,14 @@ export default function (SpecificComponent, option) {
 
   const isLogin = useSelector((state) => state.auth.isAuthenticated);
   const isInMap = location.pathname.startsWith('/map');
-
-  const storedWoomsId = useSelector((state) => state.group.groupInfo.woomsId);
   const woomsId = location.pathname.split('/')[2];
 
-  function AuthenticationCheck() {
-    console.log(woomsId);
-    console.log(storedWoomsId);
+  const showAlertAndRedirect = (message, redirectTo) => {
+    dispatch(alertActions.showAlert({ message, type: 'ERROR' }));
+    navigate(redirectTo);
+  };
 
+  function AuthenticationCheck() {
     useEffect(() => {
       if (option) {
         if (!isLogin) {
@@ -33,25 +33,21 @@ export default function (SpecificComponent, option) {
             method: 'get',
             url: `/authorization/users`,
           }).catch(() => {
-            dispatch(
-              alertActions.showAlert({
-                message:
-                  '사용자 정보를 인증할 수 없습니다. 로그인 해주시길 바랍니다.',
-                type: 'ERROR',
-              })
+            showAlertAndRedirect(
+              '사용자 정보를 인증할 수 없습니다. 로그인 해주시길 바랍니다.',
+              '/'
             );
-            navigate('/');
           });
         } else if (isLogin && isInMap) {
-          if (storedWoomsId === undefined || storedWoomsId != woomsId) {
-            dispatch(
-              alertActions.showAlert({
-                message: '잘못된 접근입니다. 그룹 목록을 통해 이동해주세요',
-                type: 'ERROR',
-              })
+          basicAxios({
+            method: 'get',
+            url: `/wooms/${woomsId}/info`,
+          }).catch(() => {
+            showAlertAndRedirect(
+              '잘못된 접근입니다. 그룹 목록을 통해 이동해주세요',
+              '/home'
             );
-            navigate('/home');
-          }
+          });
         }
       }
     });

@@ -92,7 +92,6 @@ const Map = () => {
     client.onConnect = () => {
       console.log('STOMP client connected');
       setConnected(true);
-      console.log(groupInfo);
       basicAxios({
         method: 'post',
         url: `/join/${groupInfo.woomsInviteCode}`,
@@ -108,12 +107,6 @@ const Map = () => {
 
     return () => {
       client.deactivate();
-    };
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      dispatch(groupActions.exit());
     };
   }, []);
 
