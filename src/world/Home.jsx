@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Stage, Sprite, useApp } from '@pixi/react';
+import { Stage, Sprite, Container } from '@pixi/react';
 import { OutlineFilter } from '@pixi/filter-outline';
 import homeImages from '../utils/homeImages';
 import Character from './CharacterInHome';
@@ -15,7 +15,13 @@ const Home = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [nickname, setNickname] = useState(userInfo.nickname);
   const [costume, setCostume] = useState(userInfo.costume);
+  const [isFirst, setIsFirst] = useState(true);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIsFirst(false);
+    }, 3000);
+  }, []);
   // console.log(userInfo);
   const [isActiveBed, setIsActiveBed] = useState(false);
   const [isActiveDesk, setIsActiveDesk] = useState(false);
@@ -77,6 +83,26 @@ const Home = () => {
     <div className='flex justify-center mt-24'>
       <Stage width={MAP_X} height={MAP_Y}>
         <Sprite image={homeImages.home} x={0} y={0} />
+        <Container>
+          {isFirst && (
+            <Sprite
+              image={homeImages.keyHome}
+              x={180}
+              y={150}
+              width={150}
+              height={140}
+            />
+          )}
+          {isActiveDesk && (
+            <Sprite
+              image={homeImages.keyLetter}
+              x={deskX + 100}
+              y={deskY + 80}
+              width={100}
+              height={50}
+            />
+          )}
+        </Container>
         <Sprite
           image={homeImages.bed}
           x={bedX}
