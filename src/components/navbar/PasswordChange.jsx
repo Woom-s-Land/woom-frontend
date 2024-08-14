@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { alertActions } from '../../store/alertSlice';
 
 import Modal from '../common/Modal';
 import Button from '../common/Button';
@@ -11,6 +13,8 @@ import eye_close from '../../assets/common/eye_close.png';
 const baseUrl = 'https://i11e206.p.ssafy.io';
 
 const PasswordChange = ({ onClose }) => {
+  const dispatch = useDispatch();
+
   const [isValidPassword, setIsValidPassword] = useState(true);
   const [isPasswordMatch, setIsPasswordMatch] = useState(true);
   const [message, setMessage] = useState('');
@@ -75,9 +79,19 @@ const PasswordChange = ({ onClose }) => {
         { withCredentials: true }
       );
       console.log('비밀번호 변경 성공', response);
-      setMessage('비밀번호가 성공적으로 변경되었습니다.');
+      dispatch(
+        alertActions.showAlert({
+          message: '비밀번호가 성공적으로 변경되었습니다!',
+          type: 'SUCCESS',
+        })
+      );
     } catch (error) {
-      setMessage('현재 비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
+      dispatch(
+        alertActions.showAlert({
+          message: '현재 비밀번호가 일치하지 않습니다. 다시 시도해주세요.',
+          type: 'ERROR',
+        })
+      );
       console.error('비밀번호 변경 실패', error);
     }
   };
@@ -162,7 +176,7 @@ const PasswordChange = ({ onClose }) => {
         </div>
         <div className='relative flex flex-col w-full items-center'>
           {(!isValidPassword || !isPasswordMatch) && (
-            <p className='absolute text-xs text-red-600 -translate-y-3'>
+            <p className='absolute text-xs text-red-600 -translate-y-4'>
               {message}
             </p>
           )}

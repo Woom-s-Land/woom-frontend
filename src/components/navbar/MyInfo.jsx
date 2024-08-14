@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import baseUrl from '../../libs/axios/basicAxios';
 
 import { authActions } from '../../store/authSlice';
+import { alertActions } from '../../store/alertSlice';
 
 import Modal from '../common/Modal';
 import Button from '../common/Button';
@@ -23,6 +24,12 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
   const [nickname, setNickname] = useState(userInfo.nickname);
   const [costume, setCostume] = useState(userInfo.costume);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setNickname(userInfo.nickname);
+    setCostume(userInfo.costume);
+  }, [userInfo]);
+
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -35,7 +42,7 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
     for (let i = 0; i < value.length; i++) {
       const char = value[i];
 
-      byteCount += char.charCodeAt(0) > 127 ? 2 : 1; // 한글은 3바이트, 그 외는 1바이트
+      byteCount += char.charCodeAt(0) > 127 ? 2 : 1; // 한글은 2바이트, 그 외는 1바이트
       if (byteCount > 14) break;
       finalValue += char;
     }
@@ -44,11 +51,11 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
   };
 
   const handleLeft = () => {
-    setCostume(costume - 1 < 0 ? costumeList.length - 1 : costume - 1);
+    setCostume((prev) => (prev - 1 < 0 ? costumeList.length - 1 : prev - 1));
   };
 
   const handleright = () => {
-    setCostume((costume + 1) % costumeList.length);
+    setCostume((prev) => (prev + 1) % costumeList.length);
   };
 
   const changeInfo = async () => {
@@ -61,7 +68,7 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
         },
         { withCredentials: true }
       );
-      console.log(response);
+      console.log(response.data);
       dispatch(
         authActions.setUserInfo({
           nickname: nickname,
@@ -70,8 +77,24 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
           userUuid: userInfo.userUuid,
         })
       );
+      dispatch(
+        alertActions.showAlert({
+          message: '정보가 성공적으로 변경되었습니다!',
+          type: 'SUCCESS',
+        })
+      );
     } catch (err) {
+      console.log({
+        nickname: nickname,
+        costume: costume,
+      });
       console.error(err);
+      dispatch(
+        alertActions.showAlert({
+          message: '정보가 변경되지 않았습니다. 다시 시도해주세요.',
+          type: 'ERROR',
+        })
+      );
     }
   };
 
@@ -91,6 +114,7 @@ const MyInfo = ({ isOpen, handleCloseMyInfo }) => {
                 <img
                   src={costumeList[costume]}
                   alt='char_1'
+                  placeholder='charactor'
                   className='w-1/3 mx-5'
                 />
                 <img
