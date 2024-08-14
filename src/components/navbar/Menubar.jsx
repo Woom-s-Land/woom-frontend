@@ -47,6 +47,10 @@ function Header() {
     setIsMenuOpen((isOpen) => !isOpen);
   };
 
+  const handleMoveToHomeClick = () => {
+    navigate('/home');
+    toggleMenu();
+  };
   const handleMyInfoClick = () => {
     setIsMyInfoOpen(true);
     toggleMenu();
@@ -91,7 +95,9 @@ function Header() {
 
   return (
     <header
-      className={`${isNoneMapOrHome ? 'hidden' : isMapPage ? 'header-hidden' : ''}`}
+      className={`${
+        isNoneMapOrHome ? 'hidden' : isMapPage ? 'header-hidden' : ''
+      }`}
     >
       <div
         className={`inline-flex bg-no-repeat bg-center ${
@@ -105,15 +111,15 @@ function Header() {
         )}
       </div>
 
-      <div className='fixed w-full top-4 right-6 flex gap-4 justify-end'>
+      <div className='fixed w-full top-4 right-6 flex gap-4 justify-end items-center'>
         <button
           aria-label='BGM 음소거 토글'
-          className={`bg-cover w-12 h-12 ${isPlaying ? 'bg-bgm-x' : 'bg-bgm-o'}`}
+          className={`bg-cover w-11 h-11 m-2 ${isPlaying ? 'bg-bgm-x' : 'bg-bgm-o'}`}
           onClick={toggleMute}
         />
         <button
           aria-label='메뉴 토글'
-          className='bg-cover bg-menu w-12 h-12'
+          className='bg-cover bg-menu w-9 h-9 p-2'
           onClick={toggleMenu}
         />
       </div>
@@ -124,6 +130,12 @@ function Header() {
             onClick={toggleMenu}
           ></div>
           <nav className='fixed top-16 right-1 m-0 p-0 z-20 rounded flex flex-col space-y-1'>
+            {isMapPage && (
+              <MenuButton
+                buttonText='마이 홈으로 '
+                onClickEventHandler={handleMoveToHomeClick}
+              />
+            )}
             <MenuButton
               buttonText='내 정보 수정'
               onClickEventHandler={handleMyInfoClick}

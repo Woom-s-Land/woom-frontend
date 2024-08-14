@@ -1,64 +1,61 @@
-import { useState, useRef, useEffect } from 'react';
-import { Client } from '@stomp/stompjs';
-
+// ChatBox.jsx
+import React, { useState, useRef, useEffect } from 'react';
+import EmojiPicker from 'emoji-picker-react';
 import inputEmoji from '../../assets/common/inputEmoji.png';
+import emojiIcon from '../../assets/common/emoji.png';
 
-function App() {
-  // 유저 정보 받아와서 채팅에 사용할 예정 (현재는 임시로 사용)
-  // nickname: 유저 이름, content: 채팅 내용
-  const [stompClient, setStompClient] = useState(null);
-  const [connected, setConnected] = useState(false);
-  const [nickname, setNickname] = useState('윤대영');
-  const [content, setContent] = useState('');
+const ChatBox = ({
+  stompClient,
+  connected,
+  nickname,
+  token,
+  setIsChatting,
+  isChatting,
+  EmojiData,
+}) => {
   const [chattings, setChattings] = useState([]);
+  const [content, setContent] = useState('');
+  const [isOpenEmojiPicker, setIsOpenEmojiPicker] = useState(false);
   const chatContainerRef = useRef(null);
+  const inputRef = useRef(null);
 
-  const token = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3d';
+  useEffect(() => {
+    if (isChatting && inputRef.current) {
+      inputRef.current.focus();
+    } else if (!isChatting && inputRef.current) {
+      inputRef.current.blur();
+    }
+  }, [isChatting]);
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       sendChat();
+      setIsOpenEmojiPicker(false);
     }
   };
 
   useEffect(() => {
-    const client = new Client({
-      brokerURL: 'wss://i11e206.p.ssafy.io/ws',
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
-      onConnect: (frame) => {
-        setConnected(true);
-        console.log('Connected: ' + frame);
+    if (!stompClient || !connected) return;
 
-        // 메시지 구독
-        client.subscribe('/ws/wooms/chat/' + token, (message) => {
+    // 채팅 메시지 구독 설정
+    const chatSubscription = stompClient.subscribe(
+      '/ws/wooms/chat/' + token,
+      (message) => {
+        try {
           const parseMessage = JSON.parse(message.body);
-
           console.log(parseMessage);
           setChattings((prevChattings) => [...prevChattings, parseMessage]);
-        });
-      },
-      onWebSocketError: (error) => {
-        console.error('Error with websocket', error);
-      },
-      onStompError: (frame) => {
-        console.error('Broker reported error: ' + frame.headers['message']);
-        console.error('Additional details: ' + frame.body);
-      },
-    });
-
-    setStompClient(client);
-    if (client) {
-      client.activate();
-    }
-
-    return () => {
-      if (client) {
-        client.deactivate();
+        } catch (err) {
+          console.log('Failed to parse chat message:', err);
+        }
       }
+    );
+
+    // 컴포넌트 언마운트 시 구독 해제
+    return () => {
+      chatSubscription.unsubscribe();
     };
-  }, []);
+  }, [stompClient, connected, token]);
 
   useEffect(() => {
     // 새로운 채팅이 추가될 때마다 스크롤을 맨 아래로 이동
@@ -67,12 +64,16 @@ function App() {
         chatContainerRef.current.scrollHeight;
     }
   }, [chattings]);
-
+  const togglePicker = () => {
+    setIsOpenEmojiPicker((prev) => !prev);
+  };
   const sendChat = () => {
+    // console.log('send', stompClient, connected, nickname, content);
     if (stompClient && connected && content) {
       stompClient.publish({
-        destination: '/ws/wooms/chat/' + token,
+        destination: '/ws/send/chat/' + token,
         body: JSON.stringify({
+          nickname: nickname,
           content: content,
         }),
       });
@@ -80,6 +81,14 @@ function App() {
     }
   };
 
+  const handleEmojiClick = (emojiData, event) => {
+    console.log(emojiData);
+    setIsChatting(true);
+    setContent(
+      (prev) =>
+        prev + (emojiData.isCustom ? emojiData.unified : emojiData.emoji)
+    );
+  };
   return (
     <div className='absolute bottom-0 flex flex-col justify-center items-center w-[439px] h-[280px] p-2'>
       <div
@@ -100,20 +109,39 @@ function App() {
       <div className='mt-1 w-full flex items-center justify-between bg-black bg-opacity-20 rounded-lg p-1'>
         <input
           value={content}
+          ref={inputRef}
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyPress}
+          onFocus={() => setIsChatting(true)}
+          onBlur={() => setIsChatting(false)}
           className='flex-grow py-1 px-2 text-white rounded-lg bg-black bg-opacity-0 focus:outline-none'
         />
+        {isOpenEmojiPicker && (
+          <div className='absolute bottom-14 z-20 left-20'>
+            <EmojiPicker
+              width={350}
+              height={200}
+              skinTonesDisabled={true}
+              searchDisabled={true}
+              previewConfig={{ showPreview: false }}
+              onEmojiClick={handleEmojiClick}
+              emojiStyle='native'
+            />
+          </div>
+        )}
+        <button onClick={togglePicker} className='z-10 '>
+          <img src={emojiIcon} alt='emojiIcon' className='w-6 h-6' />
+        </button>
         <button
           onClick={sendChat}
           disabled={!connected}
-          className='ml-2 p-1 rounded-lg'
+          className='ml-2 p-1 rounded-lg z-10'
         >
           <img src={inputEmoji} alt='inputEmoji' className='w-6 h-6' />
         </button>
       </div>
     </div>
   );
-}
+};
 
-export default App;
+export default ChatBox;

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Stage, Sprite, Container } from '@pixi/react';
 import { OutlineFilter } from '@pixi/filter-outline';
+import basicAxios from '../libs/axios/basicAxios';
 import CharacterInMap from './CharacterInMap';
 import mapImages from '../utils/mapImages';
 import PhotoModal from '../components/groupSpace/photo/PhotoModal';
@@ -10,7 +11,7 @@ import CommentModal from '../components/groupSpace/comment/CommentModal';
 import StoryReadModal from '../components/groupSpace/radio/StoryReadModal';
 import StoryWriteModal from '../components/groupSpace/radio/StoryWriteModal';
 import ChatBox from '../components/groupSpace/ChatBox';
-
+import client from '../libs/socket/client';
 const outlineStyle = new OutlineFilter(4, 0xbcff89);
 
 const Map = () => {
@@ -18,9 +19,8 @@ const Map = () => {
   const height = window.innerHeight;
   const pathname = window.location.pathname;
   const woomsId = pathname.split('/')[2];
+  const groupInfo = useSelector((state) => state.group.groupInfo);
   const userInfo = useSelector((state) => state.auth.userInfo);
-  const [nickname, setNickname] = useState(userInfo.nickname);
-  const [costume, setCostume] = useState(userInfo.costume);
   const [backgroundX, setBackgroundX] = useState(-300);
   const [backgroundY, setBackgroundY] = useState(-300);
 
@@ -40,6 +40,8 @@ const Map = () => {
   const [isOpenGuestbook, setIsOpenGuestbook] = useState(false);
   const [isOpenRadioRead, setIsOpenRadioRead] = useState(false);
   const [isOpenRadioWrite, setIsOpenRadioWrite] = useState(false);
+
+  const [isChatting, setIsChatting] = useState(false);
 
   const photoX = 1417;
   const photoY = 227;
@@ -73,6 +75,39 @@ const Map = () => {
       ry: radioY + backgroundY,
     };
   }, [characterX, characterY, backgroundX, backgroundY, width, height]);
+
+  // #stomp
+  const [connected, setConnected] = useState(false);
+  const [nickname, setNickname] = useState(userInfo.nickname);
+  const [costume, setCostume] = useState(userInfo.costume);
+
+  // const token = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3d';
+
+  useEffect(() => {
+    client.activate();
+    client.onConnect = () => {
+      console.log('STOMP client connected');
+      setConnected(true);
+      console.log(groupInfo);
+      basicAxios({
+        method: 'post',
+        url: `/join/${groupInfo.woomsInviteCode}`,
+      })
+        .then((res) => console.log(res.data))
+        .catch((err) => console.log(err));
+    };
+
+    client.onDisconnect = () => {
+      console.log('STOMP client disconnected');
+      setConnected(false);
+    };
+
+    return () => {
+      client.deactivate();
+    };
+  }, []);
+
+  // #end-stomp
 
   useEffect(() => {
     if (isInteractive) {
@@ -147,6 +182,22 @@ const Map = () => {
     );
     setIsNearRadio(isNear(cx, cy, radioX, radioY, radioWidth, radioHeight));
   }, [characterX, characterY, backgroundX, backgroundY]);
+
+  const handleArrowKeyDown = (e) => {
+    if (e.key === 'Enter' && !isChatting) {
+      setIsChatting(true);
+    }
+    if ((e.key === 'Escape') & isChatting) {
+      setIsChatting(false);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener('keydown', handleArrowKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleArrowKeyDown);
+    };
+  }, [handleArrowKeyDown]);
+
   return (
     <div className='w-full h-full overflow-hidden'>
       <Stage width={width} height={height}>
@@ -196,6 +247,9 @@ const Map = () => {
             height={height}
             nickname={nickname}
             costume={costume}
+            stompClient={client}
+            connected={connected}
+            token={groupInfo.woomsInviteCode}
             setBackgroundX={setBackgroundX}
             setBackgroundY={setBackgroundY}
             backgroundX={backgroundX}
@@ -210,6 +264,7 @@ const Map = () => {
             setRadioWriteInteractive={setRadioWriteInteractive}
             setCharacterX={setCharacterX} // 캐릭터의 X 위치를 상위 컴포넌트로 전달
             setCharacterY={setCharacterY} // 캐릭터의 Y 위치를 상위 컴포넌트로 전달
+            isChatting={isChatting}
           />
         </Container>
       </Stage>
@@ -228,7 +283,15 @@ const Map = () => {
       {isOpenRadioWrite && (
         <StoryWriteModal onClose={handleCloseRadioWrite} woomsId={woomsId} />
       )}
-      <ChatBox />
+
+      <ChatBox
+        stompClient={client}
+        connected={connected}
+        nickname={nickname}
+        token={groupInfo.woomsInviteCode}
+        setIsChatting={setIsChatting}
+        isChatting={isChatting}
+      />
     </div>
   );
 };

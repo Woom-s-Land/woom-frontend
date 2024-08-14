@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import loadCharacterImages from '../utils/loadCharacterImages';
-import collisions from '../assets/home/home-collisions';
 import { Sprite, Container } from '@pixi/react';
+import collisions from '../assets/home/home-collisions';
 import {
   initializeCollisionMap,
   initializeBoundaries,
 } from '../utils/boundaryUtils';
 import Nickname from './Nickname';
 import InteractionSpeechBubble from './InteractionSpeechBubble';
+import allImages from '../characterImages';
 
 const Direction = {
   DOWN: 0,
@@ -64,7 +64,7 @@ const Character = ({
   }, []);
 
   useEffect(() => {
-    const allImages = loadCharacterImages();
+    // const allImages = loadCharacterImages();
     const images = allImages[costume];
     setDirectionImages(images);
   }, [costume]);

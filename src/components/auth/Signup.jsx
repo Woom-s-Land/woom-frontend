@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+
+import imgLogo from '../../assets/logo/imgLogo.png';
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
 
@@ -118,8 +120,16 @@ const Signup = () => {
 
   return (
     <div className='flex flex-col items-center justify-center min-h-scren'>
-      <h1>대충 로고 들어갈 자리</h1>
-      <section className='w-full max-w-lg p-8 bg-white rounded shadow-md '>
+      <div className='mb-20 mt-20'>
+        <Link to='/'>
+          <img
+            src={imgLogo}
+            alt='imgLogo'
+            className='mx-auto cursor-pointer w-56'
+          />
+        </Link>
+      </div>
+      <section className='w-full max-w-md p-8 bg-white rounded shadow-md '>
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div>
             <label

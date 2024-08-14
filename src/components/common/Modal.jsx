@@ -23,7 +23,7 @@ function Modal({ children, onClose }) {
 
   return (
     <div
-      className='modal-overlay fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'
+      className='modal-overlay fixed inset-0 bg-black bg-opacity-50 flex justify-center z-10 items-center'
       onClick={handleOutsideClick}
     >
       <motion.div
