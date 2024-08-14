@@ -162,7 +162,7 @@ const PasswordChange = ({ onClose }) => {
         </div>
         <div className='relative flex flex-col w-full items-center'>
           {(!isValidPassword || !isPasswordMatch) && (
-            <p className='absolute text-xs text-red-600 -translate-y-3'>
+            <p className='absolute text-xs text-red-600 -translate-y-4'>
               {message}
             </p>
           )}
