@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
@@ -16,18 +15,10 @@ import CreateGroup from './components/group/CreateGroup.jsx';
 import StoryWrite from './components/groupSpace/radio/StoryWriteModal';
 import StoryRead from './components/groupSpace/radio/StoryReadModal';
 import Header from './components/navbar/Menubar.jsx';
-import PasswordReset from './components/auth/PasswordReset';
 import GroupDetail from './components/group/GroupDetail.jsx';
-import MyInfo from './components/navbar/MyInfo';
-import LetterList from './components/groupSpace/letter/LetterList.jsx';
 import Loading from './components/common/Loading.jsx';
-import ChooseUser from './components/groupSpace/letter/ChooseUser';
-import WriteLetter from './components/groupSpace/letter/WriteLetter';
-import WriteLetterMain from './components/groupSpace/letter/WriteLetterMain.jsx';
-import DropDown from './components/common/DropDown.jsx';
 import PlayBgm from './components/bgm/PlayBgm.jsx';
-import ReadLetterMain from './components/groupSpace/letter/ReadLetterMain.jsx';
-import ChatBox from './components/groupSpace/ChatBox.jsx';
+import AuthenticationCheck from './hoc/Auth.jsx';
 
 function App() {
   const location = useLocation();
@@ -48,11 +39,12 @@ function App() {
       <PlayBgm playOnPage={playOnPage} />
       <Header />
       <Routes>
-        <Route path='/' element={<Main />} />
-        <Route path='/home' element={<Home />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='/map/:woomsId' element={<Map />} />
-        <Route path='/login' element={<Login />} />
+        <Route path='/' element={AuthenticationCheck(Main, null)} />
+        <Route path='/home' element={AuthenticationCheck(Home, true)} />
+        <Route path='/signup' element={AuthenticationCheck(Signup, null)} />
+        <Route path='/map/:woomsId' element={AuthenticationCheck(Map, true)} />
+        <Route path='/login' element={AuthenticationCheck(Login, null)} />
+
         <Route path='/photo' element={<Photo />} />
         <Route path='/comment' element={<Comment />} />
         <Route path='/heatmap' element={<PhotoHeatMap />} />
