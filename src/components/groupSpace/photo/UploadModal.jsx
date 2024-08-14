@@ -8,9 +8,12 @@ import Button from '../../common/Button';
 import ColorPaletteEditor from './custom/ColorPaletteEditor';
 import checkPixelNumber from '../../groupSpace/photoHeatmap/checkPixelNumber';
 import { GroupPhotoApi } from '../../../apis/GroupSpaceApi';
-import exifr from 'exifr'; // exifr import
+import exifr from 'exifr';
+import { alertActions } from '../../../store/alertSlice';
+import { useDispatch } from 'react-redux';
 
 const UploadModal = ({ onClose }) => {
+  const dispatch = useDispatch();
   const pathname = window.location.pathname;
   const woomsId = pathname.split('/')[2];
   const [files, setFiles] = useState([]);
@@ -34,7 +37,7 @@ const UploadModal = ({ onClose }) => {
   const [showPaletteEditor, setShowPaletteEditor] = useState(false);
   const [showPixelCanvas, setShowPixelCanvas] = useState(true);
   const [showButtons, setShowButtons] = useState(true);
-  const [mapId, setMapId] = useState(null); // State to store the mapId
+  const [mapId, setMapId] = useState(null);
 
   const canvasRef = useRef(null);
   const polaroidRef = useRef(null);
@@ -60,14 +63,11 @@ const UploadModal = ({ onClose }) => {
         const metadata = await exifr.parse(file);
         console.log('메타데이터:', metadata);
 
-        // Extract latitude and longitude from metadata
         const latitude = metadata.latitude;
         const longitude = metadata.longitude;
 
-        // Get mapId using latitude and longitude
-        console.log(latitude, longitude);
         const id = await checkPixelNumber(latitude, longitude);
-        setMapId(id); // Store mapId
+        setMapId(id);
       } catch (err) {
         console.log(err);
       }
@@ -86,20 +86,16 @@ const UploadModal = ({ onClose }) => {
     reader.onload = async () => {
       setImageSrc(reader.result);
 
-      // Extract metadata using exifr
       try {
         const metadata = await exifr.parse(file);
         console.log('메타데이터:', metadata);
 
-        // Extract latitude and longitude from metadata
         const latitude = metadata?.latitude;
         const longitude = metadata?.longitude;
 
-        // Get mapId using latitude and longitude
         const id = checkPixelNumber(longitude, latitude);
-        // checkPixelNumber(128.68719972222223, 35.82729972222223);
         console.log(id);
-        setMapId(id); // Store mapId
+        setMapId(id);
       } catch (err) {
         console.log(err);
       }
@@ -125,25 +121,30 @@ const UploadModal = ({ onClose }) => {
       const canvas = await html2canvas(polaroidRef.current);
       const dataURL = canvas.toDataURL('image/png');
 
-      // Data URL을 Blob으로 변환
       const blob = await fetch(dataURL).then((res) => res.blob());
       const file = new File([blob], 'captured_image.png', {
         type: 'image/png',
       });
 
-      // 서버로 업로드
       const response = await GroupPhotoApi.postPhoto(woomsId, mapId, file);
       console.log('업로드 성공:', response);
 
-      alert('업로드가 성공적으로 완료되었습니다!');
+      dispatch(
+        alertActions.showAlert({
+          message: '사진이 성공적으로 업로드되었습니다.',
+          type: 'SUCCESS',
+        })
+      );
       setFiles([]);
       setCaption('');
+
+      // 모달 창 닫기
+      onClose(); // 모든 모달 창 닫기
     } catch (error) {
       console.error('업로드 실패:', error);
       alert('업로드 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);
-      onClose();
     }
   };
 
@@ -203,14 +204,14 @@ const UploadModal = ({ onClose }) => {
   };
 
   const handlePaletteEdit = () => {
-    setShowPixelCanvas(false); // 사진 숨기기
+    setShowPixelCanvas(false);
     setShowButtons(false);
     setShowPaletteEditor(true);
   };
 
   const handlePaletteUpdate = (newPalette) => {
     setPalette(newPalette);
-    setShowPixelCanvas(true); // 사진 다시 표시하기
+    setShowPixelCanvas(true);
     setShowButtons(true);
   };
 
@@ -220,7 +221,7 @@ const UploadModal = ({ onClose }) => {
         <ColorPaletteEditor
           onClose={() => {
             setShowPaletteEditor(false);
-            setShowPixelCanvas(true); // 사진 다시 표시하기
+            setShowPixelCanvas(true);
             setShowButtons(true);
           }}
           onUpdatePalette={handlePaletteUpdate}
@@ -239,10 +240,7 @@ const UploadModal = ({ onClose }) => {
               onZoomChange={setZoom}
             />
             <div className='absolute bottom-3 left-1/2 transform -translate-x-1/2'>
-              <Button
-                label='자르기'
-                onClick={handleCrop} // Corrected here
-              />
+              <Button label='자르기' onClick={handleCrop} />
             </div>
           </div>
         ) : (
@@ -265,7 +263,7 @@ const UploadModal = ({ onClose }) => {
               />
               <img
                 src='../src/assets/button/file-bt.png'
-                alt='asd'
+                alt='파일 업로드 버튼'
                 className='h-[150px]'
               />
             </label>
@@ -297,7 +295,7 @@ const UploadModal = ({ onClose }) => {
               <input
                 type='text'
                 value={caption}
-                onChange={(e) => setCaption(e.target.value.slice(0, 11))} // Limit to 10 characters
+                onChange={(e) => setCaption(e.target.value.slice(0, 11))}
                 placeholder='캡션 작성 (최대 11자)'
                 className='mt-2 p-2 rounded w-full text-center absolute bottom-4 focus:outline-none'
               />
@@ -319,7 +317,7 @@ const UploadModal = ({ onClose }) => {
               id='pixel-range'
               type='range'
               min='2'
-              max='26' // Range 수정
+              max='26'
               value={pixelScale}
               onChange={(e) => setPixelScale(parseInt(e.target.value))}
               className='w-full h-2 bg-base-color rounded-lg appearance-none cursor-pointer'
@@ -331,7 +329,7 @@ const UploadModal = ({ onClose }) => {
         className='flex justify-end space-x-2'
         style={{ marginRight: '20px' }}
       >
-        {showButtons && pixelCanvas && !loading && (
+        {showButtons && pixelCanvas && (
           <>
             <Button label='팔레트 편집' onClick={handlePaletteEdit} />
             <Button label='다시 자르기' onClick={handleNewTransform} />
