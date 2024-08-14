@@ -118,6 +118,7 @@ const ChatBox = ({
         />
         {isOpenEmojiPicker && (
           <div className='absolute bottom-14 left-20'>
+          <div className='absolute bottom-14 z-20 left-20'>
             <EmojiPicker
               width={350}
               height={200}
