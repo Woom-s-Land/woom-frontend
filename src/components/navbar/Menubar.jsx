@@ -33,6 +33,7 @@ function Header() {
 
   useEffect(() => {
     if (groupInfo && groupInfo.woomsTitle) setWoomsTitle(groupInfo.woomsTitle);
+    else setWoomsTitle('');
   }, [groupInfo]);
 
   const handleCloseMyInfo = () => {

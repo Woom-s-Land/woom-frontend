@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { groupActions } from '../store/groupSlice';
 import { Stage, Sprite, Container } from '@pixi/react';
 import { OutlineFilter } from '@pixi/filter-outline';
 import basicAxios from '../libs/axios/basicAxios';
@@ -15,6 +17,8 @@ import client from '../libs/socket/client';
 const outlineStyle = new OutlineFilter(4, 0xbcff89);
 
 const Map = () => {
+  const dispatch = useDispatch();
+
   const width = window.screen.width;
   const height = window.innerHeight;
   const pathname = window.location.pathname;
@@ -104,6 +108,12 @@ const Map = () => {
 
     return () => {
       client.deactivate();
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      dispatch(groupActions.exit());
     };
   }, []);
 
