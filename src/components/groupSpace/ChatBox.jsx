@@ -1,6 +1,6 @@
 // ChatBox.jsx
 import React, { useState, useRef, useEffect } from 'react';
-// import EmojiPicker from 'emoji-picker-react';
+import EmojiPicker from 'emoji-picker-react';
 import inputEmoji from '../../assets/common/inputEmoji.png';
 import emojiIcon from '../../assets/common/emoji.png';
 
@@ -11,9 +11,11 @@ const ChatBox = ({
   token,
   setIsChatting,
   isChatting,
+  EmojiData,
 }) => {
   const [chattings, setChattings] = useState([]);
   const [content, setContent] = useState('');
+  const [isOpenEmojiPicker, setIsOpenEmojiPicker] = useState(false);
   const chatContainerRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -28,6 +30,7 @@ const ChatBox = ({
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       sendChat();
+      setIsOpenEmojiPicker(false);
     }
   };
 
@@ -61,7 +64,9 @@ const ChatBox = ({
         chatContainerRef.current.scrollHeight;
     }
   }, [chattings]);
-  const togglePicker = () => {};
+  const togglePicker = () => {
+    setIsOpenEmojiPicker((prev) => !prev);
+  };
   const sendChat = () => {
     // console.log('send', stompClient, connected, nickname, content);
     if (stompClient && connected && content) {
@@ -76,6 +81,14 @@ const ChatBox = ({
     }
   };
 
+  const handleEmojiClick = (emojiData, event) => {
+    console.log(emojiData);
+    setIsChatting(true);
+    setContent(
+      (prev) =>
+        prev + (emojiData.isCustom ? emojiData.unified : emojiData.emoji)
+    );
+  };
   return (
     <div className='absolute bottom-0 flex flex-col justify-center items-center w-[439px] h-[280px] p-2'>
       <div
@@ -103,13 +116,26 @@ const ChatBox = ({
           onBlur={() => setIsChatting(false)}
           className='flex-grow py-1 px-2 text-white rounded-lg bg-black bg-opacity-0 focus:outline-none'
         />
-        <button onClick={togglePicker}>
+        {isOpenEmojiPicker && (
+          <div className='absolute bottom-14 z-20 left-20'>
+            <EmojiPicker
+              width={350}
+              height={200}
+              skinTonesDisabled={true}
+              searchDisabled={true}
+              previewConfig={{ showPreview: false }}
+              onEmojiClick={handleEmojiClick}
+              emojiStyle='native'
+            />
+          </div>
+        )}
+        <button onClick={togglePicker} className='z-10 '>
           <img src={emojiIcon} alt='emojiIcon' className='w-6 h-6' />
         </button>
         <button
           onClick={sendChat}
           disabled={!connected}
-          className='ml-2 p-1 rounded-lg'
+          className='ml-2 p-1 rounded-lg z-10'
         >
           <img src={inputEmoji} alt='inputEmoji' className='w-6 h-6' />
         </button>
