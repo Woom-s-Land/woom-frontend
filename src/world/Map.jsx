@@ -249,6 +249,15 @@ const Map = () => {
             y={calculateStaticElementPosition().ry}
             filters={isNearRadio ? [outlineStyle] : []}
           />
+          {isNearRadio && (
+            <Sprite
+              image={mapImages.keyRadio}
+              width={120}
+              height={60}
+              x={calculateStaticElementPosition().rx - 20}
+              y={calculateStaticElementPosition().ry - radioHeight}
+            />
+          )}
         </Container>
         {/* 캐릭터를 관리하는 Container */}
         <Container>
