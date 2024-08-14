@@ -9,6 +9,7 @@ const GroupList = ({ list, onClose, handleDetail }) => {
   const dispatch = useDispatch();
 
   const moveToGroup = (group) => () => {
+    dispatch(groupActions.exit());
     dispatch(groupActions.setGroupInfo(group));
     GroupApi.editToken(group.woomsInviteCode);
     navigate(`/map/${group.woomsId}`);
