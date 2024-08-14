@@ -6,19 +6,9 @@ import getCroppedImg from './cropImage';
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import ColorPaletteEditor from './custom/ColorPaletteEditor';
+import checkPixelNumber from '../../groupSpace/photoHeatmap/checkPixelNumber';
 import { GroupPhotoApi } from '../../../apis/GroupSpaceApi';
 import exifr from 'exifr'; // exifr import
-
-// Dummy implementation of checkPixelNumber
-// You should replace this with your actual API call or function implementation
-const checkPixelNumber = async (latitude, longitude) => {
-  // Dummy mapId for demonstration
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(1); // Replace with actual logic
-    }, 1000);
-  });
-};
 
 const UploadModal = ({ onClose }) => {
   const pathname = window.location.pathname;
@@ -66,17 +56,20 @@ const UploadModal = ({ onClose }) => {
       setImageSrc(reader.result);
 
       // Extract metadata using exifr
-      const metadata = await exifr.parse(file);
-      console.log('메타데이터:', metadata);
+      try {
+        const metadata = await exifr.parse(file);
+        console.log('메타데이터:', metadata);
 
-      // Extract latitude and longitude from metadata
-      const latitude = metadata?.GPSLatitude;
-      const longitude = metadata?.GPSLongitude;
+        // Extract latitude and longitude from metadata
+        const latitude = metadata.latitude;
+        const longitude = metadata.longitude;
 
-      if (latitude && longitude) {
         // Get mapId using latitude and longitude
+        console.log(latitude, longitude);
         const id = await checkPixelNumber(latitude, longitude);
         setMapId(id); // Store mapId
+      } catch (err) {
+        console.log(err);
       }
     };
 
@@ -94,17 +87,21 @@ const UploadModal = ({ onClose }) => {
       setImageSrc(reader.result);
 
       // Extract metadata using exifr
-      const metadata = await exifr.parse(file);
-      console.log('메타데이터:', metadata);
+      try {
+        const metadata = await exifr.parse(file);
+        console.log('메타데이터:', metadata);
 
-      // Extract latitude and longitude from metadata
-      const latitude = metadata?.GPSLatitude;
-      const longitude = metadata?.GPSLongitude;
+        // Extract latitude and longitude from metadata
+        const latitude = metadata?.latitude;
+        const longitude = metadata?.longitude;
 
-      if (latitude && longitude) {
         // Get mapId using latitude and longitude
-        const id = await checkPixelNumber(latitude, longitude);
+        const id = checkPixelNumber(longitude, latitude);
+        // checkPixelNumber(128.68719972222223, 35.82729972222223);
+        console.log(id);
         setMapId(id); // Store mapId
+      } catch (err) {
+        console.log(err);
       }
     };
 
