@@ -58,7 +58,7 @@ const Comment = ({ onClose }) => {
   return (
     <Modal onClose={onClose}>
       <div className='px-4'>
-        <h2 className='absolute top-5 left-1/2 transform -translate-x-1/2 text-2xl mt-4 mb-4 text-base-color'>
+        <h2 className='absolute top-5 left-1/2 transform -translate-x-1/2 text-2xl mt-4 mb-4 text-point-color'>
           방명록
         </h2>
         <div className='pr-8'>
@@ -98,17 +98,21 @@ const Comment = ({ onClose }) => {
                         alt='프로필 이미지'
                         className='w-9 h-9 rounded-full'
                       />
-                      <span className='text-xs mt-1'>{comment.nickname}</span>
+                      <span className='text-xs mt-1 text-point-color'>
+                        {comment.nickname}
+                      </span>
                     </div>
                   </div>
-                  <div className='bg-dialoguebox-comment bg-center bg-no-repeat bg-contain w-[600px] h-[60px] rounded overflow-hidden'>
+                  <div className='relative bg-dialoguebox-comment bg-center bg-no-repeat bg-contain w-[600px] h-[60px] rounded overflow-hidden'>
                     <div className='flex flex-col ml-1 pl-3'>
-                      <div className='text-[14px] text-left ml-5 mt-5'>
+                      <div className='text-point-color text-[14px] text-left ml-5 mt-5'>
                         {comment.content}
                       </div>
-                      <span className='text-xs text-right mr-3'>
-                        {new Date(comment.createdDate).toLocaleDateString()}
-                      </span>
+                      <div className='text-xs text-base-color text-right mr-3 absolute right-2 bottom-3'>
+                        {new Date(comment.createdDate)
+                          .toLocaleDateString()
+                          .slice(0, -1)}
+                      </div>
                     </div>
                   </div>
                 </li>
