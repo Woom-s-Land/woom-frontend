@@ -1,11 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
-import map from './assets/map/map.png';
-import imgLogo from './assets/logo/imgLogo.png';
-import letterLogo from './assets/logo/letterLogo.png';
+import introMap from './assets/mainPage/introMap.png';
+import realLogo from './assets/logo/realLogo.png';
+
 import firstImg from './assets/mainPage/firstImg.png';
 import secondImg from './assets/mainPage/secondImg.png';
-import thirdImg from './assets/mainPage/thirdImg.png';
+import finalImg from './assets/mainPage/finalImg.png';
 
 import letterImg from './assets/mainPage/letterImg.png';
 import photoMapImg from './assets/mainPage/photoMapImg.png';
@@ -22,11 +22,10 @@ const MainPage = () => {
       <div className='flex h-full flex-col'>
         <header className='flex items-center justify-between border-b border-b-[#F4EFE6] px-10'>
           <div className='flex items-center gap-4 text-[#1C160C]'>
-            <div className='w-28'>
-              <img src={imgLogo} alt='imgLogo' />
-            </div>
-            <div className='w-48'>
-              <img src={letterLogo} alt='imgLogo' />
+            <div className='w-44 py-3'>
+              <Link to='/' className='cursor-pointer'>
+                <img src={realLogo} alt='imgLogo' />
+              </Link>
             </div>
           </div>
           <div className='flex flex-1 justify-end gap-8'>
@@ -45,7 +44,7 @@ const MainPage = () => {
                 <div
                   className='flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-10 @[480px]:px-10 rounded-xl'
                   style={{
-                    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url(${map})`,
+                    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%), url(${introMap})`,
                   }}
                 >
                   <h1 className='text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl text-center'>
@@ -108,7 +107,7 @@ const MainPage = () => {
             </div>
 
             <div className='grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4'>
-              {[firstImg, secondImg, thirdImg].map((image, idx) => (
+              {[firstImg, secondImg, finalImg].map((image, idx) => (
                 <div key={idx} className='flex flex-col gap-3'>
                   <div
                     className='w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl'
