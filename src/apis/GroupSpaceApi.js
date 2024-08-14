@@ -6,11 +6,10 @@ const getComment = async (woomsId, page) => {
     url: `comments/wooms/${woomsId}?page=${page}`,
   })
     .then((res) => {
-      console.log(123);
       return res.data;
     })
     .catch((err) => {
-      return err;
+      throw err;
     });
   return data;
 };
@@ -38,13 +37,10 @@ const getCommentToday = async (woomsId) => {
     url: `/comments/wooms/${woomsId}/today`,
   })
     .then((res) => {
-      console.log(res);
       return res.data;
     })
     .catch((err) => {
-      console.log('오늘 실패');
-      console.log(err.message);
-      return err;
+      throw err;
     });
   return data;
 };
@@ -55,12 +51,10 @@ const getStory = async (woomsId, page) => {
     url: `/wooms/${woomsId}/stories?page=${page}`,
   })
     .then((res) => {
-      console.log('사연 읽기');
       return res.data;
     })
     .catch((err) => {
-      console.log('사연 읽기');
-      return err;
+      throw err;
     });
   return data;
 };
@@ -79,7 +73,7 @@ const postStory = async (woomsId, userNickname, content) => {
       return res.data;
     })
     .catch((err) => {
-      return err;
+      throw err;
     });
   return data;
 };
@@ -101,7 +95,6 @@ const postPhoto = async (woomsId, mapId, imageFile) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Upload failed:', error);
     throw error;
   }
 };
@@ -115,7 +108,7 @@ const getPhotoMonth = async (woomsId, page) => {
       return res.data;
     })
     .catch((err) => {
-      return err;
+      throw err;
     });
   return data;
 };
@@ -129,12 +122,10 @@ const getPhoto = async (woomsId, page, date) => {
     },
   })
     .then((res) => {
-      console.log('사진 아이템 모달', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(123123);
-      return err;
+      throw err;
     });
   return data;
 };
@@ -148,8 +139,7 @@ const getPhotoDetail = async (woomsId, photoId) => {
       return res.data;
     })
     .catch((err) => {
-      console.log('디테일페이지 실패');
-      return err;
+      throw err;
     });
   return data;
 };
@@ -163,7 +153,7 @@ const patchPhoto = async (woomsId, photoId) => {
       return res.data;
     })
     .catch((err) => {
-      return err;
+      throw err;
     });
   return data;
 };

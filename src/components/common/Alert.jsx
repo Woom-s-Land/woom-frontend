@@ -6,7 +6,6 @@ const Alert = () => {
   const dispatch = useDispatch();
   const { show, message, type } = useSelector((state) => state.alert);
 
-  // 상태를 추가하여 애니메이션 완료 후 컴포넌트를 제거
   const [isVisible, setIsVisible] = useState(show);
 
   useEffect(() => {
@@ -34,6 +33,11 @@ const Alert = () => {
   const borderColor = type === 'SUCCESS' ? 'bg-green-800' : 'bg-red-800';
   const textColor = type === 'SUCCESS' ? 'text-white' : 'text-white';
 
+  const commonErrorMessage =
+    message === undefined
+      ? '알 수 없는 오류가 발생했습니다. 다시 시도해주세요'
+      : message;
+
   return (
     <div
       className={`fixed top-0 left-0 right-0 flex items-center justify-center z-50 p-4 transition-transform duration-500 ${show ? 'alert-enter' : 'alert-exit'}`}
@@ -51,7 +55,7 @@ const Alert = () => {
             {type}
           </span>
           <span className='font-semibold mr-2 text-left flex-auto'>
-            {message}
+            {commonErrorMessage}
           </span>
         </div>
       </div>

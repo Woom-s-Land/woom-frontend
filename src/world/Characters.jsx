@@ -18,16 +18,6 @@ const OtherCharacter = ({
 }) => {
   const [directionImages, setDirectionImages] = useState({});
 
-  console.log(
-    x,
-    y,
-    direction,
-    stepIndex,
-    costume,
-    nickname,
-    backgroundX,
-    backgroundY
-  );
   useEffect(() => {
     const images = allImages[costume];
 
