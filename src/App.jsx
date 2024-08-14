@@ -21,22 +21,9 @@ import PlayBgm from './components/bgm/PlayBgm.jsx';
 import AuthenticationCheck from './hoc/Auth.jsx';
 
 function App() {
-  const location = useLocation();
-
-  // 음악을 재생할 페이지 정의
-  const playMusicOnPages = ['/home', '/map/:woomsId'];
-
-  // 현재 경로가 음악을 재생할 페이지와 일치하는지 확인
-  const playOnPage = playMusicOnPages.some((path) => {
-    // 경로 파라미터 처리 (예: /map/:woomsId)
-    return new RegExp(`^${path.replace(/:\w+/, '\\w+')}($|/)`).test(
-      location.pathname
-    );
-  });
-
   return (
     <div className='App cursor-custom'>
-      <PlayBgm playOnPage={playOnPage} />
+      <PlayBgm />
       <Header />
       <Routes>
         <Route path='/' element={AuthenticationCheck(Main, null)} />
