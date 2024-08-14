@@ -47,7 +47,9 @@ const Login = () => {
         password: values.password,
       });
       console.log('로그인 성공', response);
+
       await getUserInfo();
+
       dispatch(authActions.login());
       navigate('/home');
     } catch (error) {
