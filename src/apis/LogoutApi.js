@@ -1,25 +1,17 @@
 import axios from 'axios';
 import { persistor } from '../store/store';
-
-const baseUrl = 'https://i11e206.p.ssafy.io';
+import { useNavigate } from 'react-router-dom';
+import basicAxios from '../libs/axios/basicAxios';
 
 export const logout = async () => {
   try {
-    const response = await axios.delete(`${baseUrl}/api/auth`, {
-      withCredentials: true,
+    basicAxios({
+      method: 'delete',
+      url: `/auth`,
     });
-
-    if (response.status === 200) {
-      await persistor.purge();
-      return true;
-    }
-
-    return response.status === 200;
-  } catch (error) {
-    console.error(
-      '로그아웃 실패:',
-      error.response ? error.response.data : error.message
-    );
-    return false;
+  } catch (err) {
+    throw err;
+  } finally {
+    await persistor.purge();
   }
 };

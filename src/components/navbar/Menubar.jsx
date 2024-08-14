@@ -8,6 +8,7 @@ import Group from '../group/Group';
 import { logout } from '../../apis/LogoutApi';
 import { authActions } from '../../store/authSlice'; // Redux 액션 임포트
 import { settingActions } from '../../store/settingSlice'; // Redux 액션 임포트
+import { alertActions } from '../../store/alertSlice';
 
 function Header() {
   const dispatch = useDispatch();
@@ -64,20 +65,23 @@ function Header() {
 
   const handleLogoutClick = async () => {
     try {
-      // API 요청을 통해 서버 측 로그아웃 처리
-      const success = await logout();
-
-      if (success) {
-        // Redux 상태 초기화
-        dispatch(authActions.logout());
-
-        // 로그인 페이지로 리디렉션
-        navigate('/');
-      } else {
-        console.error('로그아웃 실패');
-      }
+      await logout();
+      dispatch(authActions.logout());
+      dispatch(
+        alertActions.showAlert({
+          message: '로그아웃 성공, 홈페이지로 이동합니다.',
+          type: 'SUCCESS',
+        })
+      );
     } catch (error) {
-      console.error('로그아웃 중 오류 발생:', error);
+      dispatch(
+        alertActions.showAlert({
+          message: error.response.data.message,
+          type: 'ERROR',
+        })
+      );
+    } finally {
+      navigate('/');
     }
   };
 
