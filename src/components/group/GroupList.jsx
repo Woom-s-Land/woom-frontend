@@ -21,7 +21,7 @@ const GroupList = ({ list, onClose, handleDetail }) => {
         <div className='flex items-center justify-center' key={group.woomsId}>
           <div
             onClick={() => handleDetail(group.woomsId)}
-            className='text-2xl cursor-pointer z-20 text-base-color min-w-[150px]'
+            className='text-2xl cursor-pointer z-20 text-base-color hover:text-point-color min-w-[150px]'
           >
             {group.woomsTitle}
           </div>
