@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import Modal from '../common/Modal';
 import ButtonGroup from './ButtonGroup';
 import GroupList from './GroupList';
@@ -6,29 +7,35 @@ import CreateGroup from './CreateGroup';
 import JoinGroup from './JoinGroup';
 import GroupApi from '../../apis/GroupApi';
 import GroupDetail from './GroupDetail';
+import { alertActions } from '../../store/alertSlice';
 
 const Group = ({ isOpen, handleCloseGroup }) => {
+  const dispatch = useDispatch();
   const [activeModal, setActiveModal] = useState('list');
   const [groupData, setGroupData] = useState(null);
-  const [error, setError] = useState(null);
   const [woomsId, setWoomsId] = useState();
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
+
   useEffect(() => {
     const getGroupList = async () => {
       try {
         const data = await GroupApi.getMyGroup(page);
         setGroupData(data);
         setTotalPage(data.totalPages - 1);
-        setError(null);
-      } catch (err) {
-        console.error('Failed to fetch group data:', err);
-        setError('Failed to fetch group data. Please try again later.');
+      } catch (error) {
+        dispatch(
+          alertActions.showAlert({
+            message:
+              'Wooms 목록 조회에 실패하였습니다. 페이지를 새로고침 해주세요',
+            type: 'ERROR',
+          })
+        );
       }
     };
 
     getGroupList();
-  }, [page]);
+  });
 
   const handlePrevPage = () => {
     setPage((prev) => Math.max(0, prev - 1));

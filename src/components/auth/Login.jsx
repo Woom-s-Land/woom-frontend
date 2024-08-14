@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { authActions } from '../../store/authSlice';
+import { alertActions } from '../../store/alertSlice';
 import axios from 'axios';
 import PasswordReset from './PasswordReset';
 import GitHubLogo from '../../assets/logo/github.svg';
 import GoogleLogo from '../../assets/logo/google.svg';
-
 import imgLogo from '../../assets/logo/imgLogo.png';
 
 const baseUrl = 'https://i11e206.p.ssafy.io';
@@ -14,7 +14,6 @@ const baseUrl = 'https://i11e206.p.ssafy.io';
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [values, setValues] = useState({
     email: '',
     password: '',
@@ -42,19 +41,20 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${baseUrl}/api/auth`, {
+      await axios.post(`${baseUrl}/api/auth`, {
         email: values.email,
         password: values.password,
       });
-      console.log('로그인 성공', response);
-
       await getUserInfo();
-
       dispatch(authActions.login());
       navigate('/home');
     } catch (error) {
-      console.error('일반 로그인 실패', error);
-      alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+      dispatch(
+        alertActions.showAlert({
+          message: error.response.data.message,
+          type: 'ERROR',
+        })
+      );
     }
   };
 
@@ -62,9 +62,13 @@ const Login = () => {
   const socialLogin = async (provider) => {
     try {
       window.location.href = `${baseUrl}/api/oauth2/authorization/${provider}`;
-      console.log('소셜 로그인 화면 이동 성공');
     } catch (error) {
-      console.log('소셜 로그인 화면 이동 실패', error);
+      dispatch(
+        alertActions.showAlert({
+          message: '소셜 로그인 실패',
+          type: 'ERROR',
+        })
+      );
     }
   };
 
@@ -73,11 +77,15 @@ const Login = () => {
       const response = await axios.get(`${baseUrl}/api/users/info`, {
         withCredentials: true,
       });
-
       dispatch(authActions.setUserInfo(response.data));
-      console.log('유저 정보 요청 성공', response);
     } catch (error) {
-      console.error('유저 정보 요청 실패', error);
+      dispatch(
+        alertActions.showAlert({
+          message:
+            '사용자 정보를 불러오는 데 실패하였습니다. 다시 시도해주세요.',
+          type: 'ERROR',
+        })
+      );
     }
   };
 
