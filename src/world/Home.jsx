@@ -10,7 +10,9 @@ import WriteLetterMain from '../components/groupSpace/letter/WriteLetterMain';
 import Group from '../components/group/Group';
 import { aquarium } from '../assets/animation/aquarium/aquarium';
 import LoadingBus from '../components/common/LoadingBus';
-
+import { ws } from '../assets/animation/ws/ws';
+import { sc } from '../assets/animation/sc/sc';
+import { cw } from '../assets/animation/cw/cw';
 const MAP_X = 488;
 const MAP_Y = 384;
 
@@ -21,11 +23,12 @@ const Home = () => {
   const [nickname, setNickname] = useState(userInfo.nickname);
   const [costume, setCostume] = useState(userInfo.costume);
   const [isFirst, setIsFirst] = useState(true);
-
+  const [tv, setTv] = useState(Math.floor(Math.random() * 3));
   useEffect(() => {
     setTimeout(() => {
       setIsFirst(false);
     }, 3000);
+    console.log(tv);
   }, []);
 
   useEffect(() => {
@@ -160,6 +163,37 @@ const Home = () => {
                 width={32}
                 height={33}
               />
+              {tv === 0 ? (
+                <AnimatedSprite
+                  textures={ws}
+                  isPlaying={true}
+                  animationSpeed={0.02} // 애니메이션 속도 조절
+                  x={380}
+                  y={130}
+                  width={115}
+                  height={115}
+                />
+              ) : tv === 1 ? (
+                <AnimatedSprite
+                  textures={sc}
+                  isPlaying={true}
+                  animationSpeed={0.02} // 애니메이션 속도 조절
+                  x={380}
+                  y={130}
+                  width={115}
+                  height={115}
+                />
+              ) : (
+                <AnimatedSprite
+                  textures={cw}
+                  isPlaying={true}
+                  animationSpeed={0.02} // 애니메이션 속도 조절
+                  x={380}
+                  y={130}
+                  width={115}
+                  height={115}
+                />
+              )}
               <Character
                 handleCharacterMove={handleCharacterMove}
                 isActiveBed={isActiveBed}
