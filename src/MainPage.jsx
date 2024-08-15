@@ -9,6 +9,8 @@ import finalImg from './assets/mainPage/finalImg.png';
 
 import letterImg from './assets/mainPage/letterImg.png';
 import photoMapImg from './assets/mainPage/photoMapImg.png';
+import photoImg from './assets/mainPage/photoImg.png';
+import radioImg from './assets/mainPage/radioImg.png';
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -70,7 +72,7 @@ const MainPage = () => {
                   {
                     title: '사진 픽셀 변환',
                     description: '사진을 픽셀 아트로 변환해보세요',
-                    image: photoMapImg,
+                    image: photoImg,
                   },
                   {
                     title: '사진 지도',
@@ -85,7 +87,7 @@ const MainPage = () => {
                   {
                     title: '라디오',
                     description: '내 이야기를 사연으로 남겨보세요',
-                    image: photoMapImg,
+                    image: radioImg,
                   },
                 ].map((feature, idx) => (
                   <div key={idx} className='flex flex-col gap-3 pb-3'>
