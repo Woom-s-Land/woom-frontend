@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import { alertActions } from '../../../store/alertSlice';
+import { useDispatch } from 'react-redux';
+
 import baseUrl from '../../../libs/axios/basicAxios';
 import Modal from '../../common/Modal';
 import miniSquareBtn from '../../../assets/common/miniSquareBtn.png';
@@ -19,6 +22,8 @@ const formatDate = (dateString) => {
 };
 
 const LetterList = ({ onClose, onLetterClick }) => {
+  const dispatch = useDispatch();
+
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0); // 편지 목록의 총 페이지 수 / page 최댓값: totalPages - 1
   const [letters, setLetters] = useState([]);
@@ -39,6 +44,12 @@ const LetterList = ({ onClose, onLetterClick }) => {
       } catch (error) {
         console.log('편지 목록 저장 실패');
         console.error(error);
+        dispatch(
+          alertActions.showAlert({
+            message: error.response.data.message,
+            type: 'ERROR',
+          })
+        );
       }
     };
 
@@ -49,8 +60,13 @@ const LetterList = ({ onClose, onLetterClick }) => {
         console.log('오고 있는 편지 저장 성공', response.data);
         setComingLetters(response.data);
       } catch (error) {
-        console.log('오고 있는 편지 저장 실패');
-        console.error(error);
+        console.log(error, '오고 있는 편지 저장 실패');
+        dispatch(
+          alertActions.showAlert({
+            message: error.response.data.message,
+            type: 'ERROR',
+          })
+        );
       }
     };
 
@@ -60,8 +76,13 @@ const LetterList = ({ onClose, onLetterClick }) => {
         console.log('읽지 않은 편지 개수 저장 성공', response.data);
         setUnreadCount(response.data.totalUnreadCount);
       } catch (error) {
-        console.log('읽지 않은 편지 개수 저장 실패');
-        console.error(error);
+        console.log('읽지 않은 편지 개수 저장 실패', error);
+        dispatch(
+          alertActions.showAlert({
+            message: error.response.data.message,
+            type: 'ERROR',
+          })
+        );
       }
     };
 

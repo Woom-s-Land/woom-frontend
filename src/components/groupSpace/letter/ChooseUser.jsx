@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
+import { alertActions } from '../../../store/alertSlice';
+import { useDispatch } from 'react-redux';
 import baseUrl from '../../../libs/axios/basicAxios';
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import DropDown from '../../common/DropDown';
 
 const ChooseUser = ({ onClose, onChange, onNext }) => {
+  const dispatch = useDispatch();
+
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [groups, setGroups] = useState([]);
   const [users, setUsers] = useState([]);
@@ -33,6 +37,12 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
         console.log(allGroups);
       } catch (error) {
         console.error('그룹 정보 불러오기 실패', error);
+        dispatch(
+          alertActions.showAlert({
+            message: error.response.data.message,
+            type: 'ERROR',
+          })
+        );
       }
     };
 
@@ -59,6 +69,12 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
         );
       } catch (error) {
         console.error('그룹 속한 유저 정보 불러오기 실패', error);
+        dispatch(
+          alertActions.showAlert({
+            message: error.response.data.message,
+            type: 'ERROR',
+          })
+        );
       }
     } else {
       setUsers([]);
