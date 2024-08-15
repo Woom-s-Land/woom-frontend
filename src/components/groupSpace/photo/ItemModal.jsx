@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from '../../common/Modal';
 import Loading from '../../common/Loading'; // Loading 컴포넌트를 임포트합니다.
 import { GroupPhotoApi } from '../../../apis/GroupSpaceApi';
+import { alertActions } from '../../../store/alertSlice';
 
 const ItemModal = ({ group, onImageClick, onClose }) => {
   const itemsPerPage = 6; // 한 페이지당 표시할 이미지 수
@@ -15,7 +16,7 @@ const ItemModal = ({ group, onImageClick, onClose }) => {
     const fetchImages = async () => {
       try {
         setIsLoading(true); // API 호출 전에 로딩 상태를 true로 설정합니다.
-        console.log(group.date);
+
         // group.woomsId와 group.date를 사용하여 이미지를 받아오는 API 호출
         const data = await GroupPhotoApi.getPhoto(
           group.woomsId,
@@ -23,12 +24,14 @@ const ItemModal = ({ group, onImageClick, onClose }) => {
           group.date
         );
 
-        console.log(data);
         setImages(data); // 기존 이미지에 새 이미지 추가
         setHasMore(data.length === itemsPerPage); // 받아온 데이터가 itemsPerPage와 같으면 더 있음
         setDataLength(data.length); // 현재 데이터의 길이 저장
       } catch (error) {
-        console.error('Error fetching images:', error);
+        alertActions.showAlert({
+          message: '사진을 불러오는 데 실패하였습니다.',
+          type: 'ERROR',
+        });
       } finally {
         setIsLoading(false); // API 호출이 끝난 후 로딩 상태를 false로 설정합니다.
       }

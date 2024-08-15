@@ -58,18 +58,18 @@ const UploadModal = ({ onClose }) => {
     reader.onload = async () => {
       setImageSrc(reader.result);
 
-      // Extract metadata using exifr
       try {
         const metadata = await exifr.parse(file);
-        console.log('메타데이터:', metadata);
-
         const latitude = metadata.latitude;
         const longitude = metadata.longitude;
 
         const id = await checkPixelNumber(latitude, longitude);
         setMapId(id);
       } catch (err) {
-        console.log(err);
+        alertActions.showAlert({
+          message: '사진 메타데이터 읽기에 실패하였습니다.',
+          type: 'ERROR',
+        });
       }
     };
 
@@ -88,16 +88,17 @@ const UploadModal = ({ onClose }) => {
 
       try {
         const metadata = await exifr.parse(file);
-        console.log('메타데이터:', metadata);
 
         const latitude = metadata?.latitude;
         const longitude = metadata?.longitude;
 
         const id = checkPixelNumber(longitude, latitude);
-        console.log(id);
         setMapId(id);
       } catch (err) {
-        console.log(err);
+        alertActions.showAlert({
+          message: '사진 메타데이터 읽기에 실패하였습니다.',
+          type: 'ERROR',
+        });
       }
     };
 
@@ -106,12 +107,19 @@ const UploadModal = ({ onClose }) => {
 
   const handleUpload = async () => {
     if (files.length === 0) {
-      alert('업로드할 파일이 없습니다.');
+      alertActions.showAlert({
+        message: '업로드할 사진이 없습니다.',
+        type: 'ERROR',
+      });
       return;
     }
 
     if (mapId === null) {
-      alert('위도와 경도 정보를 기반으로 mapId를 찾을 수 없습니다.');
+      alertActions.showAlert({
+        message:
+          '메타데이터에 해당되는 위도, 경도를 찾을 수 없습니다. 사진 정보를 확인해주세요.',
+        type: 'ERROR',
+      });
       return;
     }
 
@@ -126,8 +134,7 @@ const UploadModal = ({ onClose }) => {
         type: 'image/png',
       });
 
-      const response = await GroupPhotoApi.postPhoto(woomsId, mapId, file);
-      console.log('업로드 성공:', response);
+      await GroupPhotoApi.postPhoto(woomsId, mapId, file);
 
       dispatch(
         alertActions.showAlert({
@@ -141,8 +148,10 @@ const UploadModal = ({ onClose }) => {
       // 모달 창 닫기
       onClose(); // 모든 모달 창 닫기
     } catch (error) {
-      console.error('업로드 실패:', error);
-      alert('업로드 중 오류가 발생했습니다.');
+      alertActions.showAlert({
+        message: '사진 업로드 중 오류가 발생하였습니다. 다시 시도해주세요.',
+        type: 'ERROR',
+      });
     } finally {
       setLoading(false);
     }
