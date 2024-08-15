@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Stage, Sprite, Container } from '@pixi/react';
+import { Stage, Sprite, Container, AnimatedSprite } from '@pixi/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { OutlineFilter } from '@pixi/filter-outline';
 import { settingActions } from '../store/settingSlice';
@@ -8,7 +8,10 @@ import Character from './CharacterInHome';
 import ReadLetterMain from '../components/groupSpace/letter/ReadLetterMain';
 import WriteLetterMain from '../components/groupSpace/letter/WriteLetterMain';
 import Group from '../components/group/Group';
+import { useSelector } from 'react-redux';
+import { aquarium } from '../assets/animation/aquarium/aquarium';
 import LoadingBus from '../components/common/LoadingBus';
+
 const MAP_X = 488;
 const MAP_Y = 384;
 
@@ -144,7 +147,15 @@ const Home = () => {
                 y={rugY}
                 filters={isActiveRug ? [new OutlineFilter(2, 0xbcff89)] : []}
               />
-
+              <AnimatedSprite
+                textures={aquarium}
+                isPlaying={true}
+                animationSpeed={0.08} // 애니메이션 속도 조절
+                x={344}
+                y={30}
+                width={32}
+                height={33}
+              />
               <Character
                 handleCharacterMove={handleCharacterMove}
                 isActiveBed={isActiveBed}

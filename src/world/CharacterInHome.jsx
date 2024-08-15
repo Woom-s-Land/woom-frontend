@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Sprite, Container } from '@pixi/react';
+import { Texture } from 'pixi.js';
 import collisions from '../assets/home/home-collisions';
 import {
   initializeCollisionMap,
@@ -234,7 +235,7 @@ const Character = ({
     <Container x={charX} y={charY}>
       {directionImages[direction] && directionImages[direction][stepIndex] && (
         <Sprite
-          image={directionImages[direction][stepIndex]}
+          texture={Texture.from(directionImages[direction][stepIndex])}
           x={0}
           y={0}
           width={CHAR_WIDTH}
