@@ -110,7 +110,7 @@ const Character = ({
       (message) => {
         try {
           const parseMessage = JSON.parse(message.body);
-          console.log(parseMessage);
+          // console.log(parseMessage);
           // 움직임 처리
           const { nickname, x, y, direction, stepId, costume } = parseMessage;
 

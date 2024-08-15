@@ -12,6 +12,7 @@ const checkPixelNumber = (lng, lat) => {
       num = pixel.num;
     }
   });
+  console.log(num);
   return num;
 };
 
