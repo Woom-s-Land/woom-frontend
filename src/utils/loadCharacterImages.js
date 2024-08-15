@@ -45,7 +45,9 @@ const loadCharacterImages = () => {
     const index = frameMap.get(frameNumber);
 
     if (index !== undefined) {
-      allImages[characterNumber][directionIndex][index] = context[key].default;
+      const img = new Image(); // Image 객체를 생성합니다.
+      img.src = context[key].default; // Image 객체에 이미지 경로를 설정합니다.
+      allImages[characterNumber][directionIndex][index] = img; // Image 객체를 저장합니다.
     }
   });
 

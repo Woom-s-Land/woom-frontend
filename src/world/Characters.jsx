@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Sprite, Container, Texture } from '@pixi/react';
 import Nickname from './Nickname';
-import allImages from '../characterImages';
+import loadCharacterImages from '../utils/loadCharacterImages';
 import SpeechBubble from './SpeechBubble';
 
 const CHAR_WIDTH = 40; // 캐릭터 사이즈
@@ -21,13 +21,9 @@ const OtherCharacter = ({
   const [directionImages, setDirectionImages] = useState({});
 
   useEffect(() => {
+    const allImages = loadCharacterImages();
     const images = allImages[costume];
-
-    if (images) {
-      setDirectionImages(images);
-    } else {
-      setDirectionImages({});
-    }
+    setDirectionImages(images);
   }, [costume]);
 
   return (

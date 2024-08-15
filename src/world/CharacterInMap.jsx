@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Texture } from 'pixi.js';
-import allImages from '../characterImages';
+import loadCharacterImages from '../utils/loadCharacterImages';
 import collisions from '../assets/map/map_collisions';
 import OtherCharacter from './Characters';
 import Nickname from './Nickname';
@@ -146,6 +146,7 @@ const Character = ({
   };
 
   useEffect(() => {
+    const allImages = loadCharacterImages();
     const images = allImages[costume];
     setDirectionImages(images);
   }, [costume]);

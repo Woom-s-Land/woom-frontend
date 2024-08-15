@@ -7,8 +7,8 @@ import {
   initializeBoundaries,
 } from '../utils/boundaryUtils';
 import Nickname from './Nickname';
+import loadCharacterImages from '../utils/loadCharacterImages';
 import InteractionSpeechBubble from './InteractionSpeechBubble';
-import allImages from '../characterImages';
 
 const Direction = {
   DOWN: 0,
@@ -65,7 +65,7 @@ const Character = ({
   }, []);
 
   useEffect(() => {
-    // const allImages = loadCharacterImages();
+    const allImages = loadCharacterImages();
     const images = allImages[costume];
     setDirectionImages(images);
   }, [costume]);
