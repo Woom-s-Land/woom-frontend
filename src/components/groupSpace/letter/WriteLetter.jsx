@@ -6,6 +6,8 @@ import letter from '../../../assets/letter/letter.png';
 import smileEmoji from '../../../assets/common/smileEmoji.png';
 import sadEmoji from '../../../assets/common/sadEmoji.png';
 
+import ReactDOM from 'react-dom';
+
 const letterVariants = {
   hidden: { scale: 0.8, opacity: 0 },
   visible: { scale: 1, opacity: 1 },
@@ -37,8 +39,10 @@ const WriteLetter = ({
     }
   };
 
-  return (
-    <div className='letter fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
+  const portalRoot = document.getElementById('portal-root');
+
+  return ReactDOM.createPortal(
+    <div className='letter fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'>
       <motion.div
         initial='hidden'
         animate='visible'
@@ -88,7 +92,8 @@ const WriteLetter = ({
           </motion.div>
         </div>
       </motion.div>
-    </div>
+    </div>,
+    portalRoot
   );
 };
 
