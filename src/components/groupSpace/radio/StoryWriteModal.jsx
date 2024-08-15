@@ -64,7 +64,7 @@ const StoryWriteModal = ({ onClose, woomsId }) => {
 
   return (
     <Modal onClose={onClose}>
-      <div className='absolute inset-x-0 top-7 text-3xl mt-1 text-base-color'>
+      <div className='absolute inset-x-0 top-7 text-3xl mt-1 text-point-color'>
         사연 작성
       </div>
       <div className='absolute inset-x-5 top-20 flex justify-center items-center'>
