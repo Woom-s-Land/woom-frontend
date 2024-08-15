@@ -8,7 +8,6 @@ import Character from './CharacterInHome';
 import ReadLetterMain from '../components/groupSpace/letter/ReadLetterMain';
 import WriteLetterMain from '../components/groupSpace/letter/WriteLetterMain';
 import Group from '../components/group/Group';
-import { useSelector } from 'react-redux';
 import { aquarium } from '../assets/animation/aquarium/aquarium';
 import LoadingBus from '../components/common/LoadingBus';
 
