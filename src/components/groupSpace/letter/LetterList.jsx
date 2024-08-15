@@ -30,62 +30,62 @@ const LetterList = ({ onClose, onLetterClick }) => {
   const [comingLetters, setComingLetters] = useState(0);
   const [unreadCount, setUnreadCount] = useState(0);
 
+  const getLetters = async () => {
+    try {
+      const response = await baseUrl.get('/letters', {
+        params: {
+          page,
+        },
+      });
+      console.log('편지 목록 저장 성공', response.data);
+      setTotalPages(response.data.totalPages);
+      setLetters(response.data.content);
+    } catch (error) {
+      console.log('편지 목록 저장 실패');
+      console.error(error);
+      dispatch(
+        alertActions.showAlert({
+          message: error.response.data.message,
+          type: 'ERROR',
+        })
+      );
+    }
+  };
+
+  const getComingLetters = async () => {
+    try {
+      const response = await baseUrl.get('/letters/amount');
+
+      console.log('오고 있는 편지 저장 성공', response.data);
+      setComingLetters(response.data);
+    } catch (error) {
+      console.log(error, '오고 있는 편지 저장 실패');
+      dispatch(
+        alertActions.showAlert({
+          message: error.response.data.message,
+          type: 'ERROR',
+        })
+      );
+    }
+  };
+
+  const getUnreadCount = async () => {
+    try {
+      const response = await baseUrl.get('/letters/total');
+      console.log('읽지 않은 편지 개수 저장 성공', response.data);
+      setUnreadCount(response.data.totalUnreadCount);
+    } catch (error) {
+      console.log('읽지 않은 편지 개수 저장 실패', error);
+      dispatch(
+        alertActions.showAlert({
+          message: error.response.data.message,
+          type: 'ERROR',
+        })
+      );
+    }
+  };
+
   useEffect(() => {
-    const getLetters = async () => {
-      try {
-        const response = await baseUrl.get('/letters', {
-          params: {
-            page,
-          },
-        });
-        console.log('편지 목록 저장 성공', response.data);
-        setTotalPages(response.data.totalPages);
-        setLetters(response.data.content);
-      } catch (error) {
-        console.log('편지 목록 저장 실패');
-        console.error(error);
-        dispatch(
-          alertActions.showAlert({
-            message: error.response.data.message,
-            type: 'ERROR',
-          })
-        );
-      }
-    };
-
-    const getComingLetters = async () => {
-      try {
-        const response = await baseUrl.get('/letters/amount');
-
-        console.log('오고 있는 편지 저장 성공', response.data);
-        setComingLetters(response.data);
-      } catch (error) {
-        console.log(error, '오고 있는 편지 저장 실패');
-        dispatch(
-          alertActions.showAlert({
-            message: error.response.data.message,
-            type: 'ERROR',
-          })
-        );
-      }
-    };
-
-    const getUnreadCount = async () => {
-      try {
-        const response = await baseUrl.get('/letters/total');
-        console.log('읽지 않은 편지 개수 저장 성공', response.data);
-        setUnreadCount(response.data.totalUnreadCount);
-      } catch (error) {
-        console.log('읽지 않은 편지 개수 저장 실패', error);
-        dispatch(
-          alertActions.showAlert({
-            message: error.response.data.message,
-            type: 'ERROR',
-          })
-        );
-      }
-    };
-
     getLetters();
     getComingLetters();
     getUnreadCount();
@@ -115,8 +115,17 @@ const LetterList = ({ onClose, onLetterClick }) => {
 
       console.log('편지 삭제 성공', response);
       setLetters(letters.filter((letter) => letter.id !== letterId));
+      getLetters();
+      getComingLetters();
+      getUnreadCount();
     } catch (error) {
       console.error('편지 삭제 실패');
+      dispatch(
+        alertActions.showAlert({
+          message: error.response.data.message,
+          type: 'ERROR',
+        })
+      );
     }
   };
 
@@ -131,8 +140,8 @@ const LetterList = ({ onClose, onLetterClick }) => {
         <h1 className='absolute text-3xl text-point-color top-9'>
           받은 편지함
         </h1>
-        <span className='absolute top-[37px] right-40 text-3xl'>
-          {unreadCount}
+        <span className='absolute top-[37px] right-48 text-3xl text-point-color'>
+          {unreadCount > 99 ? '99+' : unreadCount}
         </span>
         {!comingLetters ? (
           <img
@@ -176,13 +185,13 @@ const LetterList = ({ onClose, onLetterClick }) => {
         {letters.map((letter) => (
           <div key={letter.id} className='flex mb-6 items-center'>
             <div
-              className={`cursor-pointer text-3xl basis-2/5 text-point-color ${letter.status === 'READ' ? 'text-base-color' : ''}`}
+              className={`cursor-pointer text-3xl basis-2/5 ${letter.status === 'READ' ? 'text-base-color' : 'text-point-color'}`}
               onClick={() => openLetterDetail(letter.id)}
             >
               {letter.senderName}
             </div>
             <div
-              className={`text-3xl basis-2/5 text-point-color ${letter.status === 'READ' ? 'text-base-color' : ''}`}
+              className={`text-3xl basis-2/5  ${letter.status === 'READ' ? 'text-base-color' : 'text-point-color'}`}
             >
               {formatDate(letter.receiveDate)}
             </div>
