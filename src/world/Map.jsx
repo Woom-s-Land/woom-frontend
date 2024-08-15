@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { groupActions } from '../store/groupSlice';
 import { Stage, Sprite, Container } from '@pixi/react';
 import { OutlineFilter } from '@pixi/filter-outline';
@@ -14,10 +13,20 @@ import StoryReadModal from '../components/groupSpace/radio/StoryReadModal';
 import StoryWriteModal from '../components/groupSpace/radio/StoryWriteModal';
 import ChatBox from '../components/groupSpace/ChatBox';
 import client from '../libs/socket/client';
+import LoadingBus from '../components/common/LoadingBus';
+import { settingActions } from '../store/settingSlice';
 const outlineStyle = new OutlineFilter(4, 0xbcff89);
 
 const Map = () => {
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.setting.isMoving);
+
+  useEffect(() => {
+    if (loading)
+      setTimeout(() => {
+        dispatch(settingActions.stopMove());
+      }, 1500);
+  }, [loading]);
 
   const width = window.screen.width;
   const height = window.innerHeight;
@@ -202,109 +211,118 @@ const Map = () => {
   }, [handleArrowKeyDown]);
 
   return (
-    <div className='w-full h-full overflow-hidden'>
-      <Stage width={width} height={height}>
-        {/* 배경을 관리하는 Container */}
-        <Container>
-          <Sprite image={mapImages.map} x={backgroundX} y={backgroundY} />
-        </Container>
-        {/* 정적인 요소를 관리하는 Container */}
-        <Container>
-          <Sprite
-            image={mapImages.photo}
-            width={photoWidth}
-            height={photoHeight}
-            x={calculateStaticElementPosition().px}
-            y={calculateStaticElementPosition().py}
-            filters={isNearPhoto ? [outlineStyle] : []}
-          />
-          <Sprite
-            image={mapImages.photomap}
-            width={photomapWidth}
-            height={photomapHeight}
-            x={calculateStaticElementPosition().pmx}
-            y={calculateStaticElementPosition().pmy}
-            filters={isNearPhotomap ? [outlineStyle] : []}
-          />
-          <Sprite
-            image={mapImages.guestbook}
-            width={guestbookWidth}
-            height={guestbookHeight}
-            x={calculateStaticElementPosition().gx}
-            y={calculateStaticElementPosition().gy}
-            filters={isNearGuestbook ? [outlineStyle] : []}
-          />
-          <Sprite
-            image={mapImages.radio}
-            width={radioWidth}
-            height={radioHeight}
-            x={calculateStaticElementPosition().rx}
-            y={calculateStaticElementPosition().ry}
-            filters={isNearRadio ? [outlineStyle] : []}
-          />
-          {isNearRadio && (
-            <Sprite
-              image={mapImages.keyRadio}
-              width={120}
-              height={60}
-              x={calculateStaticElementPosition().rx - 20}
-              y={calculateStaticElementPosition().ry - radioHeight}
+    <>
+      {loading ? (
+        <LoadingBus />
+      ) : (
+        <div className='w-full h-full overflow-hidden'>
+          <Stage width={width} height={height}>
+            {/* 배경을 관리하는 Container */}
+            <Container>
+              <Sprite image={mapImages.map} x={backgroundX} y={backgroundY} />
+            </Container>
+            {/* 정적인 요소를 관리하는 Container */}
+            <Container>
+              <Sprite
+                image={mapImages.photo}
+                width={photoWidth}
+                height={photoHeight}
+                x={calculateStaticElementPosition().px}
+                y={calculateStaticElementPosition().py}
+                filters={isNearPhoto ? [outlineStyle] : []}
+              />
+              <Sprite
+                image={mapImages.photomap}
+                width={photomapWidth}
+                height={photomapHeight}
+                x={calculateStaticElementPosition().pmx}
+                y={calculateStaticElementPosition().pmy}
+                filters={isNearPhotomap ? [outlineStyle] : []}
+              />
+              <Sprite
+                image={mapImages.guestbook}
+                width={guestbookWidth}
+                height={guestbookHeight}
+                x={calculateStaticElementPosition().gx}
+                y={calculateStaticElementPosition().gy}
+                filters={isNearGuestbook ? [outlineStyle] : []}
+              />
+              <Sprite
+                image={mapImages.radio}
+                width={radioWidth}
+                height={radioHeight}
+                x={calculateStaticElementPosition().rx}
+                y={calculateStaticElementPosition().ry}
+                filters={isNearRadio ? [outlineStyle] : []}
+              />
+              {isNearRadio && (
+                <Sprite
+                  image={mapImages.keyRadio}
+                  width={120}
+                  height={60}
+                  x={calculateStaticElementPosition().rx - 20}
+                  y={calculateStaticElementPosition().ry - radioHeight}
+                />
+              )}
+            </Container>
+            {/* 캐릭터를 관리하는 Container */}
+            <Container>
+              <CharacterInMap
+                width={width}
+                height={height}
+                nickname={nickname}
+                costume={costume}
+                stompClient={client}
+                connected={connected}
+                token={groupInfo.woomsInviteCode}
+                setBackgroundX={setBackgroundX}
+                setBackgroundY={setBackgroundY}
+                backgroundX={backgroundX}
+                backgroundY={backgroundY}
+                isOpenPhoto={isOpenPhoto}
+                isOpenPhotomap={isOpenPhotomap}
+                isOpenGuestbook={isOpenGuestbook}
+                isOpenRadioRead={isOpenRadioRead}
+                isOpenRadioWrite={isOpenRadioWrite}
+                setIsInteractive={setIsInteractive}
+                setRadioReadInteractive={setRadioReadInteractive}
+                setRadioWriteInteractive={setRadioWriteInteractive}
+                setCharacterX={setCharacterX} // 캐릭터의 X 위치를 상위 컴포넌트로 전달
+                setCharacterY={setCharacterY} // 캐릭터의 Y 위치를 상위 컴포넌트로 전달
+                isChatting={isChatting}
+              />
+            </Container>
+          </Stage>
+          {isOpenPhoto && (
+            <PhotoModal onClose={handleClosePhoto} woomsId={woomsId} />
+          )}
+          {isOpenPhotomap && (
+            <PhotoHeatMap onClose={handleClosePhotomap} woomsId={woomsId} />
+          )}
+          {isOpenGuestbook && (
+            <CommentModal onClose={handleCloseGuestbook} woomsId={woomsId} />
+          )}
+          {isOpenRadioRead && (
+            <StoryReadModal onClose={handleCloseRadioRead} woomsId={woomsId} />
+          )}
+          {isOpenRadioWrite && (
+            <StoryWriteModal
+              onClose={handleCloseRadioWrite}
+              woomsId={woomsId}
             />
           )}
-        </Container>
-        {/* 캐릭터를 관리하는 Container */}
-        <Container>
-          <CharacterInMap
-            width={width}
-            height={height}
-            nickname={nickname}
-            costume={costume}
+
+          <ChatBox
             stompClient={client}
             connected={connected}
+            nickname={nickname}
             token={groupInfo.woomsInviteCode}
-            setBackgroundX={setBackgroundX}
-            setBackgroundY={setBackgroundY}
-            backgroundX={backgroundX}
-            backgroundY={backgroundY}
-            isOpenPhoto={isOpenPhoto}
-            isOpenPhotomap={isOpenPhotomap}
-            isOpenGuestbook={isOpenGuestbook}
-            isOpenRadioRead={isOpenRadioRead}
-            isOpenRadioWrite={isOpenRadioWrite}
-            setIsInteractive={setIsInteractive}
-            setRadioReadInteractive={setRadioReadInteractive}
-            setRadioWriteInteractive={setRadioWriteInteractive}
-            setCharacterX={setCharacterX} // 캐릭터의 X 위치를 상위 컴포넌트로 전달
-            setCharacterY={setCharacterY} // 캐릭터의 Y 위치를 상위 컴포넌트로 전달
+            setIsChatting={setIsChatting}
             isChatting={isChatting}
           />
-        </Container>
-      </Stage>
-      {isOpenPhoto && (
-        <PhotoModal onClose={handleClosePhoto} woomsId={woomsId} />
+        </div>
       )}
-      {isOpenPhotomap && (
-        <PhotoHeatMap onClose={handleClosePhotomap} woomsId={woomsId} />
-      )}
-      {isOpenGuestbook && (
-        <CommentModal onClose={handleCloseGuestbook} woomsId={woomsId} />
-      )}
-      {isOpenRadioRead && (
-        <StoryReadModal onClose={handleCloseRadioRead} woomsId={woomsId} />
-      )}
-      {isOpenRadioWrite && (
-        <StoryWriteModal onClose={handleCloseRadioWrite} woomsId={woomsId} />
-      )}
-
-      <ChatBox
-        stompClient={client}
-        connected={connected}
-        nickname={nickname}
-        token={groupInfo.woomsInviteCode}
-        setIsChatting={setIsChatting}
-        isChatting={isChatting}
-      />
-    </div>
+    </>
   );
 };
 

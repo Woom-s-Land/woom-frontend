@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import ButtonDetail from './ButtonDetail';
 import { useDispatch } from 'react-redux';
+import ButtonDetail from './ButtonDetail';
+import { settingActions } from '../../store/settingSlice';
 import { groupActions } from '../../store/groupSlice';
 import GroupApi from '../../apis/GroupApi';
 
@@ -12,6 +13,7 @@ const GroupList = ({ list, onClose, handleDetail }) => {
     dispatch(groupActions.exit());
     dispatch(groupActions.setGroupInfo(group));
     GroupApi.editToken(group.woomsInviteCode);
+    dispatch(settingActions.startMove());
     navigate(`/map/${group.woomsId}`);
     onClose();
   };
