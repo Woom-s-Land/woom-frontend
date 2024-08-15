@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialAuthState = {
   audioIsPlaying: false,
+  isMoving: false,
 };
 
 const settingSlice = createSlice({
@@ -13,6 +14,12 @@ const settingSlice = createSlice({
     },
     pauseAudio(state) {
       state.audioIsPlaying = false;
+    },
+    startMove(state) {
+      state.isMoving = true;
+    },
+    stopMove(state) {
+      state.isMoving = false;
     },
   },
 });

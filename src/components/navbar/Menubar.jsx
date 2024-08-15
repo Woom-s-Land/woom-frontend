@@ -50,6 +50,7 @@ function Header() {
   };
 
   const handleMoveToHomeClick = () => {
+    dispatch(settingActions.startMove());
     navigate('/home');
     toggleMenu();
   };
@@ -64,6 +65,7 @@ function Header() {
   };
 
   const handleLogoutClick = async () => {
+    setIsMenuOpen(false);
     try {
       await logout();
       dispatch(authActions.logout());
