@@ -80,85 +80,90 @@ const Home = () => {
   }, []);
 
   return (
-    <div className='flex justify-center mt-24'>
-      <Stage width={MAP_X} height={MAP_Y}>
-        <Sprite image={homeImages.home} x={0} y={0} />
-        <Container>
-          {isFirst && (
-            <Sprite
-              image={homeImages.keyHome}
-              x={180}
-              y={150}
-              width={150}
-              height={140}
-            />
-          )}
-          {isActiveDesk && (
-            <Sprite
-              image={homeImages.keyLetter}
-              x={deskX + 100}
-              y={deskY + 80}
-              width={100}
-              height={50}
-            />
-          )}
-        </Container>
-        <Sprite
-          image={homeImages.bed}
-          x={bedX}
-          y={bedY}
-          filters={isActiveBed ? [new OutlineFilter(2, 0xbcff89)] : []}
-        />
-        <Sprite
-          image={homeImages.desk}
-          x={deskX}
-          y={deskY}
-          filters={isActiveDesk ? [new OutlineFilter(2, 0xbcff89)] : []}
-        />
-        <Sprite
-          image={homeImages.toilet}
-          x={toiletX}
-          y={toiletY}
-          filters={isActiveToilet ? [new OutlineFilter(2, 0xbcff89)] : []}
-        />
-        <Sprite
-          image={homeImages.rug}
-          x={rugX}
-          y={rugY}
-          filters={isActiveRug ? [new OutlineFilter(2, 0xbcff89)] : []}
-        />
+    <div className='fixed w-full h-full bg-map-all bg-cover'>
+      <div className='absolute inset-0 bg-black opacity-50 z-10' />
+      <div className='flex justify-center items-center h-full relative z-20'>
+        <Stage width={MAP_X} height={MAP_Y}>
+          <Sprite image={homeImages.home} x={0} y={0} />
+          <Container>
+            {isFirst && (
+              <Sprite
+                image={homeImages.keyHome}
+                x={180}
+                y={150}
+                width={150}
+                height={140}
+              />
+            )}
+            {isActiveDesk && (
+              <Sprite
+                image={homeImages.keyLetter}
+                x={deskX + 100}
+                y={deskY + 80}
+                width={100}
+                height={50}
+              />
+            )}
+          </Container>
+          <Sprite
+            image={homeImages.bed}
+            x={bedX}
+            y={bedY}
+            filters={isActiveBed ? [new OutlineFilter(2, 0xbcff89)] : []}
+          />
+          <Sprite
+            image={homeImages.desk}
+            x={deskX}
+            y={deskY}
+            filters={isActiveDesk ? [new OutlineFilter(2, 0xbcff89)] : []}
+          />
+          <Sprite
+            image={homeImages.toilet}
+            x={toiletX}
+            y={toiletY}
+            filters={isActiveToilet ? [new OutlineFilter(2, 0xbcff89)] : []}
+          />
+          <Sprite
+            image={homeImages.rug}
+            x={rugX}
+            y={rugY}
+            filters={isActiveRug ? [new OutlineFilter(2, 0xbcff89)] : []}
+          />
 
-        <Character
-          handleCharacterMove={handleCharacterMove}
-          isActiveBed={isActiveBed}
-          isActiveDesk={isActiveDesk}
-          isActiveToilet={isActiveToilet}
-          isActiveRug={isActiveRug}
-          isOpenReadLetter={isOpenReadLetter}
-          isOpenWriteLetter={isOpenWriteLetter}
-          setIsOpenWriteLetter={setIsOpenWriteLetter}
-          setIsOpenReadLetter={setIsOpenReadLetter}
-          setIsOpenGroup={setIsOpenGroup}
-          nickname={nickname}
-          costume={costume}
-        />
-        {isInBathroom && <Sprite image={homeImages.forward} x={0} y={144} />}
-      </Stage>
-      {isOpenWriteLetter && (
-        <WriteLetterMain
-          isOpen={isOpenWriteLetter}
-          onClose={handleWriteLetterClose}
-        />
-      )}
-      {isOpenReadLetter && (
-        <ReadLetterMain
-          isOpen={isOpenReadLetter}
-          onClose={handleReadLetterClose}
-        />
-      )}
-      {isOpenGroup && (
-        <Group isOpen={isOpenGroup} handleCloseGroup={handleGroupClose} />
-      )}
+          <Character
+            handleCharacterMove={handleCharacterMove}
+            isActiveBed={isActiveBed}
+            isActiveDesk={isActiveDesk}
+            isActiveToilet={isActiveToilet}
+            isActiveRug={isActiveRug}
+            isOpenReadLetter={isOpenReadLetter}
+            isOpenWriteLetter={isOpenWriteLetter}
+            setIsOpenWriteLetter={setIsOpenWriteLetter}
+            setIsOpenReadLetter={setIsOpenReadLetter}
+            setIsOpenGroup={setIsOpenGroup}
+            nickname={nickname}
+            costume={costume}
+          />
+          {isInBathroom && <Sprite image={homeImages.forward} x={0} y={144} />}
+        </Stage>
+
+        {/* 모달 컴포넌트들은 Stage 위에 표시되도록 설정 */}
+        {isOpenWriteLetter && (
+          <WriteLetterMain
+            isOpen={isOpenWriteLetter}
+            onClose={handleWriteLetterClose}
+          />
+        )}
+        {isOpenReadLetter && (
+          <ReadLetterMain
+            isOpen={isOpenReadLetter}
+            onClose={handleReadLetterClose}
+          />
+        )}
+        {isOpenGroup && (
+          <Group isOpen={isOpenGroup} handleCloseGroup={handleGroupClose} />
+        )}
+      </div>
     </div>
   );
 };

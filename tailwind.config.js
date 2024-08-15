@@ -40,6 +40,7 @@ export default {
         menu: 'url(./assets/menu/menu.png)',
         'inputbox-comment': 'url(./assets/comment/input-box.png)',
         'dialoguebox-comment': 'url(./assets/comment/dialoge-box.png)',
+        'map-all': 'url(./assets/map/map-all.png)',
       },
       gridTemplateColumns: {
         'custom-19': 'repeat(19, minmax(0, 1fr))',
