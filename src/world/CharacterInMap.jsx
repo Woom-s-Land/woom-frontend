@@ -10,7 +10,7 @@ import {
 } from '../utils/boundaryUtils';
 import { flushSync } from 'react-dom';
 import { Sprite, Container } from '@pixi/react';
-
+import SpeechBubble from './SpeechBubble';
 const Direction = {
   DOWN: 0,
   UP: 1,
@@ -35,6 +35,7 @@ const Character = ({
   stompClient,
   connected,
   token,
+  messageObj,
   setBackgroundX,
   setBackgroundY,
   backgroundX,
@@ -67,6 +68,21 @@ const Character = ({
   const BoundaryHeight = 32;
 
   // #stomp
+  const [myChat, setMyChat] = useState('');
+  useEffect(() => {
+    // messageObj가 정의되어 있고 nickname과 content가 있는지 확인
+    if (messageObj && messageObj.nickname && messageObj.content) {
+      if (messageObj.nickname === nickname) setMyChat(messageObj.content);
+      else
+        setCharacters((prevCharacters) =>
+          prevCharacters.map((char) =>
+            char.nickname === messageObj.nickname
+              ? { ...char, message: messageObj.content }
+              : char
+          )
+        );
+    }
+  }, [messageObj]);
   const updateCharacterPosition = (newData) => {
     setCharacters((prevCharacters) => {
       if (nickname === newData.nickname) return prevCharacters;
@@ -358,24 +374,6 @@ const Character = ({
     }
     animationFrameRef.current = requestAnimationFrame(animate);
   };
-  const cha = [
-    {
-      nickname: '야',
-      x: 1020,
-      y: 660,
-      direction: 0,
-      stepId: 0,
-      costume: 0,
-    },
-    {
-      nickname: '하이',
-      x: 950,
-      y: 660,
-      direction: 0,
-      stepId: 0,
-      costume: 1,
-    },
-  ];
 
   return (
     <>
@@ -390,6 +388,9 @@ const Character = ({
               height={CHAR_HEIGHT}
             />
           )}
+        {myChat && (
+          <SpeechBubble width={CHAR_WIDTH} height={CHAR_HEIGHT} text={myChat} />
+        )}
         <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text={nickname} />
       </Container>
       {characters &&
@@ -402,6 +403,7 @@ const Character = ({
             stepIndex={character.stepId}
             costume={character.costume}
             nickname={character.nickname}
+            character={character}
             backgroundX={backgroundX}
             backgroundY={backgroundY}
           />

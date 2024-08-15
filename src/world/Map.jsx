@@ -55,6 +55,7 @@ const Map = () => {
   const [isOpenRadioWrite, setIsOpenRadioWrite] = useState(false);
 
   const [isChatting, setIsChatting] = useState(false);
+  const [messageObj, setMessageObj] = useState({});
 
   const photoX = 1417;
   const photoY = 227;
@@ -277,6 +278,7 @@ const Map = () => {
                 token={groupInfo.woomsInviteCode}
                 setBackgroundX={setBackgroundX}
                 setBackgroundY={setBackgroundY}
+                messageObj={messageObj}
                 backgroundX={backgroundX}
                 backgroundY={backgroundY}
                 isOpenPhoto={isOpenPhoto}
@@ -319,6 +321,7 @@ const Map = () => {
             token={groupInfo.woomsInviteCode}
             setIsChatting={setIsChatting}
             isChatting={isChatting}
+            setMessageObj={setMessageObj}
           />
         </div>
       )}
