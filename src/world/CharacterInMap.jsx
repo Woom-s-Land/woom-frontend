@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { Texture } from 'pixi.js';
 import allImages from '../characterImages';
 import collisions from '../assets/map/map_collisions';
 import OtherCharacter from './Characters';
@@ -382,7 +383,7 @@ const Character = ({
         {directionImages[direction] &&
           directionImages[direction][stepIndex] && (
             <Sprite
-              image={directionImages[direction][stepIndex]}
+              texture={Texture.from(directionImages[direction][stepIndex])}
               x={0}
               y={0}
               width={CHAR_WIDTH}
