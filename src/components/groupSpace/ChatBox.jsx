@@ -11,7 +11,7 @@ const ChatBox = ({
   token,
   setIsChatting,
   isChatting,
-  EmojiData,
+  setMessageObj,
 }) => {
   const [chattings, setChattings] = useState([]);
   const [content, setContent] = useState('');
@@ -43,7 +43,7 @@ const ChatBox = ({
       (message) => {
         try {
           const parseMessage = JSON.parse(message.body);
-          console.log(parseMessage);
+          setMessageObj(parseMessage);
           setChattings((prevChattings) => [...prevChattings, parseMessage]);
         } catch (err) {
           console.log('Failed to parse chat message:', err);

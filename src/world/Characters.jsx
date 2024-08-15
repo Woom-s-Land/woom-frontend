@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Sprite, Container, Texture } from '@pixi/react';
 import Nickname from './Nickname';
 import allImages from '../characterImages';
+import SpeechBubble from './SpeechBubble';
 
 const CHAR_WIDTH = 40; // 캐릭터 사이즈
 const CHAR_HEIGHT = 60;
@@ -13,6 +14,7 @@ const OtherCharacter = ({
   stepIndex,
   costume,
   nickname,
+  character,
   backgroundX,
   backgroundY,
 }) => {
@@ -37,6 +39,13 @@ const OtherCharacter = ({
           y={0}
           width={CHAR_WIDTH}
           height={CHAR_HEIGHT}
+        />
+      )}
+      {character.message && (
+        <SpeechBubble
+          width={CHAR_WIDTH}
+          height={CHAR_HEIGHT}
+          text={character.message}
         />
       )}
       <Nickname width={CHAR_WIDTH} height={CHAR_HEIGHT} text={nickname} />
