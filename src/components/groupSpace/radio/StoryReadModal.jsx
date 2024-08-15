@@ -3,6 +3,7 @@ import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import Loading from '../../common/Loading'; // Loading 컴포넌트를 임포트합니다.
 import { GroupStoryApi } from '../../../apis/GroupSpaceApi';
+import { alertActions } from '../../../store/alertSlice';
 
 const StoryReadModal = ({ onClose, woomsId }) => {
   const [stories, setStories] = useState([]);
@@ -20,9 +21,11 @@ const StoryReadModal = ({ onClose, woomsId }) => {
         const { stories, totalPage } = response;
         setStories(stories);
         setFetchedTotalPages(totalPage);
-        console.log(stories);
       } catch (error) {
-        console.error('API Error:', error);
+        alertActions.showAlert({
+          message: '사연을 읽을 수 없습니다. 다시 시도해주세요.',
+          type: 'ERROR',
+        });
       } finally {
         setIsLoading(false); // API 호출이 끝난 후 로딩 상태를 false로 설정합니다.
       }

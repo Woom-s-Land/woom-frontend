@@ -36,8 +36,7 @@ const StoryWriteModal = ({ onClose, woomsId }) => {
     setIsLoading(true);
 
     try {
-      const data = await GroupStoryApi.postStory(woomsId, userNickname, story);
-      console.log(data);
+      await GroupStoryApi.postStory(woomsId, userNickname, story);
 
       dispatch(
         alertActions.showAlert({
