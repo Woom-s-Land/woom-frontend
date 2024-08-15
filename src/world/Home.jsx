@@ -29,6 +29,11 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    setNickname(userInfo.nickname);
+    setCostume(userInfo.costume);
+  }, [userInfo]);
+
+  useEffect(() => {
     if (loading)
       setTimeout(() => {
         dispatch(settingActions.stopMove());
