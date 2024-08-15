@@ -82,7 +82,7 @@ const Home = () => {
   return (
     <div className='fixed w-full h-full bg-map-all bg-cover'>
       <div className='absolute inset-0 bg-black opacity-50 z-10' />
-      <div className='flex justify-center mt-52 items-center relative z-20'>
+      <div className='flex justify-center items-center h-full relative z-20'>
         <Stage width={MAP_X} height={MAP_Y}>
           <Sprite image={homeImages.home} x={0} y={0} />
           <Container>
