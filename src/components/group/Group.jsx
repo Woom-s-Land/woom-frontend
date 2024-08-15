@@ -14,21 +14,20 @@ const Group = ({ isOpen, handleCloseGroup }) => {
   const [woomsId, setWoomsId] = useState();
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
+  const getGroupList = async () => {
+    try {
+      const data = await GroupApi.getMyGroup(page);
+      setGroupData(data);
+      setTotalPage(data.totalPages - 1);
+      setError(null);
+    } catch (err) {
+      console.error('Failed to fetch group data:', err);
+      setError('Failed to fetch group data. Please try again later.');
+    }
+  };
   useEffect(() => {
-    const getGroupList = async () => {
-      try {
-        const data = await GroupApi.getMyGroup(page);
-        setGroupData(data);
-        setTotalPage(data.totalPages - 1);
-        setError(null);
-      } catch (err) {
-        console.error('Failed to fetch group data:', err);
-        setError('Failed to fetch group data. Please try again later.');
-      }
-    };
-
     getGroupList();
-  }, [page]);
+  }, [isOpen, page]);
 
   const handlePrevPage = () => {
     setPage((prev) => Math.max(0, prev - 1));
