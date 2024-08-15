@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { groupActions } from '../store/groupSlice';
-import { Stage, Sprite, Container } from '@pixi/react';
+import { Stage, Sprite, Container, AnimatedSprite } from '@pixi/react';
 import { OutlineFilter } from '@pixi/filter-outline';
 import basicAxios from '../libs/axios/basicAxios';
 import CharacterInMap from './CharacterInMap';
@@ -15,6 +15,15 @@ import ChatBox from '../components/groupSpace/ChatBox';
 import client from '../libs/socket/client';
 import LoadingBus from '../components/common/LoadingBus';
 import { settingActions } from '../store/settingSlice';
+import { fountain } from '../assets/animation/fountain/fountain';
+import FishShadow from './FishShadow';
+import RandomWaterDrops from './RandomWaterDrops';
+import WaterLeaf from './WaterLeaf';
+import { seagullPeck } from '../assets/animation/seagullpeck/seagullPeck';
+import { seagullTakeoff } from '../assets/animation/seagulltakeoff/seagullTakeoff';
+import { sql } from '../assets/animation/sql/sql';
+import { sqr } from '../assets/animation/sqr/sqr';
+
 const outlineStyle = new OutlineFilter(4, 0xbcff89);
 
 const Map = () => {
@@ -70,12 +79,47 @@ const Map = () => {
   const guestbookX = 347;
   const guestbookY = 620;
   const guestbookWidth = 116;
-  const guestbookHeight = 126;
+  const guestbookHeight = 116;
 
   const radioX = 490;
   const radioY = 450;
   const radioWidth = 80;
   const radioHeight = 63;
+
+  const fountainX = 1337;
+  const fountainY = 880;
+  const fountainWidth = 239;
+  const fountainHeight = 176;
+  const getRandomDelay = () => Math.random() * 10000;
+
+  const fishs = [
+    {
+      x: 960,
+      y: 975,
+    },
+    {
+      x: 1600,
+      y: 1450,
+    },
+    {
+      x: 800,
+      y: 670,
+    },
+  ];
+  const waterLeafs = [
+    {
+      x: 900,
+      y: 833,
+    },
+    {
+      x: 770,
+      y: 670,
+    },
+    {
+      x: 750,
+      y: 1020,
+    },
+  ];
   // 캐릭터의 위치 변경에 따른 정적인 요소의 위치 조정
   const calculateStaticElementPosition = useCallback(() => {
     return {
@@ -87,6 +131,8 @@ const Map = () => {
       gy: guestbookY + backgroundY,
       rx: radioX + backgroundX,
       ry: radioY + backgroundY,
+      fx: fountainX + backgroundX,
+      fy: fountainY + backgroundY,
     };
   }, [characterX, characterY, backgroundX, backgroundY, width, height]);
 
@@ -265,6 +311,71 @@ const Map = () => {
                   y={calculateStaticElementPosition().ry - radioHeight}
                 />
               )}
+              <AnimatedSprite
+                textures={fountain}
+                isPlaying={true}
+                animationSpeed={0.1}
+                x={fountainX + backgroundX}
+                y={fountainY + backgroundY}
+                width={fountainWidth}
+                height={fountainHeight}
+              />
+              <AnimatedSprite
+                textures={seagullPeck}
+                isPlaying={true}
+                animationSpeed={0.08}
+                x={280 + backgroundX}
+                y={525 + backgroundY}
+                width={27}
+                height={24}
+              />
+              <AnimatedSprite
+                textures={seagullTakeoff}
+                isPlaying={true}
+                animationSpeed={0.1}
+                x={255 + backgroundX}
+                y={525 + backgroundY}
+                width={27}
+                height={24}
+              />
+              <AnimatedSprite
+                textures={sql}
+                isPlaying={true}
+                animationSpeed={0.1}
+                x={400 + backgroundX}
+                y={600 + backgroundY}
+                width={32}
+                height={32}
+              />
+              <AnimatedSprite
+                textures={sqr}
+                isPlaying={true}
+                animationSpeed={0.1}
+                x={360 + backgroundX}
+                y={593 + backgroundY}
+                width={40}
+                height={40}
+              />
+              {fishs.map((fish, index) => (
+                <FishShadow
+                  key={index}
+                  x={fish.x + backgroundX}
+                  y={fish.y + backgroundY}
+                  delay={getRandomDelay()}
+                />
+              ))}
+              {waterLeafs.map((leaf, index) => (
+                <WaterLeaf
+                  key={index}
+                  x={leaf.x + backgroundX}
+                  y={leaf.y + backgroundY}
+                  delay={getRandomDelay()}
+                />
+              ))}
+              <RandomWaterDrops
+                backgroundX={backgroundX}
+                backgroundY={backgroundY}
+              />
             </Container>
             {/* 캐릭터를 관리하는 Container */}
             <Container>
