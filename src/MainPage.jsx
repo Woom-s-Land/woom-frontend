@@ -1,16 +1,14 @@
 import { useNavigate, Link } from 'react-router-dom';
-
 import introMap from './assets/mainPage/introMap.png';
 import realLogo from './assets/logo/realLogo.png';
-
 import firstImg from './assets/mainPage/firstImg.png';
 import secondImg from './assets/mainPage/secondImg.png';
 import finalImg from './assets/mainPage/finalImg.png';
-
 import letterImg from './assets/mainPage/letterImg.png';
 import photoMapImg from './assets/mainPage/photoMapImg.png';
 import photoImg from './assets/mainPage/photoImg.png';
 import radioImg from './assets/mainPage/radioImg.png';
+import gitHubLogo from './assets/logo/github.svg';
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -120,29 +118,22 @@ const MainPage = () => {
             </div>
           </div>
         </div>
-        <footer className='flex justify-center border border-u-[#F4EFE6]'>
+        <footer className='flex justify-center border border-u-[#F4EFE6] mt-20 p-1'>
           <div className='flex max-w-[960px] flex-1 flex-col'>
-            <footer className='flex flex-col gap-6 px-5 py-3 text-center @container'>
+            <footer className='flex flex-col gap-1 px-5 text-center @container'>
               <div className='flex flex-wrap items-center justify-center gap-6 @[480px]:flex-row @[480px]:justify-around'>
-                <span className='text-[#A18249] text-base font-normal leading-normal min-w-20'>
-                  송도언
-                </span>
-                <span className='text-[#A18249] text-base font-normal leading-normal min-w-20'>
-                  홍성우
-                </span>
-                <span className='text-[#A18249] text-base font-normal leading-normal min-w-20'>
-                  이현수
-                </span>
-                <span className='text-[#A18249] text-base font-normal leading-normal min-w-20'>
-                  김도예
-                </span>
-                <span className='text-[#A18249] text-base font-normal leading-normal min-w-20'>
-                  정훈
-                </span>
-                <span className='text-[#A18249] text-base font-normal leading-normal min-w-20'>
-                  윤대영
-                </span>
+                <a
+                  href='https://github.com/Woom-s-Land'
+                  target='_blank'
+                  className='w-6 h-6 cursor-pointer'
+                >
+                  <img src={gitHubLogo} alt='gitHubLogo' />
+                </a>
               </div>
+              <p className='text-[#A18249] text-sm'>
+                SSAFY 2학기 공통 프로젝트 WOOMS
+              </p>
+              <p className='text-[#A18249] text-sm'>© 2024 WOOMS</p>
             </footer>
           </div>
         </footer>
