@@ -20,7 +20,10 @@ const Comment = ({ onClose }) => {
       const data = await GroupCommentApi.getComment(woomsId, page);
       setComments(data); // 한 페이지의 댓글만 설정
     } catch (error) {
-      console.error('Error fetching comments:', error);
+      alertActions.showAlert({
+        message: '방명록을 불러오는 데 실패하였습니다. 다시 시도해주세요.',
+        type: 'ERROR',
+      });
     }
   };
 

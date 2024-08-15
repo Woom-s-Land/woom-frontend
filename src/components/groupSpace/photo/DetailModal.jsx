@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from '../../common/Modal';
 import Loading from '../../common/Loading'; // Loading 컴포넌트를 임포트합니다.
 import { GroupPhotoApi } from '../../../apis/GroupSpaceApi';
-import { useSelector } from 'react-redux';
+import { alertActions } from '../../../store/alertSlice';
 
 const DetailModal = ({ imageId, onClose }) => {
   const [image, setImage] = useState(null); // 이미지 데이터를 저장할 상태
@@ -16,11 +16,14 @@ const DetailModal = ({ imageId, onClose }) => {
       try {
         setIsLoading(true); // API 호출 전에 로딩 상태를 true로 설정합니다.
         const data = await GroupPhotoApi.getPhotoDetail(woomsId, imageId);
-        console.log('받아온 데이터:', data);
         setImage(data);
         setIsFlipped(data.flipped); // 초기 flip 상태 설정
       } catch (error) {
-        console.error('디테일 페이지 에러', error);
+        alertActions.showAlert({
+          message:
+            '해당 사진 정보를 불러오는 데 실패하였습니다. 다시 시도해주세요.',
+          type: 'ERROR',
+        });
       } finally {
         setIsLoading(false); // API 호출이 끝난 후 로딩 상태를 false로 설정합니다.
       }

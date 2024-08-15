@@ -5,6 +5,7 @@ import UploadModal from './UploadModal';
 import Modal from '../../common/Modal';
 import Loading from '../../common/Loading'; // Loading 컴포넌트를 임포트합니다.
 import { GroupPhotoApi } from '../../../apis/GroupSpaceApi';
+import { alertActions } from '../../../store/alertSlice';
 
 function PhotoModal({ onClose }) {
   const [selectedGroup, setSelectedGroup] = useState(null);
@@ -23,11 +24,13 @@ function PhotoModal({ onClose }) {
       try {
         setIsLoading(true); // API 호출 전에 로딩 상태를 true로 설정합니다.
         const data = await GroupPhotoApi.getPhotoMonth(woomsId, currentPage);
-        console.log('API Response:', data);
         setPhotos(data);
         setHasMore(data.length === itemsPerPage); // 받아온 데이터의 길이가 itemsPerPage와 같으면 더 있음
       } catch (error) {
-        console.error('Error fetching photos:', error);
+        alertActions.showAlert({
+          message: '사진첩을 불러오는 데 실패하였습니다. 다시 시도해주세요.',
+          type: 'ERROR',
+        });
       } finally {
         setIsLoading(false); // API 호출이 끝난 후 로딩 상태를 false로 설정합니다.
       }
