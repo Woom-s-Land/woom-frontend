@@ -1,18 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Stage, Sprite, Container } from '@pixi/react';
+import { useSelector, useDispatch } from 'react-redux';
 import { OutlineFilter } from '@pixi/filter-outline';
+import { settingActions } from '../store/settingSlice';
 import homeImages from '../utils/homeImages';
 import Character from './CharacterInHome';
 import ReadLetterMain from '../components/groupSpace/letter/ReadLetterMain';
 import WriteLetterMain from '../components/groupSpace/letter/WriteLetterMain';
 import Group from '../components/group/Group';
-import { useSelector } from 'react-redux';
-
+import LoadingBus from '../components/common/LoadingBus';
 const MAP_X = 488;
 const MAP_Y = 384;
 
 const Home = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.setting.isMoving);
   const [nickname, setNickname] = useState(userInfo.nickname);
   const [costume, setCostume] = useState(userInfo.costume);
   const [isFirst, setIsFirst] = useState(true);
@@ -22,6 +25,14 @@ const Home = () => {
       setIsFirst(false);
     }, 3000);
   }, []);
+
+  useEffect(() => {
+    if (loading)
+      setTimeout(() => {
+        dispatch(settingActions.stopMove());
+      }, 1500);
+  }, [loading]);
+
   // console.log(userInfo);
   const [isActiveBed, setIsActiveBed] = useState(false);
   const [isActiveDesk, setIsActiveDesk] = useState(false);
@@ -80,91 +91,99 @@ const Home = () => {
   }, []);
 
   return (
-    <div className='fixed w-full h-full bg-map-all bg-cover'>
-      <div className='absolute inset-0 bg-black opacity-50 z-10' />
-      <div className='flex justify-center items-center h-full relative z-20'>
-        <Stage width={MAP_X} height={MAP_Y}>
-          <Sprite image={homeImages.home} x={0} y={0} />
-          <Container>
-            {isFirst && (
+    <>
+      {loading ? (
+        <LoadingBus />
+      ) : (
+        <div className='fixed w-full h-full bg-map-all bg-cover'>
+          <div className='absolute inset-0 bg-black opacity-50 z-10' />
+          <div className='flex justify-center items-center h-full relative z-20'>
+            <Stage width={MAP_X} height={MAP_Y}>
+              <Sprite image={homeImages.home} x={0} y={0} />
+              <Container>
+                {isFirst && (
+                  <Sprite
+                    image={homeImages.keyHome}
+                    x={180}
+                    y={150}
+                    width={150}
+                    height={140}
+                  />
+                )}
+                {isActiveDesk && (
+                  <Sprite
+                    image={homeImages.keyLetter}
+                    x={deskX + 100}
+                    y={deskY + 80}
+                    width={100}
+                    height={50}
+                  />
+                )}
+              </Container>
               <Sprite
-                image={homeImages.keyHome}
-                x={180}
-                y={150}
-                width={150}
-                height={140}
+                image={homeImages.bed}
+                x={bedX}
+                y={bedY}
+                filters={isActiveBed ? [new OutlineFilter(2, 0xbcff89)] : []}
+              />
+              <Sprite
+                image={homeImages.desk}
+                x={deskX}
+                y={deskY}
+                filters={isActiveDesk ? [new OutlineFilter(2, 0xbcff89)] : []}
+              />
+              <Sprite
+                image={homeImages.toilet}
+                x={toiletX}
+                y={toiletY}
+                filters={isActiveToilet ? [new OutlineFilter(2, 0xbcff89)] : []}
+              />
+              <Sprite
+                image={homeImages.rug}
+                x={rugX}
+                y={rugY}
+                filters={isActiveRug ? [new OutlineFilter(2, 0xbcff89)] : []}
+              />
+
+              <Character
+                handleCharacterMove={handleCharacterMove}
+                isActiveBed={isActiveBed}
+                isActiveDesk={isActiveDesk}
+                isActiveToilet={isActiveToilet}
+                isActiveRug={isActiveRug}
+                isOpenReadLetter={isOpenReadLetter}
+                isOpenWriteLetter={isOpenWriteLetter}
+                setIsOpenWriteLetter={setIsOpenWriteLetter}
+                setIsOpenReadLetter={setIsOpenReadLetter}
+                setIsOpenGroup={setIsOpenGroup}
+                nickname={nickname}
+                costume={costume}
+              />
+              {isInBathroom && (
+                <Sprite image={homeImages.forward} x={0} y={144} />
+              )}
+            </Stage>
+
+            {/* 모달 컴포넌트들은 Stage 위에 표시되도록 설정 */}
+            {isOpenWriteLetter && (
+              <WriteLetterMain
+                isOpen={isOpenWriteLetter}
+                onClose={handleWriteLetterClose}
               />
             )}
-            {isActiveDesk && (
-              <Sprite
-                image={homeImages.keyLetter}
-                x={deskX + 100}
-                y={deskY + 80}
-                width={100}
-                height={50}
+            {isOpenReadLetter && (
+              <ReadLetterMain
+                isOpen={isOpenReadLetter}
+                onClose={handleReadLetterClose}
               />
             )}
-          </Container>
-          <Sprite
-            image={homeImages.bed}
-            x={bedX}
-            y={bedY}
-            filters={isActiveBed ? [new OutlineFilter(2, 0xbcff89)] : []}
-          />
-          <Sprite
-            image={homeImages.desk}
-            x={deskX}
-            y={deskY}
-            filters={isActiveDesk ? [new OutlineFilter(2, 0xbcff89)] : []}
-          />
-          <Sprite
-            image={homeImages.toilet}
-            x={toiletX}
-            y={toiletY}
-            filters={isActiveToilet ? [new OutlineFilter(2, 0xbcff89)] : []}
-          />
-          <Sprite
-            image={homeImages.rug}
-            x={rugX}
-            y={rugY}
-            filters={isActiveRug ? [new OutlineFilter(2, 0xbcff89)] : []}
-          />
-
-          <Character
-            handleCharacterMove={handleCharacterMove}
-            isActiveBed={isActiveBed}
-            isActiveDesk={isActiveDesk}
-            isActiveToilet={isActiveToilet}
-            isActiveRug={isActiveRug}
-            isOpenReadLetter={isOpenReadLetter}
-            isOpenWriteLetter={isOpenWriteLetter}
-            setIsOpenWriteLetter={setIsOpenWriteLetter}
-            setIsOpenReadLetter={setIsOpenReadLetter}
-            setIsOpenGroup={setIsOpenGroup}
-            nickname={nickname}
-            costume={costume}
-          />
-          {isInBathroom && <Sprite image={homeImages.forward} x={0} y={144} />}
-        </Stage>
-
-        {/* 모달 컴포넌트들은 Stage 위에 표시되도록 설정 */}
-        {isOpenWriteLetter && (
-          <WriteLetterMain
-            isOpen={isOpenWriteLetter}
-            onClose={handleWriteLetterClose}
-          />
-        )}
-        {isOpenReadLetter && (
-          <ReadLetterMain
-            isOpen={isOpenReadLetter}
-            onClose={handleReadLetterClose}
-          />
-        )}
-        {isOpenGroup && (
-          <Group isOpen={isOpenGroup} handleCloseGroup={handleGroupClose} />
-        )}
-      </div>
-    </div>
+            {isOpenGroup && (
+              <Group isOpen={isOpenGroup} handleCloseGroup={handleGroupClose} />
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
