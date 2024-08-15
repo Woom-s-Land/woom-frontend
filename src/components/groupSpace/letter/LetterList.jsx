@@ -128,7 +128,9 @@ const LetterList = ({ onClose, onLetterClick }) => {
   return (
     <Modal onClose={onClose}>
       <div className='flex justify-center items-center mb-16'>
-        <h1 className='absolute text-3xl top-9'>받은 편지함</h1>
+        <h1 className='absolute text-3xl text-point-color top-9'>
+          받은 편지함
+        </h1>
         <span className='absolute top-[37px] right-40 text-3xl'>
           {unreadCount}
         </span>
@@ -174,13 +176,13 @@ const LetterList = ({ onClose, onLetterClick }) => {
         {letters.map((letter) => (
           <div key={letter.id} className='flex mb-6 items-center'>
             <div
-              className={`cursor-pointer text-3xl basis-2/5 ${letter.status === 'READ' ? 'text-stone-500' : ''}`}
+              className={`cursor-pointer text-3xl basis-2/5 text-point-color ${letter.status === 'READ' ? 'text-base-color' : ''}`}
               onClick={() => openLetterDetail(letter.id)}
             >
               {letter.senderName}
             </div>
             <div
-              className={`text-3xl basis-2/5 ${letter.status === 'READ' ? 'text-stone-500' : ''}`}
+              className={`text-3xl basis-2/5 text-point-color ${letter.status === 'READ' ? 'text-base-color' : ''}`}
             >
               {formatDate(letter.receiveDate)}
             </div>

@@ -161,7 +161,7 @@ const PhotoHeatMap = ({ onClose, woomsId }) => {
           />
         )}
         <div className='absolute top-7 flex justify-center items-center'>
-          <p className='text-3xl mt-1 text-base-color'>채 움</p>
+          <p className='text-3xl mt-1 text-point-color'>채 움</p>
           <div className='w-4' />
           <div className='bg-help-mark w-4 h-4 mt-1 bg-cover peer hover:bg-help-mark-hover hover:cursor-pointer'></div>
           <div className='absolute pt-7 top-[35px] ml-[75px] bg-cover z-10 w-[300px] h-[100px] invisible peer-hover:visible bg-help-bubble text-base-color '>

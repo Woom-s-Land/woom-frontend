@@ -33,7 +33,7 @@ const DropDown = ({ options = [], placeholder, onSelect }) => {
       >
         <div className='relative w-full text-lg'>
           <img src={normal_box} alt='normal_box' className='w-full' />
-          <p className='absolute inset-0 flex justify-center items-center text-black'>
+          <p className='absolute inset-0 flex justify-center items-center text-base-color'>
             {selectedOption}
           </p>
         </div>
@@ -67,7 +67,7 @@ const DropDown = ({ options = [], placeholder, onSelect }) => {
                 onClick={() => handleOptionClick(option)}
               >
                 <img src={normal_box} alt='normal_box' className='w-full' />
-                <p className='absolute inset-0 flex justify-center items-center text-black'>
+                <p className='absolute inset-0 flex justify-center items-center text-base-color'>
                   {option.label}
                 </p>
               </motion.div>

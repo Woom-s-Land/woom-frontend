@@ -3,6 +3,7 @@ import ItemModal from './ItemModal';
 import DetailModal from './DetailModal';
 import UploadModal from './UploadModal';
 import Modal from '../../common/Modal';
+import Loading from '../../common/Loading'; // Loading 컴포넌트를 임포트합니다.
 import { GroupPhotoApi } from '../../../apis/GroupSpaceApi';
 
 function PhotoModal({ onClose }) {
@@ -12,6 +13,7 @@ function PhotoModal({ onClose }) {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [hasMore, setHasMore] = useState(false);
   const [photos, setPhotos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태를 관리하는 state를 추가합니다.
   const pathname = window.location.pathname;
   const woomsId = pathname.split('/')[2]; // 페이지 URL에서 woomsId 추출
   const itemsPerPage = 6;
@@ -19,12 +21,15 @@ function PhotoModal({ onClose }) {
   useEffect(() => {
     const getPhotos = async () => {
       try {
+        setIsLoading(true); // API 호출 전에 로딩 상태를 true로 설정합니다.
         const data = await GroupPhotoApi.getPhotoMonth(woomsId, currentPage);
         console.log('API Response:', data);
         setPhotos(data);
         setHasMore(data.length === itemsPerPage); // 받아온 데이터의 길이가 itemsPerPage와 같으면 더 있음
       } catch (error) {
         console.error('Error fetching photos:', error);
+      } finally {
+        setIsLoading(false); // API 호출이 끝난 후 로딩 상태를 false로 설정합니다.
       }
     };
     getPhotos();
@@ -75,7 +80,9 @@ function PhotoModal({ onClose }) {
   return (
     <>
       <Modal onClose={onClose}>
-        {selectedImage ? (
+        {isLoading ? ( // 로딩 상태일 때 Loading 컴포넌트를 표시합니다.
+          <Loading />
+        ) : selectedImage ? (
           <DetailModal imageId={selectedImage} onClose={handleImageClose} />
         ) : selectedGroup ? (
           <ItemModal

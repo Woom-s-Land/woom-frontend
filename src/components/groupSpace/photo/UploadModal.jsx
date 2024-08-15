@@ -277,7 +277,7 @@ const UploadModal = ({ onClose }) => {
           >
             <div
               ref={polaroidRef}
-              className='bg-white p-4 shadow-lg w-[240px] h-[280px] flex flex-col items-center relative'
+              className='bg-white p-4 shadow-lg w-[240px] h-[280px] flex flex-col items-center relative rounded-lg'
             >
               {loading ? (
                 <p className='text-red-500 absolute inset-0 flex justify-center items-center'>

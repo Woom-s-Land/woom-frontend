@@ -102,8 +102,10 @@ const ChooseUser = ({ onClose, onChange, onNext }) => {
   return (
     <Modal onClose={onClose}>
       <section className='flex flex-col h-5/6 justify-between text-center'>
-        <h1 className='text-4xl text-center mt-4'>누구에게 편지를 쓸까요?</h1>
-        <div className='flex items-center justify-center space-x-4 mt-4 '>
+        <h1 className='text-4xl text-center mt-4 text-point-color'>
+          누구에게 편지를 쓸까요?
+        </h1>
+        <div className='flex items-center justify-center space-x-4 mt-4 text-point-color'>
           <div className='w-1/3 flex justify-center'>
             <DropDown
               options={groupOptions}
