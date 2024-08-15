@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { alertActions } from '../../store/alertSlice';
+import ReactDOM from 'react-dom';
 
 const Alert = () => {
   const dispatch = useDispatch();
@@ -38,7 +39,9 @@ const Alert = () => {
       ? '알 수 없는 오류가 발생했습니다. 다시 시도해주세요'
       : message;
 
-  return (
+  const portalRoot = document.getElementById('portal-root');
+
+  return ReactDOM.createPortal(
     <div
       className={`fixed top-0 left-0 right-0 flex items-center justify-center z-50 p-4 transition-transform duration-500 ${show ? 'alert-enter' : 'alert-exit'}`}
     >
@@ -59,7 +62,8 @@ const Alert = () => {
           </span>
         </div>
       </div>
-    </div>
+    </div>,
+    portalRoot
   );
 };
 

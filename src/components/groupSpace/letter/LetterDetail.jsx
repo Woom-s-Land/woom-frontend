@@ -6,6 +6,7 @@ import { alertActions } from '../../../store/alertSlice';
 import { useDispatch } from 'react-redux';
 import letter from '../../../assets/letter/letter.png';
 import happyEmoji from '../../../assets/common/happyEmoji.png';
+import ReactDOM from 'react-dom';
 
 const letterVariants = {
   hidden: { scale: 0.8, opacity: 0 },
@@ -49,8 +50,10 @@ const LetterDetail = ({ letterId, onBack }) => {
     return <div>Loading...</div>;
   }
 
-  return (
-    <div className='letter fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
+  const portalRoot = document.getElementById('portal-root');
+
+  return ReactDOM.createPortal(
+    <div className='letter fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'>
       <motion.div
         initial='hidden'
         animate='visible'
@@ -90,7 +93,8 @@ const LetterDetail = ({ letterId, onBack }) => {
           </motion.div>
         </div>
       </motion.div>
-    </div>
+    </div>,
+    portalRoot
   );
 };
 
