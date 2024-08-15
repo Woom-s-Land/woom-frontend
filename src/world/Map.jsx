@@ -140,7 +140,10 @@ const Map = () => {
   const [connected, setConnected] = useState(false);
   const [nickname, setNickname] = useState(userInfo.nickname);
   const [costume, setCostume] = useState(userInfo.costume);
-
+  useEffect(() => {
+    setNickname(userInfo.nickname);
+    setCostume(userInfo.costume);
+  }, [userInfo]);
   // const token = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3d';
 
   useEffect(() => {
