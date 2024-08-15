@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import dotImages from './dotImages';
 import basemap from './basemap';
 import data from './dummy';
@@ -142,7 +143,13 @@ const PhotoHeatMap = ({ onClose, woomsId }) => {
       onClick={handleOutsideClick}
       className='modal-overlay fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'
     >
-      <div className='bg-modal-vertical bg-cover p-5 bg-center w-[520px] h-[600px] relative flex flex-col items-center'>
+      <motion.div
+        initial={{ scale: 0.01 }}
+        animate={{ scale: [1.0, 0.8, 1.0] }}
+        exit={{ scale: 0.01 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className='bg-modal-vertical bg-cover p-5 bg-center w-[520px] h-[600px] relative flex flex-col items-center'
+      >
         <button
           onClick={handleClose}
           className='absolute top-8 left-8 w-6 h-6 bg-close-bt bg-cover'
@@ -181,7 +188,7 @@ const PhotoHeatMap = ({ onClose, woomsId }) => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

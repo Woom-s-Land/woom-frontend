@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import baseUrl from '../../../libs/axios/basicAxios';
-
+import { alertActions } from '../../../store/alertSlice';
+import { useDispatch } from 'react-redux';
 import letter from '../../../assets/letter/letter.png';
 import happyEmoji from '../../../assets/common/happyEmoji.png';
 
@@ -18,6 +19,8 @@ const buttonVariants = {
 };
 
 const LetterDetail = ({ letterId, onBack }) => {
+  const dispatch = useDispatch();
+
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [detailInfo, setDetailInfo] = useState(null);
 
@@ -30,6 +33,12 @@ const LetterDetail = ({ letterId, onBack }) => {
         console.log('편지 상세 정보 저장 성공', response.data);
       } catch (error) {
         console.error(error);
+        dispatch(
+          alertActions.showAlert({
+            message: error.response.data.message,
+            type: 'ERROR',
+          })
+        );
       }
     };
 
