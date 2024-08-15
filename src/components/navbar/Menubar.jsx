@@ -96,13 +96,13 @@ function Header() {
   const groupMap = isMapPage
     ? 'fixed w-full h-24 left-1/2 transform -translate-x-1/2 inline-flex items-center justify-center bg-no-repeat bg-opacity-0 bg-center bg-gr-title'
     : '';
-  const home = isHomePage ? 'bg-home-title w-32 h-24' : '';
+  const home = isHomePage ? 'bg-home-title w-32 h-24 mt-4' : '';
 
   return (
     <header
       className={`${
         isNoneMapOrHome ? 'hidden' : isMapPage ? 'header-hidden' : ''
-      }`}
+      } fixed top-0 left-0 right-0 z-50`}
     >
       <div
         className={`inline-flex bg-no-repeat bg-center ${
