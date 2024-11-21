@@ -96,7 +96,7 @@
 
 ### FRONTEND
 
-<img src="./readme/stack/front_stack.jpg" />
+<img src="./readme/stack/front_stack.JPG" />
 
 ---
 
